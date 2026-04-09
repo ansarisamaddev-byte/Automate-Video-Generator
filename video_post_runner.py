@@ -107,7 +107,7 @@ def run_video_automation():
     sn = row['SN']
     
     # Path logic
-    raw_video = f"videos/video ({sn}).mp4"  # Assuming you have a videos folder
+    raw_video = f"video_post/video ({sn}).mp4"  # Assuming you have a videos folder
     music_file = "music.mp3"               # Your background music
     output_video = "final_output.mp4"
     
