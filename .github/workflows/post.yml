@@ -2,15 +2,26 @@ name: Auto Post Instagram Reel
 
 on:
   schedule:
-    - cron: '58 23 * * *' # Runs at 23:58 UTC every day
-  workflow_dispatch: # Allows you to run it manually
+    # 7:00 AM IST → 01:30 UTC
+    - cron: '30 1 * * *'
+    
+    # 5:30 PM IST → 12:00 UTC
+    - cron: '0 12 * * *'
+
+  workflow_dispatch:
+
+permissions:
+  contents: write   # 🔥 REQUIRED to push CSV changes
 
 jobs:
   build:
     runs-on: ubuntu-latest
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
+        with:
+          persist-credentials: true  # important for push
 
       - name: Set up Python
         uses: actions/setup-python@v4
@@ -34,3 +45,13 @@ jobs:
           CLOUDINARY_API_KEY: ${{ secrets.CLOUDINARY_API_KEY }}
           CLOUDINARY_API_SECRET: ${{ secrets.CLOUDINARY_API_SECRET }}
         run: python video_post_runner.py
+
+      # 🔥 IMPORTANT: Commit updated CSV
+      - name: Commit updated CSV
+        run: |
+          git config --global user.name "github-actions"
+          git config --global user.email "github-actions@github.com"
+
+          git add quotes.csv
+          git commit -m "Auto update posted status" || echo "No changes to commit"
+          git push
