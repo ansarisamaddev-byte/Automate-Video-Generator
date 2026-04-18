@@ -6,7 +6,7 @@ import glob
 import random
 import cloudinary
 import cloudinary.uploader
-from insta_caption_post_v2 import generate_reel # Ensure your rendering script is named this
+from insta_caption_post import generate_reel # Ensure your rendering script is named this
 
 # --- CONFIGURATION ---
 ACCESS_TOKEN = "EAAdDD4cKxacBRPCWWL5mYCz0aFWrA3N41ZBBFnXSZBa9sslFdPfHxyyzVXemwUAckiv19zWJYUul9ZAGwLSWZATI9ae5UFRHfCGH43OmOdGySgLOWYV4zZBhaEfNkK6ZCWr9cBxLqvZCVcMSF3j2cKZBPQZCyZAVuX2CP3d1FcvHrKluuyUeRc7tt4PbXhhxl70ZARK2eLqAU73"
