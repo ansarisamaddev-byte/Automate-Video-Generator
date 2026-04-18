@@ -52,14 +52,16 @@ jobs:
           git config --global user.name "github-actions"
           git config --global user.email "github-actions@github.com"
           
-          # 1. Pull the latest changes to avoid conflicts
+          # 1. Temporarily save the CSV changes made by the script
+          git stash
+          
+          # 2. Pull the latest from the server
           git pull origin main --rebase
           
-          # 2. Add and commit your changes
+          # 3. Bring your changes back
+          git stash pop || echo "No changes to pop"
+          
+          # 4. Now add and commit as usual
           git add database.csv
-          
-          # 3. Only commit if there are actual changes to avoid "nothing to commit" errors
           git diff --quiet && git diff --staged --quiet || git commit -m "Auto update posted status"
-          
-          # 4. Push back to the repository
           git push origin main
