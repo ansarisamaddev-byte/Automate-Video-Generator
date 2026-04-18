@@ -1,3 +1,21 @@
 id,audio_path,image_folder,caption,hashtags,posted,last_image_index
 1,reel_voice/voice (1).mp3,gym_images,"Master your mind, master your life.",#stoic #motivation #mindset,True,3
 2,reel_voice/voice (2).mp3,gym_images,Discipline is doing what needs to be done.,#discipline #grind #success,True,8
+3,reel_voice/voice (3).mp3,gym_images,"Your only limit is the one you build in your mind.",#mindset #warrior #success,False,0
+4,reel_voice/voice (4).mp3,gym_images,"Pain is temporary, pride is forever.",#gymmotivation #fitness #grind,False,0
+5,reel_voice/voice (5).mp3,gym_images,"Don't stop when you're tired, stop when you're done.",#hustle #neverquit #warrior,False,0
+6,reel_voice/voice (6).mp3,gym_images,"The wolf on the hill is not as hungry as the wolf climbing.",#ambition #growth #ethos,False,0
+7,reel_voice/voice (7).mp3,gym_images,"Greatness lives outside your comfort zone.",#discipline #strive #gym,False,0
+8,reel_voice/voice (8).mp3,gym_images,"Champions are made in the dark when no one is watching.",#dedication #hardwork #stoic,False,0
+9,reel_voice/voice (9).mp3,gym_images,"Average is the enemy of excellence.",#motivation #peakperformance #warrior,False,0
+10,reel_voice/voice (10).mp3,gym_images,"Suffer the pain of discipline or the pain of regret.",#discipline #gymlife #ethos,False,0
+11,reel_voice/voice (11).mp3,gym_images,"Strength does not come from winning, it comes from struggle.",#mentalstrength #fitness #grind,False,0
+12,reel_voice/voice (12).mp3,gym_images,"Be the person your younger self would look up to.",#legacy #mindset #warrior,False,0
+13,reel_voice/voice (13).mp3,gym_images,"Action is the foundational key to all success.",#productivity #success #discipline,False,0
+14,reel_voice/voice (14).mp3,gym_images,"Excuses don't build empires.",#entrepreneur #mindset #hustle,False,0
+15,reel_voice/voice (15).mp3,gym_images,"They call it luck, you call it 4 AM.",#morningroutine #discipline #warrior,False,0
+16,reel_voice/voice (16).mp3,gym_images,"A quiet mind is a powerful mind.",#stoicism #focus #mindset,False,0
+17,reel_voice/voice (17).mp3,gym_images,"Fall seven times, stand up eight.",#resilience #grit #nevergiveup,False,0
+18,reel_voice/voice (18).mp3,gym_images,"Don't wish it were easier, wish you were better.",#improvement #growth #gymmotivation,False,0
+19,reel_voice/voice (19).mp3,gym_images,"Consistency is what transforms average into excellence.",#consistency #grind #warrior,False,0
+20,reel_voice/voice (20).mp3,gym_images,"The harder the battle, the sweeter the victory.",#victory #ethos #success,False,0
