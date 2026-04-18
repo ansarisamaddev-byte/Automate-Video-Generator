@@ -51,7 +51,15 @@ jobs:
         run: |
           git config --global user.name "github-actions"
           git config --global user.email "github-actions@github.com"
-          # Make sure this filename matches your CSV exactly (database.csv or quotes.csv)
+          
+          # 1. Pull the latest changes to avoid conflicts
+          git pull origin main --rebase
+          
+          # 2. Add and commit your changes
           git add database.csv
-          git commit -m "Auto update posted status" || echo "No changes to commit"
-          git push
+          
+          # 3. Only commit if there are actual changes to avoid "nothing to commit" errors
+          git diff --quiet && git diff --staged --quiet || git commit -m "Auto update posted status"
+          
+          # 4. Push back to the repository
+          git push origin main
