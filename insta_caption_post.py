@@ -54,17 +54,33 @@ def render_final_style(words, video_duration, clips_list):
         current_y = 300
         for word in words:
             pixel_array, w, h = create_word_data(word.word.strip().upper(), random.choice(FONTS), True)
+            
+            # --- BOUNDARY SAFETY ---
+            if current_y + h > 1800: break 
+            
             tx, ty = (1080 - w) // 2, current_y
             dur = max(0.1, video_duration - word.start)
-            clips_list.append(ImageClip(pixel_array).with_start(word.start).with_duration(dur).with_position(lambda t, tx=tx, ty=ty, d=dur: get_sliding_position(t, d, tx, ty, "top")))
+            
+            # --- LAMBDA FIX FOR MOVIEPY 2.2.1 ---
+            clips_list.append(
+                ImageClip(pixel_array)
+                .with_start(word.start)
+                .with_duration(dur)
+                .with_position(lambda t, w_tx=tx, w_ty=ty, w_dur=dur: 
+                               get_sliding_position(t, w_dur, w_tx, w_ty, "top"))
+            )
             current_y += (h - 30)
+            
     elif style == "split":
         current_y = 350
         margin = 150 
         for i, word in enumerate(words):
             pixel_array, w, h = create_word_data(word.word.strip().upper(), random.choice(FONTS), True)
+            
+            # --- BOUNDARY SAFETY ---
+            if current_y + h > 1800: break 
+            
             tx = margin if i % 2 == 0 else (1080 - w - margin)
-            if current_y + h > 1750: break
             dur = max(0.1, video_duration - word.start)
             clips_list.append(ImageClip(pixel_array).with_start(word.start).with_duration(dur).with_position((tx, current_y)).with_effects([vfx.CrossFadeIn(0.1)]))
             current_y += (h - 20)
@@ -114,31 +130,40 @@ def generate_reel(audio_path, image_folder, music_path, credit_video_path, outpu
                 clean_text = word.word.strip().upper()
                 if not clean_text: continue
                 pixel_array, w, h = create_word_data(clean_text, random.choice(FONTS))
+                
                 if word_in_batch >= max_words:
                     current_y, current_x, word_in_batch = random.randint(450, 600), 100, 0
-                dis_at = segment.words[idx + (max_words - word_in_batch)].start if idx + (max_words - word_in_batch) < len(segment.words) else sentence_end
-                word_dur = max(0.1, dis_at - word.start)
+                
                 if current_x + w > 900:
                     current_x, current_y = 100, current_y + h + 20
+                
+                # --- BOUNDARY SAFETY ---
+                if current_y + h > 1850: continue
+
+                dis_at = segment.words[idx + (max_words - word_in_batch)].start if idx + (max_words - word_in_batch) < len(segment.words) else sentence_end
+                word_dur = max(0.1, dis_at - word.start)
+                
                 tx, ty = current_x, current_y
                 move_dir = random.choice(["left", "right", "top", "bottom"])
-                txt_clip = (ImageClip(pixel_array).with_start(word.start).with_duration(word_dur).with_effects([vfx.CrossFadeOut(0.2)]).with_position(lambda t, tx=tx, ty=ty, d=move_dir, dur=word_dur: get_sliding_position(t, dur, tx, ty, d)))
+                
+                # --- LAMBDA FIX FOR MOVIEPY 2.2.1 ---
+                txt_clip = (ImageClip(pixel_array)
+                            .with_start(word.start)
+                            .with_duration(word_dur)
+                            .with_effects([vfx.CrossFadeOut(0.2)])
+                            .with_position(lambda t, w_tx=tx, w_ty=ty, w_dir=move_dir, w_dur=word_dur: 
+                                           get_sliding_position(t, w_dur, w_tx, w_ty, w_dir)))
+                
                 all_clips.append(txt_clip)
                 current_x += w - 10
                 word_in_batch += 1
 
     generated_reel = CompositeVideoClip(all_clips, size=(1080, 1920)).with_duration(video_duration).with_audio(final_audio)
 
-    # --- TRANSITION LOGIC ---
     if credit_video_path and os.path.exists(credit_video_path):
-        print("DEBUG: Creating crossfade transition...")
         credit_clip = VideoFileClip(credit_video_path).with_effects([vfx.Resize(width=1080)])
-        
-        # Apply a subtle fade out to the generated reel and fade in to credits
         generated_reel = generated_reel.with_effects([vfx.CrossFadeOut(0.5)])
         credit_clip = credit_clip.with_effects([vfx.CrossFadeIn(0.5)])
-        
-        # padding=-0.5 creates a 0.5s overlap/transition
         final_video = concatenate_videoclips([generated_reel, credit_clip], method="compose", padding=-0.5)
     else:
         final_video = generated_reel
