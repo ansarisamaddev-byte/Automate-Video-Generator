@@ -1,20 +1,25 @@
-name: Daily Instagram Reel Post
+name: Auto Post Instagram Reel
 
 on:
   schedule:
-    # Runs at 02:30 UTC (8:00 AM IST) and 15:30 UTC (9:00 PM IST)
-    # GitHub Actions uses UTC time. Adjusted for IST (UTC+5:30)
+    # 8:00 AM IST → 02:30 UTC
     - cron: '30 2 * * *'
+    # 9:00 PM IST → 15:30 UTC
     - cron: '30 15 * * *'
-  workflow_dispatch: # Allows you to run it manually for testing
+  workflow_dispatch:
+
+permissions:
+  contents: write
 
 jobs:
-  build-and-post:
+  build:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout Repository
+      - name: Checkout code
         uses: actions/checkout@v4
+        with:
+          persist-credentials: true
 
       - name: Set up Python
         uses: actions/setup-python@v5
@@ -29,20 +34,24 @@ jobs:
       - name: Install Python Dependencies
         run: |
           python -m pip install --upgrade pip
-          pip install -r requirements.txt
+          # Added faster-whisper as it is required for your rendering script
+          pip install pandas moviepy pillow requests cloudinary faster-whisper numpy
 
-      - name: Run Automation Script
+      - name: Run Script
         env:
-          # It is safer to use Secrets for your tokens/keys
+          # Matching the variable names exactly as used in your automation script
+          IG_ACCESS_TOKEN: ${{ secrets.INSTAGRAM_ACCESS_TOKEN }}
+          IG_USER_ID: ${{ secrets.INSTAGRAM_ACCOUNT_ID }}
           CLOUDINARY_CLOUD_NAME: ${{ secrets.CLOUDINARY_CLOUD_NAME }}
           CLOUDINARY_API_KEY: ${{ secrets.CLOUDINARY_API_KEY }}
           CLOUDINARY_API_SECRET: ${{ secrets.CLOUDINARY_API_SECRET }}
-        run: python insta_caption_post_runner.py
+        run: python main_automation.py
 
-      - name: Commit Updated CSV
+      - name: Commit updated CSV
         run: |
-          git config --local user.email "github-actions[bot]@users.noreply.github.com"
-          git config --local user.name "github-actions[bot]"
+          git config --global user.name "github-actions"
+          git config --global user.email "github-actions@github.com"
+          # Make sure this filename matches your CSV exactly (database.csv or quotes.csv)
           git add database.csv
-          git commit -m "Update database: mark reel as posted" || echo "No changes to commit"
+          git commit -m "Auto update posted status" || echo "No changes to commit"
           git push
