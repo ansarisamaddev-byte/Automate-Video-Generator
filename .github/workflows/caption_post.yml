@@ -1,11 +1,11 @@
-name: Caption Post Instagram Reel
+name: YouTube Automation
 
 on:
   schedule:
-    # 8:00 AM IST → 02:30 UTC
-    - cron: '30 2 * * *'
-    # 9:00 PM IST → 15:30 UTC
-    - cron: '30 15 * * *'
+    # 7:15 AM IST → 01:45 UTC
+    - cron: '45 1 * * *'
+    # 7:30 PM IST → 14:00 UTC
+    - cron: '0 14 * * *'
   workflow_dispatch:
 
 permissions:
@@ -34,34 +34,39 @@ jobs:
       - name: Install Python Dependencies
         run: |
           python -m pip install --upgrade pip
-          # Added faster-whisper as it is required for your rendering script
-          pip install pandas moviepy pillow requests cloudinary faster-whisper numpy
+          pip install pandas \
+          google-api-python-client \
+          google-auth \
+          google-auth-oauthlib \
+          cloudinary \
+          moviepy \
+          pillow \
+          numpy \
+          faster-whisper
 
-      - name: Run Script
+      - name: Run YouTube Automation
         env:
-          # Matching the variable names exactly as used in your automation script
-          IG_ACCESS_TOKEN: ${{ secrets.INSTAGRAM_ACCESS_TOKEN }}
-          IG_USER_ID: ${{ secrets.INSTAGRAM_ACCOUNT_ID }}
-          CLOUDINARY_CLOUD_NAME: ${{ secrets.CLOUDINARY_CLOUD_NAME }}
-          CLOUDINARY_API_KEY: ${{ secrets.CLOUDINARY_API_KEY }}
-          CLOUDINARY_API_SECRET: ${{ secrets.CLOUDINARY_API_SECRET }}
-        run: python insta_caption_post_runner.py
+          CLOUD_NAME: ${{ secrets.CLOUDINARY_CLOUD_NAME }}
+          API_KEY: ${{ secrets.CLOUDINARY_API_KEY }}
+          API_SECRET: ${{ secrets.CLOUDINARY_API_SECRET }}
+        run: python youtube_automation.py
 
       - name: Commit updated CSV
         run: |
           git config --global user.name "github-actions"
           git config --global user.email "github-actions@github.com"
-          
-          # 1. Temporarily save the CSV changes made by the script
+
+          # Save local changes
           git stash
-          
-          # 2. Pull the latest from the server
+
+          # Pull latest changes safely
           git pull origin main --rebase
-          
-          # 3. Bring your changes back
+
+          # Re-apply local changes
           git stash pop || echo "No changes to pop"
+
+          # Commit updated CSV
+          git add yt_database.csv
+          git diff --quiet && git diff --staged --quiet || git commit -m "Auto update YouTube posted status"
           
-          # 4. Now add and commit as usual
-          git add database.csv
-          git diff --quiet && git diff --staged --quiet || git commit -m "Auto update posted status"
           git push origin main
