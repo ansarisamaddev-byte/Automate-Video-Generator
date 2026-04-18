@@ -2,7 +2,7 @@ id,audio_path,image_folder,caption,hashtags,posted,last_image_index
 1,reel_voice/voice (1).mp3,gym_images,"Master your mind, master your life.",#stoic #motivation #mindset,True,3
 2,reel_voice/voice (2).mp3,gym_images,Discipline is doing what needs to be done.,#discipline #grind #success,True,8
 3,reel_voice/voice (3).mp3,gym_images,Your only limit is the one you build in your mind.,#mindset #warrior #success,True,13
-4,reel_voice/voice (4).mp3,gym_images,"Pain is temporary, pride is forever.",#gymmotivation #fitness #grind,False,0
+4,reel_voice/voice (4).mp3,gym_images,"Pain is temporary, pride is forever.",#gymmotivation #fitness #grind,True,16
 5,reel_voice/voice (5).mp3,gym_images,"Don't stop when you're tired, stop when you're done.",#hustle #neverquit #warrior,False,0
 6,reel_voice/voice (6).mp3,gym_images,The wolf on the hill is not as hungry as the wolf climbing.,#ambition #growth #ethos,False,0
 7,reel_voice/voice (7).mp3,gym_images,Greatness lives outside your comfort zone.,#discipline #strive #gym,False,0
