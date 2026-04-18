@@ -20,7 +20,7 @@ from google.auth.transport.requests import Request
 from googleapiclient.http import MediaFileUpload
 
 # ================= VIDEO GENERATOR =================
-from insta_caption_post_v2 import generate_reel
+from insta_caption_post import generate_reel
 
 SCOPES = ["https://www.googleapis.com/auth/youtube.upload"]
 
