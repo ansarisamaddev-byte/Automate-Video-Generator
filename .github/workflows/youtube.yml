@@ -49,7 +49,7 @@ jobs:
           CLOUD_NAME: ${{ secrets.CLOUDINARY_CLOUD_NAME }}
           API_KEY: ${{ secrets.CLOUDINARY_API_KEY }}
           API_SECRET: ${{ secrets.CLOUDINARY_API_SECRET }}
-        run: python youtube_automation.py
+        run: python youtube_upload.py
 
       - name: Commit updated CSV
         run: |
