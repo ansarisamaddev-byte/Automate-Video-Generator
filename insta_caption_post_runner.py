@@ -65,8 +65,11 @@ def upload_reel_to_instagram(local_video_path, caption):
         return False
 
 def run_automation():
-    # 1. Load CSV (Ensure your CSV has these columns: id, audio_path, image_folder, caption, hashtags, posted, last_image_index)
     csv_file = 'database.csv'
+    if not os.path.exists(csv_file):
+        print(f"❌ CSV not found: {csv_file}")
+        return
+
     df = pd.read_csv(csv_file)
     
     # 2. Find first unposted row
@@ -79,37 +82,47 @@ def run_automation():
     row = df.loc[index]
 
     # 3. Determine Starting Image Index
-    # If it's the first row, start at 0. Otherwise, check the previous row's end point.
     start_idx = 0
     if index > 0:
-        start_idx = int(df.at[index-1, 'last_image_index'])
+        posted_rows = df[df['posted'].astype(str).str.lower() == 'true']
+        if not posted_rows.empty:
+            start_idx = int(posted_rows.iloc[-1]['last_image_index'])
 
-    # 4. Pick Random Music
+    # 4. Pick Random Background Music
     music_list = glob.glob("background_music/*.mp3")
     bg_music = random.choice(music_list) if music_list else None
     
+    # --- 5. PICK RANDOM ENDING ASSET ---
+    ending_assets = glob.glob("ending/*.mp4") # Looks inside 'ending' folder
+    if not ending_assets:
+        print("❌ Error: No ending assets found in 'ending' folder!")
+        return
+    
+    selected_ending = random.choice(ending_assets)
+    print(f"🎬 Selected Ending Asset: {selected_ending}")
+    
     output_video = "final_reel_output.mp4"
 
-    # 5. Generate the Reel
+    # 6. Generate the Reel
     print(f"🎬 Generating Reel starting from Image Index: {start_idx}")
     new_last_index = generate_reel(
         audio_path=row['audio_path'],
         image_folder=row['image_folder'],
         music_path=bg_music,
+        credit_video_path=selected_ending, # Now passes the random ending
         output_name=output_video,
         start_at=start_idx
     )
 
-    # 6. Upload
+    # 7. Upload and Update
     full_caption = f"{row['caption']}\n\n{row['hashtags']}"
     if upload_reel_to_instagram(output_video, full_caption):
-        # Update CSV
         df.at[index, 'posted'] = True
         df.at[index, 'last_image_index'] = new_last_index
         df.to_csv(csv_file, index=False)
-        print(f"✅ Posted and CSV updated. Next Reel will start at image index: {new_last_index}")
+        print(f"✅ Posted. Next start index: {new_last_index}")
     else:
         print("❌ Upload failed.")
-
+        
 if __name__ == "__main__":
     run_automation()
