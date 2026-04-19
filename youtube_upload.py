@@ -54,7 +54,7 @@ def upload_to_youtube(video_path, title, description, tags):
             body={
                 "snippet": {
                     "title": title,
-                    "description": description + f"\n\nSource: {video_url}",
+                    "description": description",
                     "tags": tags,
                     "categoryId": "22"
                 },
