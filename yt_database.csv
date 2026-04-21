@@ -7,7 +7,7 @@ id,audio_path,image_folder,caption,hashtags,posted,last_image_index
 6,reel_voice/voice (6).mp3,gym_images,The Hungry Wolf,#ambition #growth #ethos,True,20
 7,reel_voice/voice (7).mp3,gym_images,Leave Your Comfort Zone,#discipline #strive #gym,True,21
 8,reel_voice/voice (8).mp3,gym_images,Made In The Dark,#dedication #hardwork #stoic,True,31
-9,reel_voice/voice (9).mp3,gym_images,Enemy Of Excellence,#motivation #peakperformance #warrior,False,0
+9,reel_voice/voice (9).mp3,gym_images,Enemy Of Excellence,#motivation #peakperformance #warrior,True,34
 10,reel_voice/voice (10).mp3,gym_images,Pain of Discipline,#discipline #gymlife #ethos,False,0
 11,reel_voice/voice (11).mp3,gym_images,Winning Through Struggle,#mentalstrength #fitness #grind,False,0
 12,reel_voice/voice (12).mp3,gym_images,Be Your Own Hero,#legacy #mindset #warrior,False,0
