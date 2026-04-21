@@ -6,7 +6,7 @@ id,audio_path,image_folder,caption,hashtags,posted,last_image_index
 5,reel_voice/voice (5).mp3,gym_images,Stop When You Are Done,#hustle #neverquit #warrior,True,17
 6,reel_voice/voice (6).mp3,gym_images,The Hungry Wolf,#ambition #growth #ethos,True,20
 7,reel_voice/voice (7).mp3,gym_images,Leave Your Comfort Zone,#discipline #strive #gym,True,21
-8,reel_voice/voice (8).mp3,gym_images,Made In The Dark,#dedication #hardwork #stoic,False,0
+8,reel_voice/voice (8).mp3,gym_images,Made In The Dark,#dedication #hardwork #stoic,True,31
 9,reel_voice/voice (9).mp3,gym_images,Enemy Of Excellence,#motivation #peakperformance #warrior,False,0
 10,reel_voice/voice (10).mp3,gym_images,Pain of Discipline,#discipline #gymlife #ethos,False,0
 11,reel_voice/voice (11).mp3,gym_images,Winning Through Struggle,#mentalstrength #fitness #grind,False,0
