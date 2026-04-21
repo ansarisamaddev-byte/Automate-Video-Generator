@@ -8,7 +8,7 @@ id,audio_path,image_folder,caption,hashtags,posted,last_image_index
 7,reel_voice/voice (7).mp3,gym_images,Greatness lives outside your comfort zone.,#discipline #strive #gym,True,20
 8,reel_voice/voice (8).mp3,gym_images,Champions are made in the dark when no one is watching.,#dedication #hardwork #stoic,True,30
 9,reel_voice/voice (9).mp3,gym_images,Average is the enemy of excellence.,#motivation #peakperformance #warrior,True,33
-10,reel_voice/voice (10).mp3,gym_images,Suffer the pain of discipline or the pain of regret.,#discipline #gymlife #ethos,False,0
+10,reel_voice/voice (10).mp3,gym_images,Suffer the pain of discipline or the pain of regret.,#discipline #gymlife #ethos,True,34
 11,reel_voice/voice (11).mp3,gym_images,"Strength does not come from winning, it comes from struggle.",#mentalstrength #fitness #grind,False,0
 12,reel_voice/voice (12).mp3,gym_images,Be the person your younger self would look up to.,#legacy #mindset #warrior,False,0
 13,reel_voice/voice (13).mp3,gym_images,Action is the foundational key to all success.,#productivity #success #discipline,False,0
