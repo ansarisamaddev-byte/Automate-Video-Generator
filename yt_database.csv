@@ -9,7 +9,7 @@ id,audio_path,image_folder,caption,hashtags,posted,last_image_index
 8,reel_voice/voice (8).mp3,gym_images,Made In The Dark,#dedication #hardwork #stoic,True,31
 9,reel_voice/voice (9).mp3,gym_images,Enemy Of Excellence,#motivation #peakperformance #warrior,True,34
 10,reel_voice/voice (10).mp3,gym_images,Pain of Discipline,#discipline #gymlife #ethos,True,35
-11,reel_voice/voice (11).mp3,gym_images,Winning Through Struggle,#mentalstrength #fitness #grind,False,0
+11,reel_voice/voice (11).mp3,gym_images,Winning Through Struggle,#mentalstrength #fitness #grind,True,45
 12,reel_voice/voice (12).mp3,gym_images,Be Your Own Hero,#legacy #mindset #warrior,False,0
 13,reel_voice/voice (13).mp3,gym_images,Action Over Words,#productivity #success #discipline,False,0
 14,reel_voice/voice (14).mp3,gym_images,Empires No Excuses,#entrepreneur #mindset #hustle,False,0
