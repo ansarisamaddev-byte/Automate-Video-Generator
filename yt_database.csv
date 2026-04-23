@@ -11,7 +11,7 @@ id,audio_path,image_folder,caption,hashtags,posted,last_image_index
 10,reel_voice/voice (10).mp3,gym_images,Pain of Discipline,#discipline #gymlife #ethos,True,35
 11,reel_voice/voice (11).mp3,gym_images,Winning Through Struggle,#mentalstrength #fitness #grind,True,45
 12,reel_voice/voice (12).mp3,gym_images,Be Your Own Hero,#legacy #mindset #warrior,True,46
-13,reel_voice/voice (13).mp3,gym_images,Action Over Words,#productivity #success #discipline,False,0
+13,reel_voice/voice (13).mp3,gym_images,Action Over Words,#productivity #success #discipline,True,52
 14,reel_voice/voice (14).mp3,gym_images,Empires No Excuses,#entrepreneur #mindset #hustle,False,0
 15,reel_voice/voice (15).mp3,gym_images,Luck vs 4 AM,#morningroutine #discipline #warrior,False,0
 16,reel_voice/voice (16).mp3,gym_images,The Power of Silence,#stoicism #focus #mindset,False,0
