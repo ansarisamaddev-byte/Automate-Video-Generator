@@ -13,7 +13,7 @@ id,audio_path,image_folder,caption,hashtags,posted,last_image_index
 12,reel_voice/voice (12).mp3,gym_images,Be the person your younger self would look up to.,#legacy #mindset #warrior,True,45
 13,reel_voice/voice (13).mp3,gym_images,Action is the foundational key to all success.,#productivity #success #discipline,True,51
 14,reel_voice/voice (14).mp3,gym_images,Excuses don't build empires.,#entrepreneur #mindset #hustle,True,60
-15,reel_voice/voice (15).mp3,gym_images,"They call it luck, you call it 4 AM.",#morningroutine #discipline #warrior,False,0
+15,reel_voice/voice (15).mp3,gym_images,"They call it luck, you call it 4 AM.",#morningroutine #discipline #warrior,True,62
 16,reel_voice/voice (16).mp3,gym_images,A quiet mind is a powerful mind.,#stoicism #focus #mindset,False,0
 17,reel_voice/voice (17).mp3,gym_images,"Fall seven times, stand up eight.",#resilience #grit #nevergiveup,False,0
 18,reel_voice/voice (18).mp3,gym_images,"Don't wish it were easier, wish you were better.",#improvement #growth #gymmotivation,False,0
