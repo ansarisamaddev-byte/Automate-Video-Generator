@@ -15,7 +15,7 @@ id,audio_path,image_folder,caption,hashtags,posted,last_image_index
 14,reel_voice/voice (14).mp3,gym_images,Empires No Excuses,#entrepreneur #mindset #hustle,True,61
 15,reel_voice/voice (15).mp3,gym_images,Luck vs 4 AM,#morningroutine #discipline #warrior,True,64
 16,reel_voice/voice (16).mp3,gym_images,The Power of Silence,#stoicism #focus #mindset,True,71
-17,reel_voice/voice (17).mp3,gym_images,The Grit To Stand,#resilience #grit #nevergiveup,False,0
+17,reel_voice/voice (17).mp3,gym_images,The Grit To Stand,#resilience #grit #nevergiveup,True,73
 18,reel_voice/voice (18).mp3,gym_images,Be Better Not Easier,#improvement #growth #gymmotivation,False,0
 19,reel_voice/voice (19).mp3,gym_images,Average Is Not Enough,#consistency #grind #warrior,False,0
 20,reel_voice/voice (20).mp3,gym_images,The Sweetest Victory,#victory #ethos #success,False,0
