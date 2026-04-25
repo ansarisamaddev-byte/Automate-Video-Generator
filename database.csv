@@ -16,7 +16,7 @@ id,audio_path,image_folder,caption,hashtags,posted,last_image_index
 15,reel_voice/voice (15).mp3,gym_images,"They call it luck, you call it 4 AM.",#morningroutine #discipline #warrior,True,62
 16,reel_voice/voice (16).mp3,gym_images,A quiet mind is a powerful mind.,#stoicism #focus #mindset,True,68
 17,reel_voice/voice (17).mp3,gym_images,"Fall seven times, stand up eight.",#resilience #grit #nevergiveup,True,70
-18,reel_voice/voice (18).mp3,gym_images,"Don't wish it were easier, wish you were better.",#improvement #growth #gymmotivation,False,0
+18,reel_voice/voice (18).mp3,gym_images,"Don't wish it were easier, wish you were better.",#improvement #growth #gymmotivation,True,75
 19,reel_voice/voice (19).mp3,gym_images,Consistency is what transforms average into excellence.,#consistency #grind #warrior,False,0
 20,reel_voice/voice (20).mp3,gym_images,"The harder the battle, the sweeter the victory.",#victory #ethos #success,False,0
 21,reel_voice/voice (21).mp3,gym_images,The Cost of Regret,#regret #discipline #stoic,False,0
