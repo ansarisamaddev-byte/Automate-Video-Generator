@@ -18,7 +18,7 @@ id,audio_path,image_folder,caption,hashtags,posted,last_image_index
 17,reel_voice/voice (17).mp3,gym_images,The Grit To Stand,#resilience #grit #nevergiveup,True,73
 18,reel_voice/voice (18).mp3,gym_images,Be Better Not Easier,#improvement #growth #gymmotivation,True,78
 19,reel_voice/voice (19).mp3,gym_images,Average Is Not Enough,#consistency #grind #warrior,True,80
-20,reel_voice/voice (20).mp3,gym_images,The Sweetest Victory,#victory #ethos #success,False,0
+20,reel_voice/voice (20).mp3,gym_images,The Sweetest Victory,#victory #ethos #success,True,86
 21,reel_voice/voice (21).mp3,gym_images,The Cost of Regret,#regret #discipline #stoic,False,0
 22,reel_voice/voice (22).mp3,gym_images,Build In Silence,#hustle #privacy #success,False,0
 23,reel_voice/voice (23).mp3,gym_images,Stay Dangerous,#mindset #warrior #focus,False,0
