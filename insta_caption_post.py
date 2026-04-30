@@ -17,6 +17,7 @@ SAFE_MARGIN = 60
 SLIDE_OFFSET = 80
 FONTS = [
     r"fonts/dejavu-sans-bold.ttf",
+    r"fonts/New folder/Montserrat-VariableFont_wght.ttf",
     r"fonts/Blankit-8MW2B.ttf", r"fonts/Cintaly-ax7v9.otf",
     r"fonts/dejavu-sans-bold.ttf", r"fonts/Sabering-gwAG3.otf",
     r"fonts/Sugiono-3zqyy.ttf", r"fonts/SukaCoffee-DYmzE.otf"
@@ -72,39 +73,66 @@ def create_word_data(text, font_path, max_horizontal_available, fill_color=(255,
 # ---------------- PAGINATION ---------------- #
 def render_paginated_text(segment, segment_end, clips):
     words_in_current_page = []
-    curr_x, curr_y, line_h = SAFE_MARGIN, SCREEN_H // 3, 0
+    curr_x = SAFE_MARGIN
+    curr_y = SCREEN_H // 3
+    line_h = 0
+    
+    # We define a strict right-side boundary. 
+    # If a word's right edge would go past this, it MUST go to the next line.
+    RIGHT_BOUNDARY = SCREEN_W - SAFE_MARGIN
     USABLE_WIDTH = SCREEN_W - (SAFE_MARGIN * 2)
+    
     HIGHLIGHT_COLORS = [(255, 255, 0), (0, 255, 255), (50, 255, 50)]
 
     for i, w_obj in enumerate(segment.words):
         txt = w_obj.word.strip().upper()
         if not txt: continue
 
+        # Random color logic
         word_color = random.choice(HIGHLIGHT_COLORS) if random.random() < 0.15 else (255, 255, 255)
+
+        # Generate the word data
         arr, w, h = create_word_data(txt, random.choice(FONTS), USABLE_WIDTH, fill_color=word_color)
 
-        if curr_x + w > (SCREEN_W - SAFE_MARGIN):
-            curr_x = SAFE_MARGIN
-            curr_y += line_h + 30 
-            line_h = 0
+        # 🔥 THE FIX: Check if the word fits on the CURRENT line
+        # We add a 20px buffer to be safe
+        if curr_x + w > RIGHT_BOUNDARY:
+            curr_x = SAFE_MARGIN    # Reset to left
+            curr_y += line_h + 35   # Move down (with extra line spacing)
+            line_h = 0              # Reset line height for the new line
 
+        # Check if we ran out of vertical space (Page Break)
         if curr_y + h > (SCREEN_H - SAFE_MARGIN):
             page_end_time = w_obj.start
             for p_word in words_in_current_page:
                 p_word['clip'] = p_word['clip'].with_duration(max(0.1, page_end_time - p_word['start']))
                 clips.append(p_word['clip'])
-            words_in_current_page, curr_x, curr_y, line_h = [], SAFE_MARGIN, SCREEN_H // 3, 0
+            
+            # Reset everything for a fresh screen
+            words_in_current_page = []
+            curr_x = SAFE_MARGIN
+            curr_y = SCREEN_H // 3
+            line_h = 0
 
+        # Positioning
         direction = "left" if curr_x < SCREEN_W // 2 else "right"
-        word_clip = (ImageClip(arr).with_start(w_obj.start).with_duration(max(0.1, segment_end - w_obj.start))
-                     .with_position(lambda t, x=curr_x, y=curr_y, d=direction, ww=w, hh=h: 
-                                    get_sliding_position(t, x, y, d, ww, hh)))
+        start_t = w_obj.start
+        total_dur = max(0.1, segment_end - start_t)
         
-        words_in_current_page.append({'clip': word_clip, 'start': w_obj.start})
-        curr_x += w + 20
+        word_clip = (ImageClip(arr)
+             .with_start(start_t)
+             .with_duration(total_dur)
+             .with_position(lambda t, x=curr_x, y=curr_y, d=direction, ww=w, hh=h: 
+                            get_sliding_position(t, x, y, d, ww, hh)))
+        
+        words_in_current_page.append({'clip': word_clip, 'start': start_t})
+        
+        # Move cursor for next word
+        curr_x += w + 25 # Increased horizontal spacing between words
         line_h = max(line_h, h)
 
-    for p_word in words_in_current_page: clips.append(p_word['clip'])
+    for p_word in words_in_current_page:
+        clips.append(p_word['clip'])
 
 # ---------------- MAIN ENGINE ---------------- #
 def generate_reel(audio_path, image_folder, music_path=None, credit_video_path=None, output_name="output.mp4", start_at=0):
@@ -160,7 +188,7 @@ def generate_reel(audio_path, image_folder, music_path=None, credit_video_path=N
 if __name__ == "__main__":
     # Example of a manual test call
     next_idx = generate_reel(
-        audio_path="reel_voice/voice (22).mp3",
+        audio_path="reel_voice/voice (25).mp3",
         image_folder="gym_images",
         music_path="background_music/workout_beat.mp3", # Optional: add a path if you want music
         credit_video_path="ending/outro.mp4",           # Optional: add a path if you want an ending
