@@ -17,7 +17,6 @@ SAFE_MARGIN = 60
 SLIDE_OFFSET = 80
 FONTS = [
     r"fonts/dejavu-sans-bold.ttf",
-    r"fonts/New folder/Montserrat-VariableFont_wght.ttf",
     r"fonts/Blankit-8MW2B.ttf", r"fonts/Cintaly-ax7v9.otf",
     r"fonts/dejavu-sans-bold.ttf", r"fonts/Sabering-gwAG3.otf",
     r"fonts/Sugiono-3zqyy.ttf", r"fonts/SukaCoffee-DYmzE.otf"
