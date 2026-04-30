@@ -22,7 +22,7 @@ id,audio_path,image_folder,caption,hashtags,posted,last_image_index
 21,reel_voice/voice (21).mp3,gym_images,The Cost of Regret,#regret #discipline #stoic,True,88
 22,reel_voice/voice (22).mp3,gym_images,Build In Silence,#hustle #privacy #success,True,89
 23,reel_voice/voice (23).mp3,gym_images,Stay Dangerous,#mindset #warrior #focus,True,90
-24,reel_voice/voice (24).mp3,gym_images,Respect The Process,#consistency #gymmotivation #grind,False,0
+24,reel_voice/voice (24).mp3,gym_images,Respect The Process,#consistency #gymmotivation #grind,True,91
 25,reel_voice/voice (25).mp3,gym_images,Master Your Emotions,#stoicism #mentalstrength #growth,False,0
 26,reel_voice/voice (26).mp3,gym_images,No One Is Coming,#selfreliance #discipline #warrior,False,0
 27,reel_voice/voice (27).mp3,gym_images,Work While They Sleep,#ambition #entrepreneur #hustle,False,0
