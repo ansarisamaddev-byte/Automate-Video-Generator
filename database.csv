@@ -24,7 +24,7 @@ id,audio_path,image_folder,caption,hashtags,posted,last_image_index
 23,reel_voice/voice (23).mp3,gym_images,Stay Dangerous,#mindset #warrior #focus,True,87
 24,reel_voice/voice (24).mp3,gym_images,Respect The Process,#consistency #gymmotivation #grind,True,88
 25,reel_voice/voice (25).mp3,gym_images,Master Your Emotions,#stoicism #mentalstrength #growth,True,95
-26,reel_voice/voice (26).mp3,gym_images,No One Is Coming,#selfreliance #discipline #warrior,False,0
+26,reel_voice/voice (26).mp3,gym_images,No One Is Coming,#selfreliance #discipline #warrior,True,104
 27,reel_voice/voice (27).mp3,gym_images,Work While They Sleep,#ambition #entrepreneur #hustle,False,0
 28,reel_voice/voice (28).mp3,gym_images,Don't Negotiate With Yourself,#discipline #mindset #fitness,False,0
 29,reel_voice/voice (29).mp3,gym_images,The Burden of Greatness,#success #sacrifice #stoic,False,0
