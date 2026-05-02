@@ -43,9 +43,10 @@ def get_sliding_position(t, tx, ty, direction, w, h):
     return clamp(x, SAFE_MARGIN, SCREEN_W - w - SAFE_MARGIN), clamp(y, SAFE_MARGIN, SCREEN_H - h - SAFE_MARGIN)
 
 # ---------------- TEXT RENDER (COLOR & MIN SIZE) ---------------- #
-def create_word_data(text, font_path, max_horizontal_available, fill_color=(255, 255, 255)):
-    target_size = random.randint(115, 130)
-    min_font_size = 100 
+def create_word_data(text, font_path, max_horizontal_available):
+    # Fixed target size and a strict minimum floor
+    target_size = 120
+    MIN_FONT_SIZE = 85 
 
     try:
         font = ImageFont.truetype(font_path, target_size)
@@ -53,86 +54,88 @@ def create_word_data(text, font_path, max_horizontal_available, fill_color=(255,
         font = ImageFont.load_default()
 
     temp_draw = ImageDraw.Draw(Image.new("RGBA", (1, 1)))
-    bbox = temp_draw.textbbox((0, 0), text, font=font)
-    w, h = (bbox[2] - bbox[0]) + 60, (bbox[3] - bbox[1]) + 40
+    
+    def get_dims(f):
+        bbox = temp_draw.textbbox((0, 0), text, font=f)
+        return bbox[2] - bbox[0], bbox[3] - bbox[1]
 
-    if w > max_horizontal_available:
-        scale = max_horizontal_available / w
-        new_size = max(min_font_size, int(target_size * scale))
-        font = ImageFont.truetype(font_path, new_size)
-        bbox = temp_draw.textbbox((0, 0), text, font=font)
-        w, h = (bbox[2] - bbox[0]) + 60, (bbox[3] - bbox[1]) + 40
+    w_text, h_text = get_dims(font)
 
-    w, h = make_even(w), make_even(h)
-    img = Image.new("RGBA", (w, h), (0, 0, 0, 0))
+    # Scale down if too wide, but never below MIN_FONT_SIZE
+    if w_text > max_horizontal_available:
+        scale = max_horizontal_available / w_text
+        final_size = max(MIN_FONT_SIZE, int(target_size * scale))
+        font = ImageFont.truetype(font_path, final_size)
+        w_text, h_text = get_dims(font)
+
+    padding = 25
+    w_canvas, h_canvas = make_even(w_text + padding), make_even(h_text + padding)
+    
+    img = Image.new("RGBA", (w_canvas, h_canvas), (0, 0, 0, 0))
     draw = ImageDraw.Draw(img)
-    draw.text((w // 2, h // 2), text, font=font, fill=fill_color,
-              stroke_width=7, stroke_fill=(0, 0, 0), anchor="mm")
-    return np.array(img), w, h
+    
+    # fill_color is now strictly white
+    draw.text((w_canvas // 2, h_canvas // 2), text, font=font, fill=(255, 255, 255),
+              stroke_width=8, stroke_fill=(0, 0, 0), anchor="mm")
+    
+    return np.array(img), w_canvas, h_canvas
 
 # ---------------- PAGINATION ---------------- #
 def render_paginated_text(segment, segment_end, clips):
-    words_in_current_page = []
+    words_on_screen = []
     curr_x = SAFE_MARGIN
-    curr_y = SCREEN_H // 3
+    curr_y = SCREEN_H // 3 
     line_h = 0
     
-    # We define a strict right-side boundary. 
-    # If a word's right edge would go past this, it MUST go to the next line.
     RIGHT_BOUNDARY = SCREEN_W - SAFE_MARGIN
+    BOTTOM_BOUNDARY = SCREEN_H - 450 # Safety buffer for Reels/TikTok UI
     USABLE_WIDTH = SCREEN_W - (SAFE_MARGIN * 2)
-    
-    HIGHLIGHT_COLORS = [(255, 255, 0), (0, 255, 255), (50, 255, 50)]
 
-    for i, w_obj in enumerate(segment.words):
+    # Process words that actually have text
+    valid_words = [w for w in segment.words if w.word.strip()]
+
+    for i, w_obj in enumerate(valid_words):
         txt = w_obj.word.strip().upper()
-        if not txt: continue
+        
+        # Call the updated renderer (no color logic inside)
+        arr, w, h = create_word_data(txt, random.choice(FONTS), USABLE_WIDTH)
 
-        # Random color logic
-        word_color = random.choice(HIGHLIGHT_COLORS) if random.random() < 0.15 else (255, 255, 255)
-
-        # Generate the word data
-        arr, w, h = create_word_data(txt, random.choice(FONTS), USABLE_WIDTH, fill_color=word_color)
-
-        # 🔥 THE FIX: Check if the word fits on the CURRENT line
-        # We add a 20px buffer to be safe
+        # Line Wrap Check
         if curr_x + w > RIGHT_BOUNDARY:
-            curr_x = SAFE_MARGIN    # Reset to left
-            curr_y += line_h + 35   # Move down (with extra line spacing)
-            line_h = 0              # Reset line height for the new line
+            curr_x = SAFE_MARGIN
+            curr_y += line_h + 35 
+            line_h = 0
 
-        # Check if we ran out of vertical space (Page Break)
-        if curr_y + h > (SCREEN_H - SAFE_MARGIN):
-            page_end_time = w_obj.start
-            for p_word in words_in_current_page:
-                p_word['clip'] = p_word['clip'].with_duration(max(0.1, page_end_time - p_word['start']))
-                clips.append(p_word['clip'])
+        # Page Wrap Check (Clear screen when full)
+        if curr_y + h > BOTTOM_BOUNDARY:
+            page_clear_time = w_obj.start
+            for item in words_on_screen:
+                item['clip'] = item['clip'].with_duration(max(0.1, page_clear_time - item['start']))
+                clips.append(item['clip'])
             
-            # Reset everything for a fresh screen
-            words_in_current_page = []
+            # Reset for fresh page
+            words_on_screen = []
             curr_x = SAFE_MARGIN
             curr_y = SCREEN_H // 3
             line_h = 0
 
-        # Positioning
-        direction = "left" if curr_x < SCREEN_W // 2 else "right"
+        # Create Clip
         start_t = w_obj.start
-        total_dur = max(0.1, segment_end - start_t)
-        
         word_clip = (ImageClip(arr)
-             .with_start(start_t)
-             .with_duration(total_dur)
-             .with_position(lambda t, x=curr_x, y=curr_y, d=direction, ww=w, hh=h: 
-                            get_sliding_position(t, x, y, d, ww, hh)))
-        
-        words_in_current_page.append({'clip': word_clip, 'start': start_t})
-        
-        # Move cursor for next word
-        curr_x += w + 25 # Increased horizontal spacing between words
+                     .with_start(start_t)
+                     .with_position(lambda t, x=curr_x, y=curr_y, ww=w, hh=h: 
+                                    get_sliding_position(t, x, y, "left", ww, hh)))
+
+        words_on_screen.append({'clip': word_clip, 'start': start_t})
+
+        # Advance spacing
+        curr_x += w + 25 
         line_h = max(line_h, h)
 
-    for p_word in words_in_current_page:
-        clips.append(p_word['clip'])
+    # Ensure the last batch of words stays until the end of the segment
+    for item in words_on_screen:
+        item['clip'] = item['clip'].with_duration(max(0.1, segment_end - item['start']))
+        clips.append(item['clip'])
 
 # ---------------- MAIN ENGINE ---------------- #
 def generate_reel(audio_path, image_folder, music_path=None, credit_video_path=None, output_name="output.mp4", start_at=0):
@@ -188,7 +191,7 @@ def generate_reel(audio_path, image_folder, music_path=None, credit_video_path=N
 if __name__ == "__main__":
     # Example of a manual test call
     next_idx = generate_reel(
-        audio_path="reel_voice/voice (25).mp3",
+        audio_path="reel_voice/voice (28).mp3",
         image_folder="gym_images",
         music_path="background_music/workout_beat.mp3", # Optional: add a path if you want music
         credit_video_path="ending/outro.mp4",           # Optional: add a path if you want an ending
