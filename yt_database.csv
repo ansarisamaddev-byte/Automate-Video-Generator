@@ -28,7 +28,7 @@ id,audio_path,image_folder,caption,hashtags,posted,last_image_index
 27,reel_voice/voice (27).mp3,gym_images,Work While They Sleep,#ambition #entrepreneur #hustle,True,109
 28,reel_voice/voice (28).mp3,gym_images,Don't Negotiate With Yourself,#discipline #mindset #fitness,True,110
 29,reel_voice/voice (29).mp3,gym_images,The Burden of Greatness,#success #sacrifice #stoic,True,115
-30,reel_voice/voice (30).mp3,gym_images,Small Wins Every Day,#progress #motivation #habits,False,0
+30,reel_voice/voice (30).mp3,gym_images,Small Wins Every Day,#progress #motivation #habits,True,119
 31,reel_voice/voice (31).mp3,gym_images,Forged In Fire,#resilience #strength #warrior,False,0
 32,reel_voice/voice (32).mp3,gym_images,The Discipline Gap,#bridge #success #hardwork,False,0
 33,reel_voice/voice (33).mp3,gym_images,Sacrifice For The Vision,#dream #hustle #focus,False,0
