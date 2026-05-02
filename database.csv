@@ -26,7 +26,7 @@ id,audio_path,image_folder,caption,hashtags,posted,last_image_index
 25,reel_voice/voice (25).mp3,gym_images,Master Your Emotions,#stoicism #mentalstrength #growth,True,95
 26,reel_voice/voice (26).mp3,gym_images,No One Is Coming,#selfreliance #discipline #warrior,True,104
 27,reel_voice/voice (27).mp3,gym_images,Work While They Sleep,#ambition #entrepreneur #hustle,True,105
-28,reel_voice/voice (28).mp3,gym_images,Don't Negotiate With Yourself,#discipline #mindset #fitness,False,0
+28,reel_voice/voice (28).mp3,gym_images,Don't Negotiate With Yourself,#discipline #mindset #fitness,True,106
 29,reel_voice/voice (29).mp3,gym_images,The Burden of Greatness,#success #sacrifice #stoic,False,0
 30,reel_voice/voice (30).mp3,gym_images,Small Wins Every Day,#progress #motivation #habits,False,0
 31,reel_voice/voice (31).mp3,gym_images,Forged In Fire,#resilience #strength #warrior,False,0
