@@ -32,7 +32,7 @@ id,audio_path,image_folder,caption,hashtags,posted,last_image_index
 31,reel_voice/voice (31).mp3,gym_images,Forged In Fire,#resilience #strength #warrior,True,130
 32,reel_voice/voice (32).mp3,gym_images,The Discipline Gap,#bridge #success #hardwork,True,132
 33,reel_voice/voice (33).mp3,gym_images,Sacrifice For The Vision,#dream #hustle #focus,True,133
-34,reel_voice/voice (34).mp3,gym_images,Winners Never Quit,#perseverance #gymlife #grind,False,0
+34,reel_voice/voice (34).mp3,gym_images,Winners Never Quit,#perseverance #gymlife #grind,True,139
 35,reel_voice/voice (35).mp3,gym_images,Control The Controllables,#stoic #peace #mindset,False,0
 36,reel_voice/voice (36).mp3,gym_images,Legacy Over Likes,#purpose #authenticity #growth,False,0
 37,reel_voice/voice (37).mp3,gym_images,Your Only Competition,#selfimprovement #fitness #ethos,False,0
