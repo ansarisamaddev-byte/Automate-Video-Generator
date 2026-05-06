@@ -18,9 +18,12 @@ TRANSITION_TIME = 0.6
 
 # Update these paths to your actual font locations
 FONTS = [
-    r"font/Blankit-BWyOl.otf",
-    r"font/Cintaly-ax7v9.otf",
-    r"font/MilkyCoffee-X3mWd.otf",
+    r"fonts/Blackburn Free.ttf",
+    r"fonts/WorldstarRegular.ttf",
+    r"fonts/LemonJellyPersonalUse-dEqR.ttf",
+    r"fonts/Sugiono-3zqyy.ttf",
+    r"fonts/Cintaly-Eazdl.ttf",
+    r"fonts/Blankit-8MW2B.ttf",
 ]
 
 # ---------------- VISUAL EFFECTS ---------------- #
