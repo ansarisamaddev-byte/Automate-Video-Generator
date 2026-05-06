@@ -16,15 +16,15 @@ SCREEN_W, SCREEN_H = 1080, 1920
 SAFE_MARGIN = 60
 SLIDE_OFFSET = 80
 FONTS = [
-    r"fonts\Blackburn Free.ttf",
-    r"fonts\Blankit-8MW2B.ttf",
-    r"fonts\Cintaly-Eazdl.ttf",
-    r"fonts\dejavu-sans-bold.ttf",
-    r"fonts\LemonJellyPersonalUse-dEqR.ttf",
-    r"fonts\NotoColorEmoji.ttf",
-    r"fonts\PoemLettersSerifRegular-lgggX.ttf",
-    r"fonts\Sugiono-3zqyy.ttf",
-    r"fonts\WorldstarRegular.ttf"
+    r"fonts/Blackburn Free.ttf",
+    r"fonts/Blankit-8MW2B.ttf",
+    r"fonts/Cintaly-Eazdl.ttf",
+    r"fonts/dejavu-sans-bold.ttf",
+    r"fonts/LemonJellyPersonalUse-dEqR.ttf",
+    r"fonts/NotoColorEmoji.ttf",
+    r"fonts/PoemLettersSerifRegular-lgggX.ttf",
+    r"fonts/Sugiono-3zqyy.ttf",
+    r"fonts/WorldstarRegular.ttf"
 ]
 
 
