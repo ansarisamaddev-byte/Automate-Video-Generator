@@ -20,6 +20,8 @@ FONTS = [
     r"fonts/WorldstarRegular.ttf",
     r"fonts/LemonJellyPersonalUse-dEqR.ttf",
     r"fonts/Sugiono-3zqyy.ttf",
+    r"fonts/Cintaly-Eazdl.ttf",
+    r"fonts/Blankit-8MW2B.ttf",
 ]
 
 
