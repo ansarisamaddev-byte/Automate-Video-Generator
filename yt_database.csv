@@ -36,7 +36,7 @@ id,audio_path,image_folder,caption,hashtags,posted,last_image_index
 35,reel_voice/voice (35).mp3,gym_images,Control The Controllables,#stoic #peace #mindset,True,142
 36,reel_voice/voice (36).mp3,gym_images,Legacy Over Likes,#purpose #authenticity #growth,True,143
 37,reel_voice/voice (37).mp3,gym_images,Your Only Competition,#selfimprovement #fitness #ethos,True,144
-38,reel_voice/voice (38).mp3,gym_images,Outwork Your Talent,#dedication #effort #success,False,0
+38,reel_voice/voice (38).mp3,gym_images,Outwork Your Talent,#dedication #effort #success,True,148
 39,reel_voice/voice (39).mp3,gym_images,The Power of Habit,#routine #discipline #change,False,0
 40,reel_voice/voice (40).mp3,gym_images,Silence the Doubters,#proveit #motivation #warrior,False,0
 41,reel_voice/voice (41).mp3,gym_images,Embrace The Suck,#grit #mentalstrength #gym,False,0
