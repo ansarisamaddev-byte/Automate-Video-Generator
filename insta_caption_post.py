@@ -7,195 +7,177 @@ from moviepy import (
     AudioFileClip, ColorClip, ImageClip, VideoFileClip,
     CompositeVideoClip, CompositeAudioClip, concatenate_videoclips
 )
+from moviepy.video.fx import CrossFadeIn, FadeOut
 from faster_whisper import WhisperModel
 
-# ---------------- GLOBAL INIT ---------------- #
-model = WhisperModel("tiny", device="cpu", compute_type="int8")
-
+# ---------------- CORE CONFIG ---------------- #
+model = WhisperModel("tiny", device="cpu", compute_type="int8", cpu_threads=4)
 SCREEN_W, SCREEN_H = 1080, 1920
-SAFE_MARGIN = 60
-SLIDE_OFFSET = 80
+SAFE_MARGIN = 75
+TRANSITION_TIME = 0.6  # Slightly longer for a smoother "merge"
+
 FONTS = [
-    r"fonts/Blackburn Free.ttf",
-    r"fonts/WorldstarRegular.ttf",
-    r"fonts/LemonJellyPersonalUse-dEqR.ttf",
-    r"fonts/Sugiono-3zqyy.ttf",
-    r"fonts/Cintaly-Eazdl.ttf",
-    r"fonts/Blankit-8MW2B.ttf",
+    r"D:\Projects\Automation\font\Blankit-BWyOl.otf",
+    r"D:\Projects\Automation\font\Cintaly-ax7v9.otf",
+    r"D:\Projects\Automation\font\MilkyCoffee-X3mWd.otf",
 ]
 
+# ---------------- ANIMATION & VISUALS ---------------- #
 
-# ---------------- UTILS ---------------- #
-def make_even(x):
-    x = int(round(x))
-    return x if x % 2 == 0 else x + 1
+def apply_ken_burns(clip, duration):
+    """Cinematic movement engine."""
+    mode = random.choice(["zoom_in", "zoom_out", "pan_left", "pan_right"])
+    if mode == "zoom_in":
+        return clip.resized(lambda t: 1 + 0.12 * (t / duration))
+    elif mode == "zoom_out":
+        return clip.resized(lambda t: 1.15 - 0.12 * (t / duration))
+    elif mode == "pan_left":
+        return clip.with_position(lambda t: (int(-60 * (t / duration)), "center"))
+    else: # pan_right
+        return clip.with_position(lambda t: (int(-120 + 60 * (t / duration)), "center"))
 
-def clamp(val, min_val, max_val):
-    return max(min_val, min(val, max_val))
+def apply_cinematic_darken(clip):
+    return clip.image_transform(lambda pic: (pic * 0.7).astype('uint8'))
 
-def get_sliding_position(t, tx, ty, direction, w, h):
-    slide_time = 0.12
-    if t < slide_time:
-        p = t / slide_time
-        if direction == "left": x = (tx - SLIDE_OFFSET) + (SLIDE_OFFSET * p); y = ty
-        elif direction == "right": x = (tx + SLIDE_OFFSET) - (SLIDE_OFFSET * p); y = ty
-    else:
-        x, y = tx, ty
-    return clamp(x, SAFE_MARGIN, SCREEN_W - w - SAFE_MARGIN), clamp(y, SAFE_MARGIN, SCREEN_H - h - SAFE_MARGIN)
+# ---------------- TEXT ENGINE ---------------- #
 
-# ---------------- TEXT RENDER (COLOR & MIN SIZE) ---------------- #
-def create_word_data(text, font_path, max_horizontal_available):
-    # Fixed target size and a strict minimum floor
-    target_size = 120
-    MIN_FONT_SIZE = 85 
-
+def create_word_data(text, font_path, max_width):
+    target_size, MIN_FONT_SIZE = 125, 90
     try:
         font = ImageFont.truetype(font_path, target_size)
     except:
         font = ImageFont.load_default()
 
     temp_draw = ImageDraw.Draw(Image.new("RGBA", (1, 1)))
-    
-    def get_dims(f):
-        bbox = temp_draw.textbbox((0, 0), text, font=f)
-        return bbox[2] - bbox[0], bbox[3] - bbox[1]
+    bbox = temp_draw.textbbox((0, 0), text, font=font)
+    w_text, h_text = bbox[2] - bbox[0], bbox[3] - bbox[1]
 
-    w_text, h_text = get_dims(font)
+    if w_text > max_width:
+        scale = max_width / w_text
+        font = ImageFont.truetype(font_path, max(MIN_FONT_SIZE, int(target_size * scale)))
+        bbox = temp_draw.textbbox((0, 0), text, font=font)
+        w_text, h_text = bbox[2] - bbox[0], bbox[3] - bbox[1]
 
-    # Scale down if too wide, but never below MIN_FONT_SIZE
-    if w_text > max_horizontal_available:
-        scale = max_horizontal_available / w_text
-        final_size = max(MIN_FONT_SIZE, int(target_size * scale))
-        font = ImageFont.truetype(font_path, final_size)
-        w_text, h_text = get_dims(font)
-
-    padding = 25
-    w_canvas, h_canvas = make_even(w_text + padding), make_even(h_text + padding)
-    
+    w_canvas, h_canvas = int(w_text + 50), int(h_text + 50)
     img = Image.new("RGBA", (w_canvas, h_canvas), (0, 0, 0, 0))
     draw = ImageDraw.Draw(img)
-    
-    # fill_color is now strictly white
     draw.text((w_canvas // 2, h_canvas // 2), text, font=font, fill=(255, 255, 255),
-              stroke_width=8, stroke_fill=(0, 0, 0), anchor="mm")
-    
+              stroke_width=15, stroke_fill=(0, 0, 0), anchor="mm")
     return np.array(img), w_canvas, h_canvas
 
-# ---------------- PAGINATION ---------------- #
-def render_paginated_text(segment, segment_end, clips):
-    words_on_screen = []
-    curr_x = SAFE_MARGIN
-    curr_y = SCREEN_H // 3 
-    line_h = 0
-    
-    RIGHT_BOUNDARY = SCREEN_W - SAFE_MARGIN
-    BOTTOM_BOUNDARY = SCREEN_H - 450 # Safety buffer for Reels/TikTok UI
-    USABLE_WIDTH = SCREEN_W - (SAFE_MARGIN * 2)
+# ---------------- MAIN PIPELINE ---------------- #
 
-    # Process words that actually have text
-    valid_words = [w for w in segment.words if w.word.strip()]
-
-    for i, w_obj in enumerate(valid_words):
-        txt = w_obj.word.strip().upper()
-        
-        # Call the updated renderer (no color logic inside)
-        arr, w, h = create_word_data(txt, random.choice(FONTS), USABLE_WIDTH)
-
-        # Line Wrap Check
-        if curr_x + w > RIGHT_BOUNDARY:
-            curr_x = SAFE_MARGIN
-            curr_y += line_h + 35 
-            line_h = 0
-
-        # Page Wrap Check (Clear screen when full)
-        if curr_y + h > BOTTOM_BOUNDARY:
-            page_clear_time = w_obj.start
-            for item in words_on_screen:
-                item['clip'] = item['clip'].with_duration(max(0.1, page_clear_time - item['start']))
-                clips.append(item['clip'])
-            
-            # Reset for fresh page
-            words_on_screen = []
-            curr_x = SAFE_MARGIN
-            curr_y = SCREEN_H // 3
-            line_h = 0
-
-        # Create Clip
-        start_t = w_obj.start
-        word_clip = (ImageClip(arr)
-                     .with_start(start_t)
-                     .with_position(lambda t, x=curr_x, y=curr_y, ww=w, hh=h: 
-                                    get_sliding_position(t, x, y, "left", ww, hh)))
-
-        words_on_screen.append({'clip': word_clip, 'start': start_t})
-
-        # Advance spacing
-        curr_x += w + 25 
-        line_h = max(line_h, h)
-
-    # Ensure the last batch of words stays until the end of the segment
-    for item in words_on_screen:
-        item['clip'] = item['clip'].with_duration(max(0.1, segment_end - item['start']))
-        clips.append(item['clip'])
-
-# ---------------- MAIN ENGINE ---------------- #
-def generate_reel(audio_path, image_folder, music_path=None, credit_video_path=None, output_name="output.mp4", start_at=0):
+def generate_reel(audio_path, image_folder, music_path=None, credit_video_path=None, output_name="output.mp4"):
     image_files = sorted(glob.glob(os.path.join(image_folder, "*.jpg")))
-    result = model.transcribe(audio_path, word_timestamps=True)
-    segments = list(result[0])
+    
+    segments_gen, _ = model.transcribe(audio_path, word_timestamps=True)
+    all_words = []
+    for seg in segments_gen:
+        all_words.extend(seg.words)
     
     speech_audio = AudioFileClip(audio_path)
-    video_duration = speech_audio.duration - 0.01 
-    clips = [ColorClip((SCREEN_W, SCREEN_H), (0, 0, 0)).with_duration(video_duration)]
+    total_duration = speech_audio.duration - 0.05
 
-    for i, segment in enumerate(segments):
-        start, end = segment.start, min(segments[i+1].start if i+1 < len(segments) else video_duration, video_duration)
-        if (end - start) <= 0: continue
+    # Separate lists for Z-index management
+    bg_clips = []
+    text_clips = []
+    
+    curr_x, curr_y, line_h = SAFE_MARGIN, SCREEN_H // 3, 0
+    max_w = SCREEN_W - (SAFE_MARGIN * 2)
+    bottom_limit = SCREEN_H - 600
+    
+    image_index = 0
+    current_image_start = 0
+    words_in_current_view = []
 
-        if image_files:
-            img_idx = (start_at + i) % len(image_files)
-            img = Image.open(image_files[img_idx]).convert("RGB")
-            ratio = max(SCREEN_W/img.size[0], SCREEN_H/img.size[1])
-            img = img.resize((int(img.size[0]*ratio), int(img.size[1]*ratio)), Image.LANCZOS)
-            
-            l, t = (img.size[0]-SCREEN_W)//2, (img.size[1]-SCREEN_H)//2
-            img_arr = np.array(img.crop((l, t, l+SCREEN_W, t+SCREEN_H)))
-            
-            bg_clip = ImageClip(img_arr).with_start(start).with_duration(end-start)
-            overlay = ColorClip((SCREEN_W, SCREEN_H), (0, 0, 0)).with_opacity(0.5).with_start(start).with_duration(end-start)
-            clips.extend([bg_clip, overlay])
+    def flush_view(end_time):
+        """Creates the 'Merge' transition by overlapping background clips."""
+        nonlocal image_index, current_image_start, words_in_current_view
+        
+        view_duration = end_time - current_image_start
+        if view_duration <= 0 or not words_in_current_view: return
 
-        render_paginated_text(segment, end, clips)
+        img_path = image_files[image_index % len(image_files)]
+        img_pil = Image.open(img_path).convert("RGB")
+        
+        ratio = max(SCREEN_W / img_pil.width, SCREEN_H / img_pil.height) * 1.35
+        img_pil = img_pil.resize((int(img_pil.width * ratio), int(img_pil.height * ratio)), Image.LANCZOS)
+        img_arr = np.array(img_pil)
 
-    # Audio Mixing
-    voice = speech_audio.with_duration(video_duration)
+        # The 'Merge' Secret: Extend duration into the next clip's start time
+        bg = (ImageClip(img_arr)
+              .with_start(current_image_start)
+              .with_duration(view_duration + TRANSITION_TIME))
+        
+        bg = apply_cinematic_darken(bg)
+        bg = apply_ken_burns(bg, view_duration + TRANSITION_TIME)
+        
+        # CrossFadeIn handles the transparent blend over the previous image
+        if current_image_start > 0:
+            bg = bg.with_effects([CrossFadeIn(TRANSITION_TIME)])
+        
+        bg_clips.append(bg)
+        
+        for w_data in words_in_current_view:
+            text_clips.append(w_data['clip'].with_duration(end_time - w_data['start']))
+        
+        image_index += 1
+        current_image_start = end_time
+        words_in_current_view = []
+
+    # Processing loop
+    for w_obj in all_words:
+        word_text = w_obj.word.strip().upper()
+        if not word_text: continue
+        
+        arr, w, h = create_word_data(word_text, random.choice(FONTS), max_w)
+
+        if curr_x + w > SCREEN_W - SAFE_MARGIN:
+            curr_x, curr_y, line_h = SAFE_MARGIN, curr_y + line_h + 45, 0
+
+        if curr_y + h > bottom_limit:
+            flush_view(w_obj.start)
+            curr_x, curr_y, line_h = SAFE_MARGIN, SCREEN_H // 3, 0
+
+        safe_x, safe_y = max(0, min(curr_x, SCREEN_W - w)), max(0, min(curr_y, SCREEN_H - h))
+        
+        word_clip = (ImageClip(arr)
+                     .with_start(w_obj.start)
+                     .with_position((safe_x, safe_y)))
+        
+        words_in_current_view.append({'clip': word_clip, 'start': w_obj.start})
+        curr_x, line_h = curr_x + w + 30, max(line_h, h)
+
+    flush_view(total_duration)
+
+    # Audio Logic
+    voice = speech_audio.with_duration(total_duration)
     if music_path and os.path.exists(music_path):
-        bg_m = AudioFileClip(music_path).with_volume_scaled(0.12).with_duration(video_duration)
-        final_audio = CompositeAudioClip([voice, bg_m])
+        bgm = AudioFileClip(music_path).with_volume_scaled(0.16).with_duration(total_duration)
+        final_audio = CompositeAudioClip([voice, bgm])
     else:
         final_audio = voice
-    
-    main_reel = CompositeVideoClip(clips, size=(SCREEN_W, SCREEN_H)).with_duration(video_duration).with_audio(final_audio)
 
-    # Append Credit Video
+    # Layering: Backgrounds first, then Text on top
+    final_video_clips = bg_clips + text_clips
+    
+    video = (CompositeVideoClip(final_video_clips, size=(SCREEN_W, SCREEN_H))
+             .with_duration(total_duration)
+             .with_audio(final_audio))
+
     if credit_video_path and os.path.exists(credit_video_path):
-        credit = VideoFileClip(credit_video_path).resized(width=SCREEN_W)
-        final_video = concatenate_videoclips([main_reel, credit], method="compose")
-    else:
-        final_video = main_reel
+        try:
+            credit = VideoFileClip(credit_video_path).resized(width=SCREEN_W)
+            video = concatenate_videoclips([video, credit], method="compose")
+        except: pass
 
-    final_video.write_videofile(output_name, fps=30, codec="libx264", audio_codec="aac", threads=4)
-    
-    # Return index for database update
-    return start_at + len(segments)
+    video.write_videofile(output_name, fps=30, codec="libx264", audio_codec="aac", threads=4, preset="ultrafast")
 
 if __name__ == "__main__":
-    # Example of a manual test call
-    next_idx = generate_reel(
-        audio_path="reel_voice/voice (28).mp3",
-        image_folder="gym_images",
-        music_path="background_music/workout_beat.mp3", # Optional: add a path if you want music
-        credit_video_path="ending/outro.mp4",           # Optional: add a path if you want an ending
-        output_name="test_reel.mp4",
-        start_at=0                                      # Start from the first image
+    generate_reel(
+        audio_path="audio/voice (36).mp3",
+        image_folder="images",
+        music_path="background_music/music.mp3",
+        credit_video_path="ending/outro.mp4",
+        output_name="warrior_seamless_edition.mp4"
     )
