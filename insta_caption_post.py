@@ -17,8 +17,9 @@ SAFE_MARGIN = 60
 SLIDE_OFFSET = 80
 FONTS = [
     r"fonts/Blackburn Free.ttf",
-    r"fonts/dejavu-sans-bold.ttf",
-    r"fonts/WorldstarRegular.ttf"
+    r"fonts/WorldstarRegular.ttf",
+    r"fonts/LemonJellyPersonalUse-dEqR.ttf",
+    r"fonts/Sugiono-3zqyy.ttf",
 ]
 
 
