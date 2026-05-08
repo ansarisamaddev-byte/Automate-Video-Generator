@@ -38,7 +38,7 @@ id,audio_path,image_folder,caption,hashtags,posted,last_image_index
 37,reel_voice/voice (37).mp3,gym_images,Your Only Competition,#selfimprovement #fitness #ethos,True,144
 38,reel_voice/voice (38).mp3,gym_images,Outwork Your Talent,#dedication #effort #success,True,149
 39,reel_voice/voice (39).mp3,gym_images,The Power of Habit,#routine #discipline #change,True,154
-40,reel_voice/voice (40).mp3,gym_images,Silence the Doubters,#proveit #motivation #warrior,False,0
+40,reel_voice/voice (40).mp3,gym_images,Silence the Doubters,#proveit #motivation #warrior,True,164
 41,reel_voice/voice (41).mp3,gym_images,Embrace The Suck,#grit #mentalstrength #gym,False,0
 42,reel_voice/voice (42).mp3,gym_images,The 1 Percent Mindset,#excellence #standard #hustle,False,0
 43,reel_voice/voice (43).mp3,gym_images,Fuel From Failure,#growth #learning #success,False,0
