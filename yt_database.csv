@@ -42,7 +42,7 @@ id,audio_path,image_folder,caption,hashtags,posted,last_image_index
 41,reel_voice/voice (41).mp3,gym_images,Embrace The Suck,#grit #mentalstrength #gym,True,164
 42,reel_voice/voice (42).mp3,gym_images,The 1 Percent Mindset,#excellence #standard #hustle,True,171
 43,reel_voice/voice (43).mp3,gym_images,Fuel From Failure,#growth #learning #success,True,176
-44,reel_voice/voice (44).mp3,gym_images,Beyond The Horizon,#vision #ambition #future,False,0
+44,reel_voice/voice (44).mp3,gym_images,Beyond The Horizon,#vision #ambition #future,True,182
 45,reel_voice/voice (45).mp3,gym_images,The Iron Never Lies,#gymmotivation #truth #training,False,0
 46,reel_voice/voice (46).mp3,gym_images,Stay Hungry Stay Humble,#success #mindset #growth,False,0
 47,reel_voice/voice (47).mp3,gym_images,Battle Tested,#experience #resilience #warrior,False,0
