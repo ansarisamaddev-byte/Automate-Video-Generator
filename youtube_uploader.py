@@ -103,7 +103,7 @@ def upload_to_youtube(
 
 def run_automation():
 
-    csv_file = "reels.csv"
+    csv_file = "shorts.csv"
 
     if not os.path.exists(csv_file):
         print("❌ CSV not found")
