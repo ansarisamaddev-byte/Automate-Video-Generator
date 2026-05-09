@@ -61,7 +61,7 @@ jobs:
           git stash pop || echo "No changes to pop"
 
           # Commit updated CSV
-          git add yt_database.csv
+          git add shorts.csv
           git diff --quiet && git diff --staged --quiet || git commit -m "Auto update YouTube posted status"
           
           git push origin main
