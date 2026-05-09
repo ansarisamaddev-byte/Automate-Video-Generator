@@ -409,7 +409,7 @@ def generate_reel(
 if __name__ == "__main__":
 
     result = generate_reel(
-        audio_path="reel_voice/W (1).mp3",
+        audio_path="audio/W (1).mp3",
         image_folder="images/W",
         music_path="background_music/workout_beat.mp3",
         credit_video_path="ending/outro.mp4",
