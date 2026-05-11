@@ -27,13 +27,8 @@ SCOPES = [
     "https://www.googleapis.com/auth/youtube.upload"
 ]
 
-
-# ================= AUTH =================
-
 def get_service():
-
     creds = None
-
     if os.path.exists("token.pickle"):
         with open("token.pickle", "rb") as f:
             creds = pickle.load(f)
@@ -42,31 +37,12 @@ def get_service():
         creds.refresh(Request())
 
     return googleapiclient.discovery.build(
-        "youtube",
-        "v3",
-        credentials=creds
+        "youtube", "v3", credentials=creds
     )
 
-
-# ================= UPLOAD =================
-
-def upload_to_youtube(
-    video_path,
-    title,
-    description,
-    tags
-):
+def upload_to_youtube(video_path, title, description, tags):
     try:
-
-        print("☁️ Uploading to Cloudinary...")
-
-        cloudinary.uploader.upload(
-            video_path,
-            resource_type="video"
-        )
-
         print("📤 Uploading to YouTube...")
-
         youtube = get_service()
 
         request = youtube.videos().insert(
@@ -86,144 +62,101 @@ def upload_to_youtube(
         )
 
         response = request.execute()
-
-        print(
-            f"✅ Uploaded: "
-            f"https://www.youtube.com/watch?v={response['id']}"
-        )
-
+        print(f"✅ Uploaded: https://www.youtube.com/watch?v={response['id']}")
         return True
 
     except Exception as e:
-        print(f"❌ Upload Error: {e}")
+        print(f"❌ YouTube Upload Error: {e}")
         return False
 
-
-# ================= MAIN =================
+# ================= MAIN AUTOMATION LOGIC =================
 
 def run_automation():
-
     csv_file = "shorts.csv"
 
     if not os.path.exists(csv_file):
         print("❌ CSV not found")
         return
 
+    # Load data and standardize the 'posted' column
     df = pd.read_csv(csv_file)
+    df["posted"] = df["posted"].astype(str).str.lower()
 
-    unposted = (
-        df["posted"]
-        .astype(str)
-        .str.lower() == "false"
-    )
+    # Find rows that haven't been processed yet
+    unposted_df = df[df["posted"] == "false"]
 
-    if not unposted.any():
-        print("✅ All uploaded")
+    if unposted_df.empty:
+        print("✅ All reels have been posted!")
         return
 
-    index = df[unposted].index[0]
-    row = df.loc[index]
+    # Get the index of the first unposted row
+    current_index = unposted_df.index[0]
+    row = df.loc[current_index]
 
-    start_idx = int(
-        row["last_image_index"]
-    )
-
-    bg_music_files = glob.glob(
-        "background_music/*.mp3"
-    )
-
-    bg_music = (
-        random.choice(bg_music_files)
-        if bg_music_files else None
-    )
-
-    ending_assets = glob.glob(
-        "ending/*.mp4"
-    )
-
-    if not ending_assets:
-        print("❌ No ending videos")
-        return
-
-    selected_ending = random.choice(
-        ending_assets
-    )
-
-    output_video = "yt_output.mp4"
-
-    print("🎬 Generating video...")
-
-    result = generate_reel(
-        audio_path=row["audio_path"],
-        image_folder=row["image_folder"],
-        music_path=bg_music,
-        credit_video_path=selected_ending,
-        output_name=output_video,
-        start_at=start_idx
-    )
-
-    caption = result["caption"]
-    new_last_index = result["last_index"]
-
-    # Detect W / M
-    if (
-        "/W" in row["audio_path"]
-        or "\\W" in row["audio_path"]
-    ):
-        hashtags = [
-            "warrior",
-            "discipline",
-            "grind",
-            "stoic",
-            "shorts"
-        ]
-
+    # --- THE IMAGE INDEX FIX ---
+    # We look at the row immediately before this one to see where it stopped.
+    # This prevents every video from starting back at image 0.
+    if current_index > 0:
+        start_idx = int(df.loc[current_index - 1, "last_image_index"])
     else:
-        hashtags = [
-            "motivation",
-            "mindset",
-            "success",
-            "growth",
-            "shorts"
-        ]
+        start_idx = int(row["last_image_index"])
+
+    print(f"🚀 Processing ID {row.get('id', current_index)} | Starting at image index: {start_idx}")
+
+    # --- ASSET SELECTION ---
+    bg_music_files = glob.glob("background_music/*.mp3")
+    bg_music = random.choice(bg_music_files) if bg_music_files else None
+
+    ending_assets = glob.glob("ending/*.mp4")
+    if not ending_assets:
+        print("❌ Error: No ending/outro videos found.")
+        return
+    selected_ending = random.choice(ending_assets)
+
+    output_video = f"temp_output_{current_index}.mp4"
+
+    # --- GENERATION ---
+    print("🎬 Generating video content...")
+    try:
+        result = generate_reel(
+            audio_path=row["audio_path"],
+            image_folder=row["image_folder"],
+            music_path=bg_music,
+            credit_video_path=selected_ending,
+            output_name=output_video,
+            start_at=start_idx
+        )
+    except Exception as e:
+        print(f"❌ Generation failed: {e}")
+        return
+
+    # --- METADATA & HASHTAGS ---
+    caption = result["caption"]
+    is_warrior_theme = any(x in row["audio_path"].upper() for x in ["/W", "\\W", "W ("])
+    
+    if is_warrior_theme:
+        hashtags = ["warrior", "discipline", "grind", "stoic", "shorts"]
+    else:
+        hashtags = ["motivation", "mindset", "success", "growth", "shorts"]
 
     title = f"{caption} 💪 #shorts"
+    description = f"{caption}\n\n#{' #'.join(hashtags)}\n\n🔥 Daily Motivation\n🚀 Subscribe For More"
 
-    description = f"""
-{caption}
+    # --- UPLOAD & UPDATE ---
+    if upload_to_youtube(output_video, title, description, hashtags):
+        # Update current row as posted
+        df.at[current_index, "posted"] = "true"
+        # Store where we ended so the NEXT row knows where to start
+        df.at[current_index, "last_image_index"] = result["last_index"]
 
-#{' #'.join(hashtags)}
-
-🔥 Daily Motivation
-🚀 Subscribe For More
-"""
-
-    if upload_to_youtube(
-        output_video,
-        title,
-        description,
-        hashtags
-    ):
-
-        df.at[index, "posted"] = True
-        df.at[
-            index,
-            "last_image_index"
-        ] = new_last_index
-
-        df.to_csv(
-            csv_file,
-            index=False
-        )
-
+        # Save CSV immediately
+        df.to_csv(csv_file, index=False)
+        
         if os.path.exists(output_video):
             os.remove(output_video)
-
-        print("✅ DONE")
-
+        print("✅ Process Complete.")
     else:
-        print("❌ Upload failed")
-
+        print("❌ Process aborted due to upload failure.")
 
 if __name__ == "__main__":
     run_automation()
