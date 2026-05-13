@@ -6,7 +6,7 @@ id,audio_path,image_folder,posted,last_image_index
 5,audio/M (50).mp3,images/M,true,16
 6,audio/M (65).mp3,images/M,true,20
 7,audio/W (36).mp3,images/W,true,29
-8,audio/W (6).mp3,images/W,false,0
+8,audio/W (6).mp3,images/W,true,31
 9,audio/W (20).mp3,images/W,false,0
 10,audio/W (23).mp3,images/W,false,0
 11,audio/M (20).mp3,images/M,false,0
