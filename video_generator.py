@@ -413,7 +413,7 @@ if __name__ == "__main__":
         image_folder="images/psycho",
         music_path="background_music/workout_beat.mp3",
         credit_video_path="ending/outro.mp4",
-        output_name="test_reel.mp4",
+        output_name="test_reel_2.mp4",
         start_at=0
     )
 
