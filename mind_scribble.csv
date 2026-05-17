@@ -1,2 +1,13 @@
 id,audio_path,image_folder,posted,last_image_index
 1,audio/psycho/audio (1).mp3,images/psycho,true,19
+2,audio/mindscribble/audio (1).mp3,images/mindscribble,false,0
+3,audio/mindscribble/audio (2).mp3,images/mindscribble,false,0
+4,audio/mindscribble/audio (3).mp3,images/mindscribble,false,0
+5,audio/mindscribble/audio (4).mp3,images/mindscribble,false,0
+6,audio/mindscribble/audio (5).mp3,images/mindscribble,false,0
+7,audio/mindscribble/audio (6).mp3,images/mindscribble,false,0
+8,audio/mindscribble/audio (7).mp3,images/mindscribble,false,0
+9,audio/mindscribble/audio (8).mp3,images/mindscribble,false,0
+10,audio/mindscribble/audio (9).mp3,images/mindscribble,false,0
+11,audio/mindscribble/audio (10).mp3,images/mindscribble,false,0
+12,audio/mindscribble/audio (11).mp3,images/mindscribble,false,0
