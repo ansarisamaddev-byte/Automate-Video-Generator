@@ -409,19 +409,11 @@ def generate_reel(
 if __name__ == "__main__":
 
     result = generate_reel(
-<<<<<<< HEAD
-        audio_path="audio/W (1).mp3",
-        image_folder="images/W",
-        music_path="background_music/workout_beat.mp3",
-        credit_video_path="ending/outro.mp4",
-        output_name="test_reel.mp4",
-=======
         audio_path="audio/psycho/audio (1).mp3",
         image_folder="images/psycho",
         music_path="background_music/workout_beat.mp3",
         credit_video_path="ending/outro.mp4",
         output_name="test_reel_2.mp4",
->>>>>>> human_mind
         start_at=0
     )
 
