@@ -132,7 +132,7 @@ def run_automation():
     )
 
     endings = glob.glob(
-        "ending/*.mp4"
+        "ending/warrior/*.mp4"
     )
 
     if not endings:

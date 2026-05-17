@@ -107,7 +107,7 @@ def run_automation():
     bg_music_files = glob.glob("background_music/*.mp3")
     bg_music = random.choice(bg_music_files) if bg_music_files else None
 
-    ending_assets = glob.glob("ending/*.mp4")
+    ending_assets = glob.glob("ending/warrior/*.mp4")
     if not ending_assets:
         print("❌ Error: No ending/outro videos found.")
         return
