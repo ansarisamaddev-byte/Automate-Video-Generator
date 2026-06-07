@@ -96,8 +96,12 @@ def run_automation():
     # --- THE IMAGE INDEX FIX ---
     # We look at the row immediately before this one to see where it stopped.
     # This prevents every video from starting back at image 0.
-    if current_index > 0:
-        start_idx = int(df.loc[current_index - 1, "last_image_index"])
+    current_loc = df.index.get_loc(current_index)
+    
+    if current_loc > 0:
+        # Get the label of the previous row safely
+        prev_idx_label = df.index[current_loc - 1]
+        start_idx = int(df.loc[prev_idx_label, "last_image_index"])
     else:
         start_idx = int(row["last_image_index"])
 
