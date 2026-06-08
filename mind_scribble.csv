@@ -1,4 +1,4 @@
-id,audio_path,image_folder,posted,last_image_index
+Id,audio_path,image_folder,posted,last_image_index
 1,audio/psycho/audio (1).mp3,images/psycho,true,5
 2,audio/mindscribble/audio (1).mp3,images/mindscribble,true,7
 3,audio/mindscribble/audio (2).mp3,images/mindscribble,true,25
@@ -11,3 +11,22 @@ id,audio_path,image_folder,posted,last_image_index
 10,audio/mindscribble/audio (9).mp3,images/mindscribble,true,148
 11,audio/mindscribble/audio (10).mp3,images/mindscribble,true,167
 12,audio/mindscribble/audio (11).mp3,images/mindscribble,true,185
+13,audio/mindscribble/audio (12).mp3,images/mindscribble,true,0
+14,audio/mindscribble/audio (13).mp3,images/mindscribble,true,0
+15,audio/mindscribble/audio (14).mp3,images/mindscribble,true,0
+16,audio/mindscribble/audio (15).mp3,images/mindscribble,true,0
+17,audio/mindscribble/audio (16).mp3,images/mindscribble,true,0
+18,audio/mindscribble/audio (17).mp3,images/mindscribble,true,0
+19,audio/mindscribble/audio (18).mp3,images/mindscribble,true,0
+20,audio/mindscribble/audio (19).mp3,images/mindscribble,true,0
+21,audio/mindscribble/audio (20).mp3,images/mindscribble,true,0
+22,audio/mindscribble/audio (21).mp3,images/mindscribble,true,0
+23,audio/mindscribble/audio (22).mp3,images/mindscribble,true,0
+24,audio/mindscribble/audio (23).mp3,images/mindscribble,true,0
+25,audio/mindscribble/audio (24).mp3,images/mindscribble,true,0
+26,audio/mindscribble/audio (25).mp3,images/mindscribble,true,0
+27,audio/mindscribble/audio (26).mp3,images/mindscribble,true,0
+28,audio/mindscribble/audio (27).mp3,images/mindscribble,true,0
+29,audio/mindscribble/audio (28).mp3,images/mindscribble,true,0
+30,audio/mindscribble/audio (29).mp3,images/mindscribble,true,0
+31,audio/mindscribble/audio (30).mp3,images/mindscribble,true,0
