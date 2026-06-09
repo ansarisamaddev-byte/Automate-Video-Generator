@@ -151,7 +151,6 @@ id,audio_path,image_folder,posted,last_image_index
 150,audio/M (110).mp3,images/warrior/M,False,0
 151,audio/M (111).mp3,images/warrior/M,False,0
 152,audio/M (112).mp3,images/warrior/M,False,0
-<<<<<<< HEAD
 153,audio/M (113).mp3,images/warrior/M,False,0
 154,audio/M (114).mp3,images/warrior/M,False,0
 155,audio/M (115).mp3,images/warrior/M,False,0
@@ -168,5 +167,3 @@ id,audio_path,image_folder,posted,last_image_index
 166,audio/M (126).mp3,images/warrior/M,False,0
 167,audio/M (127).mp3,images/warrior/M,False,0
 168,audio/M (128).mp3,images/warrior/M,False,0
-=======
->>>>>>> 4dab76709c310b66ef9d8554fb35433b4ad20707
