@@ -13,11 +13,11 @@ id,audio_path,image_folder,posted,last_image_index
 12,audio/mindscribble/audio (11).mp3,images/mindscribble,true,185
 13,audio/mindscribble/audio (12).mp3,images/mindscribble,true,204
 14,audio/mindscribble/audio (13).mp3,images/mindscribble,true,223
-15,audio/mindscribble/audio (14).mp3,images/mindscribble,false,0
-16,audio/mindscribble/audio (15).mp3,images/mindscribble,false,0
-17,audio/mindscribble/audio (16).mp3,images/mindscribble,false,0
-18,audio/mindscribble/audio (17).mp3,images/mindscribble,false,0
-19,audio/mindscribble/audio (18).mp3,images/mindscribble,false,0
+15,audio/mindscribble/audio (14).mp3,images/mindscribble,true,238
+16,audio/mindscribble/audio (15).mp3,images/mindscribble,true,256
+17,audio/mindscribble/audio (16).mp3,images/mindscribble,true,273
+18,audio/mindscribble/audio (17).mp3,images/mindscribble,true,290
+19,audio/mindscribble/audio (18).mp3,images/mindscribble,true,307
 20,audio/mindscribble/audio (19).mp3,images/mindscribble,false,0
 21,audio/mindscribble/audio (20).mp3,images/mindscribble,false,0
 22,audio/mindscribble/audio (21).mp3,images/mindscribble,false,0
