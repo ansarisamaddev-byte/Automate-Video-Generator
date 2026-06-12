@@ -170,11 +170,12 @@ def generate_reel(
     start_at=0
 ):
 
-    image_files = sorted(
-        glob.glob(
-            os.path.join(image_folder, "*.jpg")
-        )
-    )
+    extensions = ["*.jpg", "*.jpeg", "*.png", "*.JPG", "*.JPEG", "*.PNG"]
+    image_files = []
+    for ext in extensions:
+        image_files.extend(glob.glob(os.path.join(image_folder, ext)))
+    
+    image_files = sorted(image_files)
 
     if not image_files:
         raise ValueError(
