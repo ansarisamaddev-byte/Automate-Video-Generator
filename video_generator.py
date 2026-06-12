@@ -35,6 +35,10 @@ TRANSITION_TIME = 0.6
 
 
 FONTS = [
+    # --- Base / Reliable Fonts ---
+    r"fonts/dejavu-sans-bold.ttf",          # Best overall for clean, error-free subtitles
+    
+    # --- Stylized / Display Fonts ---
     r"fonts/Blackburn Free.ttf",
     r"fonts/WorldstarRegular.ttf",
     r"fonts/Sugiono-3zqyy.ttf",
