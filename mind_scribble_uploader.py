@@ -38,11 +38,10 @@ def get_active_style():
     """Returns the style name based on current time."""
     hour = datetime.datetime.now().hour
     # Define your time windows
-    return "night"
-    # if 6 <= hour < 18:
-    #     return "morning"
-    # else:
-    #     return "night"
+    if 6 <= hour < 18:
+        return "morning"
+    else:
+        return "night"
 
 def get_service():
     creds = None
