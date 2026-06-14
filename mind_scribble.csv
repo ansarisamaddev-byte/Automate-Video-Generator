@@ -25,7 +25,7 @@ id,audio_path,image_folder,posted,last_image_index
 24,audio/mindscribble/audio (23).mp3,images/mindscribble,true,90
 25,audio/mindscribble/audio (24).mp3,images/mindscribble,true,109
 26,audio/mindscribble/audio (25).mp3,images/mindscribble,true,109
-27,audio/mindscribble/audio (26).mp3,images/mindscribble,false,0
+27,audio/mindscribble/audio (26).mp3,images/mindscribble,true,129
 28,audio/mindscribble/audio (27).mp3,images/mindscribble,false,0
 29,audio/mindscribble/audio (28).mp3,images/mindscribble,false,0
 30,audio/mindscribble/audio (29).mp3,images/mindscribble,false,0
