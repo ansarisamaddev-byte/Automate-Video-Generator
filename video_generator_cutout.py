@@ -6,8 +6,8 @@ import math
 
 from PIL import Image, ImageDraw, ImageFont, ImageEnhance
 
-# Standard, reliable MoviePy imports
-from moviepy.editor import (
+# --- UPDATED MOVIEPY 2.X IMPORTS ---
+from moviepy import (
     AudioFileClip,
     ImageClip,
     VideoFileClip,
@@ -15,6 +15,7 @@ from moviepy.editor import (
     CompositeAudioClip,
     concatenate_videoclips
 )
+# -----------------------------------
 
 from faster_whisper import WhisperModel
 
