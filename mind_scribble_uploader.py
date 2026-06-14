@@ -7,6 +7,7 @@ import pandas as pd
 # ================= CLOUDINARY =================
 import cloudinary
 import cloudinary.uploader
+import datetime
 
 cloudinary.config(
     cloud_name="dusdbgfey",
