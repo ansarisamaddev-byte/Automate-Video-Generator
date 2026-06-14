@@ -143,15 +143,33 @@ def run_automation():
     # --- GENERIC GENERATION CALL ---
     print(f"🎬 Generating content using {style_name} style...")
     try:
-        # Note: Ensure all your generator files use these EXACT argument names
-        result = generator_func(
-            audio_path=row["audio_path"],
-            image_folder=row["image_folder"], 
-            music_path=bg_music,
-            credit_video_path=selected_ending,
-            output_name=output_video,
-            start_at=start_idx
-        )
+        if style_name == "night":
+            # Call the night style generator with its specific arguments
+            result = generator_func(
+                audio_path=row["audio_path"],
+                bg_folder="images/backgrounds",  # Hardcoded or map it from your CSV
+                cutout_folder="images/cutouts",  # Hardcoded or map it from your CSV
+                music_path=bg_music,
+                credit_video_path=selected_ending,
+                output_name=output_video
+            )
+            
+            # The night generator doesn't track image indexes, so we just pass the start_idx forward
+            # to prevent a KeyError on the next step
+            if "last_index" not in result:
+                result["last_index"] = start_idx
+                
+        else:
+            # Call the morning style generator with its specific arguments
+            result = generator_func(
+                audio_path=row["audio_path"],
+                image_folder=row["image_folder"], 
+                music_path=bg_music,
+                credit_video_path=selected_ending,
+                output_name=output_video,
+                start_at=start_idx
+            )
+            
     except Exception as e:
         print(f"❌ Generation failed: {e}")
         return
