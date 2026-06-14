@@ -21,11 +21,26 @@ from googleapiclient.http import MediaFileUpload
 from google_auth_oauthlib.flow import InstalledAppFlow
 
 # ================= VIDEO GENERATOR =================
-from video_generator import generate_reel
+from video_generator import generate_reel as generate_morning_style   # e.g., Pencil
+from video_generator_cutout import generate_reel as generate_night_style # e.g., Cutout
 
 SCOPES = [
     "https://www.googleapis.com/auth/youtube.upload"
 ]
+
+GENERATOR_STRATEGIES = {
+    "morning": generate_morning_style,
+    "night": generate_night_style
+}
+
+def get_active_style():
+    """Returns the style name based on current time."""
+    hour = datetime.datetime.now().hour
+    # Define your time windows
+    if 6 <= hour < 18:
+        return "morning"
+    else:
+        return "night"
 
 def get_service():
     creds = None
@@ -90,55 +105,46 @@ def upload_to_youtube(video_path, title, description, tags):
         return False
 
 # ================= MAIN AUTOMATION LOGIC =================
-
 def run_automation():
     csv_file = "mind_scribble.csv"
-
     if not os.path.exists(csv_file):
         print("❌ CSV not found")
         return
 
-    # Load data and standardize the 'posted' column 
     df = pd.read_csv(csv_file)
     df["posted"] = df["posted"].astype(str).str.lower()
-
-    # Find rows that haven't been processed yet
     unposted_df = df[df["posted"] == "false"]
 
     if unposted_df.empty:
         print("✅ All MindScribble shorts have been posted!")
         return
 
-    # Get the index of the first unposted row
     current_index = unposted_df.index[0]
     row = df.loc[current_index]
 
-    # --- THE IMAGE INDEX FIX ---
-    if current_index > 0:
-        start_idx = int(df.loc[current_index - 1, "last_image_index"])
-    else:
-        start_idx = int(row["last_image_index"])
+    # --- STYLE & GENERATOR SELECTION ---
+    style_name = get_active_style()
+    generator_func = GENERATOR_STRATEGIES.get(style_name)
+    
+    print(f"🕒 Time detected: {datetime.datetime.now().strftime('%H:%M')}")
+    print(f"🚀 Using generation style: {style_name}")
 
-    print(f"🧠 Processing ID {row.get('id', current_index)} | Starting at sketch image index: {start_idx}")
-
-    # --- ASSET SELECTION ---
-    bg_music_files = glob.glob("background_music/*.mp3")
-    bg_music = random.choice(bg_music_files) if bg_music_files else None
-
-    ending_assets = glob.glob("ending/mindscribble/*.mp4")
-    if not ending_assets:
-        print("❌ Error: No ending/outro videos found.")
-        return
-    selected_ending = random.choice(ending_assets)
-
+    # Index Logic
+    start_idx = int(df.loc[current_index - 1, "last_image_index"]) if current_index > 0 else int(row["last_image_index"])
+    
     output_video = f"mindscribble_output_{current_index}.mp4"
 
-    # --- GENERATION ---
-    print("🎬 Generating pencil scribble video content...")
+    # --- ASSET SELECTION ---
+    bg_music = random.choice(glob.glob("background_music/*.mp3") or [None])
+    selected_ending = random.choice(glob.glob("ending/mindscribble/*.mp4") or [None])
+
+    # --- GENERIC GENERATION CALL ---
+    print(f"🎬 Generating content using {style_name} style...")
     try:
-        result = generate_reel(
+        # Note: Ensure all your generator files use these EXACT argument names
+        result = generator_func(
             audio_path=row["audio_path"],
-            image_folder=row["image_folder"],
+            image_folder=row["image_folder"], 
             music_path=bg_music,
             credit_video_path=selected_ending,
             output_name=output_video,
