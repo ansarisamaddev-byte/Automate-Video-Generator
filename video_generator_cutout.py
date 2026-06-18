@@ -284,7 +284,8 @@ def generate_reel(
         if dur <= 1.5:
             break  # Skip if clip is too short to fully animate
 
-        cut_path = cutout_files[i % len(cutout_files)]
+        # CHANGED: Picks a completely random cutout image instead of sequential modulo indexing
+        cut_path = random.choice(cutout_files)
         cut_arr = process_cutout_image(cut_path)
 
         clip = ImageClip(cut_arr).with_start(t_start).with_duration(dur)
