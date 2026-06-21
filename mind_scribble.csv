@@ -32,7 +32,7 @@ id,audio_path,image_folder,posted,last_image_index
 31,audio/mindscribble/audio (30).mp3,images/mindscribble,true,168
 32,audio/mindscribble/audio (31).mp3,images/mindscribble,true,188
 33,audio/mindscribble/audio (32).mp3,images/mindscribble,true,206
-34,audio/mindscribble/audio (33).mp3,images/mindscribble,false,0
+34,audio/mindscribble/audio (33).mp3,images/mindscribble,true,225
 35,audio/mindscribble/audio (34).mp3,images/mindscribble,false,0
 36,audio/mindscribble/audio (35).mp3,images/mindscribble,false,0
 37,audio/mindscribble/audio (36).mp3,images/mindscribble,false,0
