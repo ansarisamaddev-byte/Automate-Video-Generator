@@ -71,8 +71,8 @@ def process_cutout_image(img_path):
     """Scales cutouts for the screen."""
     img = Image.open(img_path).convert("RGBA")
 
-    # Fills 55% of screen height
-    target_h = int(SCREEN_H * 0.55)
+    # MODIFIED: Fills 35% of screen height instead of 55% to make it smaller
+    target_h = int(SCREEN_H * 0.35)
 
     scale_w = target_h / img.height
     target_w = int(img.width * scale_w)
@@ -279,7 +279,7 @@ def generate_reel(
 
         layer_clips.append(clip)
 
-    # --- ADDED: 3b. SPECIAL END SUBSCRIBE CUTOUT (Last 2 seconds) ---
+    # --- 3b. SPECIAL END SUBSCRIBE CUTOUT (Last 2 seconds) ---
     subscribe_folder = "images/cutout/subscribe"
     if os.path.exists(subscribe_folder):
         sub_files = glob.glob(os.path.join(subscribe_folder, "*.png")) + glob.glob(os.path.join(subscribe_folder, "*.PNG"))
