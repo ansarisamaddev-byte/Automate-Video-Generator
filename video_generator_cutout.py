@@ -135,11 +135,7 @@ def apply_slide_and_fade(clip, duration):
         else:
             curr_x, curr_y = parked_pos
 
-        # MoviePy 2.x: CompositeVideoClip.compose_mask crashes with a
-        # shape-mismatch ValueError if a masked clip is positioned FULLY
-        # outside the canvas (no overlap at all on one axis). Clamp so the
-        # clip always keeps at least 1px of overlap with the frame -
-        # visually identical to "fully off-screen" but avoids the crash.
+        # Clamp so the clip always keeps at least 1px of overlap with the canvas frame
         curr_x = max(-w + 1, min(SCREEN_W - 1, curr_x))
         curr_y = max(-h + 1, min(SCREEN_H - 1, curr_y))
 
@@ -152,11 +148,7 @@ def apply_slide_and_fade(clip, duration):
     def fade_mask(get_frame, t):
         mask_frame = get_frame(t)
         if t >= duration - fade_time:
-            # Calculate how far into the fade we are (0.0 to 1.0)
             factor = 1.0 - ((t - (duration - fade_time)) / fade_time)
-            # Mask frames are floats in [0, 1] - DO NOT cast to uint8 or the
-            # mask collapses to all-zeros (this was a bug under MoviePy 1.x too,
-            # it just happened to be silently tolerated there).
             return mask_frame * max(0.0, factor)
         return mask_frame
 
@@ -226,7 +218,7 @@ def generate_reel(
         bg_files.extend(glob.glob(os.path.join(bg_folder, ext.upper())))
     bg_files = sorted(bg_files)
 
-    # Fetch Cutouts (BUG FIX: Using set() to remove OS-level duplicate finds)
+    # Fetch Cutouts
     raw_cutouts = glob.glob(os.path.join(cutout_folder, "*.png")) + glob.glob(os.path.join(cutout_folder, "*.PNG"))
     cutout_files = sorted(list(set(raw_cutouts)))
 
@@ -253,22 +245,17 @@ def generate_reel(
         if dur <= 0:
             break
 
-        # Pick a completely random background image
         bg_path = random.choice(bg_files)
         bg_arr = process_bg_image(bg_path)
 
-        # MoviePy 2.x: set_start/set_duration -> with_start/with_duration
         clip = ImageClip(bg_arr).with_start(t_start).with_duration(dur)
         clip = apply_ken_burns(clip, dur)
-        # MoviePy 2.x: set_position -> with_position, crop -> cropped
         clip = clip.with_position(("center", "center")).cropped(y1=0, y2=SCREEN_H, x1=0, x2=SCREEN_W)
 
         layer_clips.append(clip)
 
     # 2. BUILD CENTRAL BANNER (Transparent Black)
     banner_arr = create_central_banner()
-    # MoviePy 2.x: ImageClip auto-detects an alpha mask from RGBA arrays,
-    # so the `transparent=` kwarg no longer exists.
     banner_clip = (ImageClip(banner_arr)
                    .with_position((0, BANNER_Y))
                    .with_duration(total_duration))
@@ -282,9 +269,8 @@ def generate_reel(
         t_start = i * cutout_interval
         dur = min(cutout_interval, total_duration - t_start)
         if dur <= 1.5:
-            break  # Skip if clip is too short to fully animate
+            break
 
-        # CHANGED: Picks a completely random cutout image instead of sequential modulo indexing
         cut_path = random.choice(cutout_files)
         cut_arr = process_cutout_image(cut_path)
 
@@ -293,15 +279,32 @@ def generate_reel(
 
         layer_clips.append(clip)
 
+    # --- ADDED: 3b. SPECIAL END SUBSCRIBE CUTOUT (Last 2 seconds) ---
+    subscribe_folder = "images/cutout/subscribe"
+    if os.path.exists(subscribe_folder):
+        sub_files = glob.glob(os.path.join(subscribe_folder, "*.png")) + glob.glob(os.path.join(subscribe_folder, "*.PNG"))
+        if sub_files:
+            sub_path = random.choice(sub_files)
+            sub_arr = process_cutout_image(sub_path)
+            
+            # Appears exactly 2 seconds before the voice audio finishes
+            sub_start = max(0.0, total_duration - 2.0)
+            sub_dur = total_duration - sub_start
+            
+            if sub_dur > 0:
+                sub_clip = ImageClip(sub_arr).with_start(sub_start).with_duration(sub_dur)
+                sub_clip = apply_slide_and_fade(sub_clip, sub_dur)
+                layer_clips.append(sub_clip)
+
     # 4. BUILD CAPTIONS (Locked inside the central banner - 5 WORDS MAX)
     curr_x = SAFE_MARGIN
-    curr_y = BANNER_Y + 40  # Start slightly inside the top of the banner
+    curr_y = BANNER_Y + 40
     line_h = 0
     max_w = SCREEN_W - (SAFE_MARGIN * 2)
-    bottom_limit = BANNER_Y + BANNER_H - 100  # Flush if we reach the bottom of the banner
+    bottom_limit = BANNER_Y + BANNER_H - 100
 
     words_in_current_view = []
-    word_counter = 0  # <--- Tracker to enforce 5 words
+    word_counter = 0
 
     def flush_text(flush_time):
         for wd in words_in_current_view:
@@ -317,13 +320,11 @@ def generate_reel(
 
         arr, w, h = create_word_data(word, random.choice(FONTS), max_w)
 
-        # Wrap text to next line
         if curr_x + w > SCREEN_W - SAFE_MARGIN:
             curr_x = SAFE_MARGIN
             curr_y += line_h + 45
             line_h = 0
 
-        # Text hit bottom of banner OR we reached 5 words -> Flush and restart
         if curr_y + h > bottom_limit or word_counter >= 5:
             flush_text(w_obj.start)
             curr_x = SAFE_MARGIN
@@ -331,7 +332,6 @@ def generate_reel(
             line_h = 0
             word_counter = 0
 
-        # MoviePy 2.x: set_start/set_position -> with_start/with_position
         clip = ImageClip(arr).with_start(w_obj.start).with_position((curr_x, curr_y))
 
         words_in_current_view.append({
@@ -346,10 +346,8 @@ def generate_reel(
     flush_text(total_duration)
 
     # -------- AUDIO & VIDEO COMPILE -------- #
-    # MoviePy 2.x: set_duration -> with_duration
     voice = speech_audio.with_duration(total_duration)
     if music_path and os.path.exists(music_path):
-        # MoviePy 2.x: volumex -> with_volume_scaled
         bgm = AudioFileClip(music_path).with_volume_scaled(0.15).with_duration(total_duration)
         final_audio = CompositeAudioClip([voice, bgm])
     else:
@@ -366,7 +364,6 @@ def generate_reel(
 
     if credit_video_path and os.path.exists(credit_video_path):
         try:
-            # MoviePy 2.x: resize -> resized
             credit = VideoFileClip(credit_video_path).resized(width=SCREEN_W)
             video = concatenate_videoclips([video, credit], method="compose")
         except Exception:
