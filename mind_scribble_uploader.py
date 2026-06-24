@@ -37,11 +37,8 @@ GENERATOR_STRATEGIES = {
 def get_active_style():
     """Returns the style name based on current time."""
     hour = datetime.datetime.now().hour
-    # Define your time windows
-    if 6 <= hour < 18:
-        return "morning"
-    else:
-        return "night"
+    # Define your time window
+    return "night"
 
 def get_service():
     creds = None
