@@ -280,7 +280,7 @@ def generate_reel(
         layer_clips.append(clip)
 
     # --- 3b. SPECIAL END SUBSCRIBE CUTOUT (Last 2 seconds) ---
-    subscribe_folder = "images/cutout/subscribe"
+    subscribe_folder = os.path.join(cutout_folder, "subscribe")
     if os.path.exists(subscribe_folder):
         sub_files = glob.glob(os.path.join(subscribe_folder, "*.png")) + glob.glob(os.path.join(subscribe_folder, "*.PNG"))
         if sub_files:
