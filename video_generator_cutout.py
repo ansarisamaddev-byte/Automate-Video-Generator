@@ -268,6 +268,13 @@ def generate_reel(
     for i in range(cutout_count):
         t_start = i * cutout_interval
         dur = min(cutout_interval, total_duration - t_start)
+        
+        # --- ADD THESE 3 LINES TO PREVENT OVERLAP ---
+        sub_start = max(0.0, total_duration - 4.0)
+        if t_start + dur > sub_start:
+            dur = max(0.0, sub_start - t_start)
+
+
         if dur <= 1.5:
             break
 
@@ -288,7 +295,7 @@ def generate_reel(
             sub_arr = process_cutout_image(sub_path)
             
             # Appears exactly 2 seconds before the voice audio finishes
-            sub_start = max(0.0, total_duration - 2.0)
+            sub_start = max(0.0, total_duration - 4.0)
             sub_dur = total_duration - sub_start
             
             if sub_dur > 0:
