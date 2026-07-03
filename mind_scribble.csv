@@ -1,5 +1,5 @@
 id,audio_path,image_folder,posted,last_image_index,caption
-1,audio/mindscribble/audio (1).mp3,images/psycho,true,5
+1,audio/mindscribble/audio (1).mp3,images/psycho,true,5,
 2,audio/mindscribble/audio (1).mp3,images/mindscribble,true,7,
 3,audio/mindscribble/audio (2).mp3,images/mindscribble,true,25,
 4,audio/mindscribble/audio (3).mp3,images/mindscribble,true,42,
@@ -67,7 +67,7 @@ id,audio_path,image_folder,posted,last_image_index,caption
 66,audio/mindscribble/audio (65).mp3,images/mindscribble,true,317,
 67,audio/mindscribble/audio (66).mp3,images/mindscribble,true,317,
 68,audio/mindscribble/audio (67).mp3,images/mindscribble,true,0,
-69,audio/mindscribble/audio (68).mp3,images/mindscribble,false,0,Are You A Sponge?
+69,audio/mindscribble/audio (68).mp3,images/mindscribble,true,0,Are You A Sponge?
 70,audio/mindscribble/audio (69).mp3,images/mindscribble,false,0,The Addictive Loop of Stress
 71,audio/mindscribble/audio (70).mp3,images/mindscribble,false,0,The Danger of Toxic Positivity
 72,audio/mindscribble/audio (71).mp3,images/mindscribble,false,0,The Echo of Your Childhood Self
