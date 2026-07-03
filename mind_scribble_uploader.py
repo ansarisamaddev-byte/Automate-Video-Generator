@@ -2,12 +2,12 @@ import os
 import glob
 import random
 import pickle
+import datetime
 import pandas as pd
 
 # ================= CLOUDINARY =================
 import cloudinary
 import cloudinary.uploader
-import datetime
 
 cloudinary.config(
     cloud_name="dusdbgfey",
@@ -36,8 +36,7 @@ GENERATOR_STRATEGIES = {
 
 def get_active_style():
     """Returns the style name based on current time."""
-    hour = datetime.datetime.now().hour
-    # Define your time window
+    # Custom window logic can be added here if needed
     return "night"
 
 def get_service():
@@ -140,23 +139,19 @@ def run_automation():
     print(f"🎬 Generating content using {style_name} style...")
     try:
         if style_name == "night":
-            # Call the night style generator with its specific arguments
             result = generator_func(
                 audio_path=row["audio_path"],
-                bg_folder="images/backgrounds",  # Hardcoded or map it from your CSV
-                cutout_folder="images/cutouts",  # Hardcoded or map it from your CSV
+                bg_folder="images/backgrounds",  
+                cutout_folder="images/cutouts",  
                 music_path=bg_music,
                 credit_video_path=selected_ending,
                 output_name=output_video
             )
             
-            # The night generator doesn't track image indexes, so we just pass the start_idx forward
-            # to prevent a KeyError on the next step
             if "last_index" not in result:
                 result["last_index"] = start_idx
                 
         else:
-            # Call the morning style generator with its specific arguments
             result = generator_func(
                 audio_path=row["audio_path"],
                 image_folder=row["image_folder"], 
@@ -170,10 +165,16 @@ def run_automation():
         print(f"❌ Generation failed: {e}")
         return
 
+    # --- CAPTION SELECTION LOGIC ---
+    # Looks for a custom caption value inside the CSV row map
+    if "caption" in row and pd.notna(row["caption"]) and str(row["caption"]).strip() != "":
+        caption = str(row["caption"]).strip()
+        print(f"📖 Using pre-defined caption from CSV: {caption}")
+    else:
+        caption = result["caption"]
+        print(f"🎙️ Using transcribed caption from audio: {caption}")
+
     # --- METADATA & HASHTAGS ---
-    caption = result["caption"]
-    
-    # Custom psychology conditional tags depending on path signatures
     is_dark_psych = any(x in row["audio_path"].upper() for x in ["/P", "\\P", "P (", "DARK"])
     
     if is_dark_psych:
@@ -184,16 +185,17 @@ def run_automation():
         emoji = "🧠💡"
 
     title = f"{caption} {emoji} #shorts"
+    # Safe limit check to guarantee YouTube API doesn't complain about title overflow
+    if len(title) > 100:
+        title = title[:95] + "... #shorts"
+
     description = f"{caption}\n\n#{' #'.join(hashtags)}\n\n🧠 Deep Human Insights\n🚀 Subscribe for daily mental loops."
 
     # --- UPLOAD & UPDATE ---
     if upload_to_youtube(output_video, title, description, hashtags):
-        # Update current row as posted
         df.at[current_index, "posted"] = "true"
-        # Store where we ended so the NEXT row knows where to start
         df.at[current_index, "last_image_index"] = result["last_index"]
 
-        # Save CSV immediately
         df.to_csv(csv_file, index=False)
         
         if os.path.exists(output_video):
