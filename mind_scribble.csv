@@ -1,4 +1,4 @@
-id,audio_path,image_folder,posted,last_image_index
+id,audio_path,image_folder,posted,last_image_index,caption
 1,audio/mindscribble/audio (1).mp3,images/psycho,true,5
 2,audio/mindscribble/audio (1).mp3,images/mindscribble,true,7
 3,audio/mindscribble/audio (2).mp3,images/mindscribble,true,25
