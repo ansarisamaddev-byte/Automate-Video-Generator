@@ -112,7 +112,7 @@ def generate_coldcase_video(
     if not bg_files:
         raise ValueError(f"❌ Background pool empty: {bg_folder}")
     if not evidence_files:
-        evidence_files = bg_files
+        raise ValueError(f"❌ Evidence pool empty: {evidence_folder}")
 
     segments_gen, _ = model.transcribe(audio_path, word_timestamps=True)
     segments = list(segments_gen)

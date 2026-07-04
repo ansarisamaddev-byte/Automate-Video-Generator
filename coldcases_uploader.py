@@ -90,6 +90,7 @@ def run_automation():
 
     idx = unposted_df.index[0]
     row = df.loc[idx]
+    case_number = int(row["index"])
     
     # Explicitly set the output name BEFORE generation
     output_video = f"temp_coldcase_render_{idx}.mp4"
@@ -100,7 +101,7 @@ def run_automation():
         generator_result = generate_coldcase_video(
             audio_path=row["audio_path"],
             bg_folder="images/coldcases/background_images",
-            evidence_folder=f"images/coldcases/{idx}",
+            evidence_folder=f"images/coldcases/{case_number}",
             music_path=random.choice(glob.glob("background_music/*.mp3") or [None]),
             credit_video_path=random.choice(glob.glob("ending/coldcases/*.mp4") or [None]),
             output_name=output_video,
