@@ -52,13 +52,21 @@ jobs:
           git config --global user.name "github-actions"
           git config --global user.email "github-actions@github.com"
 
-          # Pull latest changes to avoid conflict
+          # 1. Stash changes to coldcases.csv so the folder is clean
+          git stash
+
+          # 2. Pull latest changes safely
           git pull origin main --rebase
 
-          # Add the file that tracks your video status
+          # 3. Bring back our CSV changes
+          git stash pop || echo "No changes to pop"
+
+          # 4. Add ONLY the CSV file (ignore any stray temp video files)
           git add coldcases.csv
           
-          # Commit only if there are changes
-          git diff --quiet && git diff --staged --quiet || git commit -m "Auto update: ColdCases posted status"
-
-          git push origin main
+          # 5. Commit and push only if there are actual changes
+          if ! git diff --cached --quiet; then
+            git commit -m "Auto update: ColdCases posted status"
+            git push origin main
+          else
+            echo "No changes to commit, skipping push."
