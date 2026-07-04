@@ -17,7 +17,7 @@ SCOPES = ["https://www.googleapis.com/auth/youtube.upload"]
 
 def get_service():
     creds = None
-    pickle_file = "coldcases_token.pickle"
+    pickle_file = "coldcases_pov_token.pickle"
     client_secrets = "coldcases_auth.json"
 
     if os.path.exists(pickle_file):

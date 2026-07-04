@@ -5,3 +5,4 @@ client_secret.json
 *.pickle
 instagram_video_workflow.yml
 coldcases_auth.json
+coldcases_client_secret.json
