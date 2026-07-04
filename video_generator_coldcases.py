@@ -133,7 +133,7 @@ def generate_coldcase_video(
 
 
     # 2. Evidence Frame
-    evidence_interval = 7.5
+    evidence_interval = 12.0
     for i in range(math.ceil(total_duration / evidence_interval)):
         t_start = i * evidence_interval
         dur = min(evidence_interval, total_duration - t_start)
@@ -299,3 +299,35 @@ def generate_coldcase_video(
 
     print(f"✅ Video generation complete: {output_name}")
     return output_name
+
+
+if __name__ == "__main__":
+    # Define test parameters
+    test_audio = "audio/coldcases/audio (1).mp3"  # Ensure this file exists in your folder
+    bg_folder = "images/coldcases/background_images"
+    evidence_folder = "images/coldcases/1" # Change 1 to your test case index folder
+    char_folder = "images/coldcases/characters"
+    sub_folder = "images/coldcases/characters/subscribe"
+    output = "final_test_video.mp4"
+    
+    # Simple check to ensure folders exist before running
+    if not os.path.exists(bg_folder):
+        print(f"❌ Error: Background folder not found: {bg_folder}")
+    elif not os.path.exists(test_audio):
+        print(f"❌ Error: Audio file '{test_audio}' not found.")
+    else:
+        print("🚀 Starting test generation...")
+        try:
+            generate_coldcase_video(
+                audio_path=test_audio,
+                bg_folder=bg_folder,
+                evidence_folder=evidence_folder,
+                music_path=None, # Set to None for now to keep it simple
+                credit_video_path=None,
+                output_name=output,
+                char_folder=char_folder,
+                sub_folder=sub_folder
+            )
+            print(f"✅ Success! Saved to {output}")
+        except Exception as e:
+            print(f"❌ Generation failed: {e}")
