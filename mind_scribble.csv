@@ -1,5 +1,5 @@
 id,audio_path,image_folder,posted,last_image_index,caption
-1,audio/mindscribble/audio (1).mp3,images/psycho,false,5,
+1,audio/mindscribble/audio (0).mp3,images/mindscribble,false,5,
 2,audio/mindscribble/audio (1).mp3,images/mindscribble,false,7,
 3,audio/mindscribble/audio (2).mp3,images/mindscribble,false,25,
 4,audio/mindscribble/audio (3).mp3,images/mindscribble,false,42,
