@@ -1,0 +1,274 @@
+import os
+import glob
+import random
+import datetime
+import math
+import numpy as np
+import pandas as pd
+from PIL import Image, ImageDraw, ImageFont, ImageEnhance, ImageOps
+
+# ================= MOVIEPY 2.X & WHISPER =================
+from moviepy import AudioFileClip, ImageClip, CompositeVideoClip, CompositeAudioClip
+from faster_whisper import WhisperModel
+
+# ================= CORE ENGINE SETUP =================
+SCREEN_W = 1080
+SCREEN_H = 1920
+SAFE_MARGIN = 75
+BANNER_Y = int(SCREEN_H * 0.45) 
+
+FONTS = [r"fonts/dejavu-sans-bold.ttf"]
+
+_whisper_model = None
+def get_whisper_model():
+    global _whisper_model
+    if _whisper_model is None:
+        _whisper_model = WhisperModel("tiny", device="cpu", compute_type="int8", cpu_threads=4)
+    return _whisper_model
+
+def apply_ken_burns(clip, duration):
+    mode = random.choice(["zoom_in", "zoom_out"])
+    return clip.resized(lambda t: 1.0 + 0.04 * (t / duration) if mode == "zoom_in" else 1.04 - 0.04 * (t / duration))
+
+def process_bg_image(img_path):
+    try:
+        img = Image.open(img_path).convert("RGB")
+    except:
+        img = Image.new("RGB", (SCREEN_W, SCREEN_H), (20, 20, 20))
+    ratio = max(SCREEN_W / img.width, SCREEN_H / img.height) * 1.1
+    img = img.resize((int(img.width * ratio), int(img.height * ratio)), Image.Resampling.LANCZOS)
+    img = ImageEnhance.Color(img).enhance(0.4)
+    img = ImageEnhance.Brightness(img).enhance(0.35)
+    return np.array(img)
+
+def process_evidence_image(img_path):
+    img = Image.open(img_path).convert("RGBA")
+    
+    max_allowed_w = int(SCREEN_W * 0.88)  
+    max_allowed_h = int(SCREEN_H * 0.38)
+    
+    ratio_w = max_allowed_w / img.width
+    ratio_h = max_allowed_h / img.height
+    scale = min(ratio_w, ratio_h)
+    
+    target_w = int(img.width * scale)
+    target_h = int(img.height * scale)
+    img = img.resize((target_w, target_h), Image.Resampling.LANCZOS)
+    
+    img = ImageOps.expand(img, border=12, fill=(255, 255, 255, 255))
+    rotation_angle = random.uniform(-5.0, 5.0)
+    img = img.rotate(rotation_angle, resample=Image.Resampling.BICUBIC, expand=True)
+    
+    return np.array(img)
+
+def process_character_image(img_path, max_w, max_h):
+    img = Image.open(img_path).convert("RGBA")
+    
+    ratio_w = max_w / img.width
+    ratio_h = max_h / img.height
+    scale = min(ratio_w, ratio_h)
+    
+    target_w = int(img.width * scale)
+    target_h = int(img.height * scale)
+    img = img.resize((target_w, target_h), Image.Resampling.LANCZOS)
+    return np.array(img)
+
+def create_word_data(text, font_path, max_width):
+    target_size, min_size = 75, 55
+    font = ImageFont.truetype(font_path, target_size) if os.path.exists(font_path) else ImageFont.load_default()
+    tdraw = ImageDraw.Draw(Image.new("RGBA", (1, 1)))
+    bbox = tdraw.textbbox((0, 0), text, font=font)
+    w_text, h_text = bbox[2] - bbox[0], bbox[3] - bbox[1]
+
+    if w_text > max_width:
+        font = ImageFont.truetype(font_path, max(min_size, int(target_size * (max_width / w_text))))
+        bbox = tdraw.textbbox((0, 0), text, font=font)
+        w_text, h_text = bbox[2] - bbox[0], bbox[3] - bbox[1]
+
+    canvas_w, canvas_h = int(w_text + 40), int(h_text + 40)
+    img = Image.new("RGBA", (canvas_w, canvas_h), (0, 0, 0, 0))
+    draw = ImageDraw.Draw(img)
+    
+    text_color = (244, 169, 59) 
+    draw.text((canvas_w // 2, canvas_h // 2), text, font=font, fill=text_color, stroke_width=7, stroke_fill=(0, 0, 0), anchor="mm")
+    return np.array(img), canvas_w, canvas_h
+
+def generate_coldcase_video(
+    style_name,
+    audio_path, 
+    bg_folder, 
+    evidence_folder, 
+    music_path, 
+    credit_video_path,
+    output_name,
+    cutout_folder=None
+):
+    print(f"⚙️ Initializing render pipeline in [{style_name.upper()}] layout configuration...")
+    
+    model = get_whisper_model()
+    bg_files = sorted(glob.glob(os.path.join(bg_folder, "*.jpg")) + glob.glob(os.path.join(bg_folder, "*.png")))
+    evidence_files = sorted(glob.glob(os.path.join(evidence_folder, "*.jpg")) + glob.glob(os.path.join(evidence_folder, "*.png")))
+
+    if not bg_files:
+        raise ValueError(f"❌ Background pool empty: {bg_folder}")
+    if not evidence_files:
+        evidence_files = bg_files
+
+    segments_gen, _ = model.transcribe(audio_path, word_timestamps=True)
+    segments = list(segments_gen)
+    all_words = [w for seg in segments for w in seg.words]
+    
+    speech_audio = AudioFileClip(audio_path)
+    total_duration = speech_audio.duration - 0.05
+    layer_clips, text_clips = [], []
+
+    # 1. Background Track
+    bg_interval = 5.0
+    for i in range(math.ceil(total_duration / bg_interval)):
+        t_start = i * bg_interval
+        dur = min(bg_interval, total_duration - t_start)
+        if dur <= 0: break
+        clip = ImageClip(process_bg_image(random.choice(bg_files))).with_start(t_start).with_duration(dur)
+        layer_clips.append(apply_ken_burns(clip, dur).with_position(("center", "center")).cropped(y1=0, y2=SCREEN_H, x1=0, x2=SCREEN_W))
+
+    # --- NIGHT STYLE CUTOUT INJECTION ---
+    if style_name == "night" and cutout_folder and os.path.exists(cutout_folder):
+        cutout_files = sorted(glob.glob(os.path.join(cutout_folder, "*.png")) + glob.glob(os.path.join(cutout_folder, "*.jpg")))
+        if cutout_files:
+            print("🌙 Applying special night layout cutouts layer...")
+            # Adds cutout asset behind evidence frame but in front of background
+            c_img = process_character_image(random.choice(cutout_files), SCREEN_W, int(SCREEN_H * 0.5))
+            c_clip = ImageClip(c_img).with_start(0).with_duration(total_duration).with_position(("center", "center"))
+            layer_clips.append(c_clip)
+
+    # 2. Evidence Frame
+    evidence_interval = 7.5
+    for i in range(math.ceil(total_duration / evidence_interval)):
+        t_start = i * evidence_interval
+        dur = min(evidence_interval, total_duration - t_start)
+        if dur <= 1.0: break
+        
+        raw_img = process_evidence_image(random.choice(evidence_files))
+        clip = ImageClip(raw_img).with_start(t_start).with_duration(dur).with_position(("center", int(SCREEN_H * 0.12)))
+        clip = clip.transform(lambda gf, t: gf(t) * min(1.0, t / 0.5))
+        layer_clips.append(clip)
+
+    # 3. Characters Setup
+    char_folder = "images/coldcase/characters"
+    sub_folder = "images/coldcase/characters/subscribe"
+    
+    detective_poses = glob.glob(os.path.join(char_folder, "*.png"))
+    subscribe_poses = glob.glob(os.path.join(sub_folder, "*.png"))
+
+    outro_threshold = max(0.0, total_duration - 5.0)
+
+    CHAR_W, CHAR_H = 605, 871  
+    SUB_W, SUB_H = 726, 992
+
+    if detective_poses and outro_threshold > 0:
+        char_interval = 4.0
+        num_char_loops = math.ceil(outro_threshold / char_interval)
+        
+        shuffled_detective_poses = detective_poses.copy()
+        random.shuffle(shuffled_detective_poses)
+        
+        for i in range(num_char_loops):
+            c_start = i * char_interval
+            c_dur = min(char_interval, outro_threshold - c_start)
+            if c_dur <= 0: break
+            
+            if not shuffled_detective_poses:
+                shuffled_detective_poses = detective_poses.copy()
+                random.shuffle(shuffled_detective_poses)
+                
+            chosen_pose = shuffled_detective_poses.pop(0)
+            
+            det_arr = process_character_image(chosen_pose, CHAR_W, CHAR_H)
+            char_clip = ImageClip(det_arr).with_start(c_start).with_duration(c_dur).with_position(("left", "bottom"))
+            char_clip = char_clip.transform(lambda gf, t: gf(t) * min(1.0, t / 0.4))
+            layer_clips.append(char_clip)
+
+    if subscribe_poses:
+        sub_arr = process_character_image(random.choice(subscribe_poses), SUB_W, SUB_H)
+        sub_clip = ImageClip(sub_arr).with_start(outro_threshold).with_duration(total_duration - outro_threshold).with_position(("center", "bottom"))
+        sub_clip = sub_clip.transform(lambda gf, t: gf(t) * min(1.0, t / 0.4))
+        layer_clips.append(sub_clip)
+    elif detective_poses and outro_threshold == 0:
+        det_arr = process_character_image(random.choice(detective_poses), CHAR_W, CHAR_H)
+        char_clip = ImageClip(det_arr).with_start(0).with_duration(total_duration).with_position(("left", "bottom"))
+        layer_clips.append(char_clip)
+
+    # 4. Accumulative Subtitle Engine
+    active_font = FONTS[0] if os.path.exists(FONTS[0]) else "default"
+    max_w = SCREEN_W - (SAFE_MARGIN * 2)
+    
+    current_sentence_words = []
+    
+    def process_and_flush_sentence(word_group):
+        if not word_group:
+            return
+        sentence_end_time = word_group[-1]["end"]
+        curr_x, curr_y = SAFE_MARGIN, BANNER_Y + 30
+        line_h = 0
+        
+        for item in word_group:
+            word_str = item["word"]
+            arr, w, h = create_word_data(word_str, active_font, max_w)
+            
+            if curr_x + w > SCREEN_W - SAFE_MARGIN:
+                curr_x = SAFE_MARGIN
+                curr_y += line_h + 20
+                line_h = 0
+            
+            line_h = max(line_h, h)
+            duration = sentence_end_time - item["start"]
+            if duration > 0:
+                word_clip = (ImageClip(arr)
+                             .with_start(item["start"])
+                             .with_duration(duration)
+                             .with_position((curr_x, curr_y)))
+                text_clips.append(word_clip)
+                
+            curr_x += w + 20
+
+    for w_obj in all_words:
+        word_text = w_obj.word.strip().upper()
+        if not word_text:
+            continue
+            
+        current_sentence_words.append({
+            "word": word_text,
+            "start": w_obj.start,
+            "end": w_obj.end
+        })
+        
+        is_terminal = any(char in word_text for char in [".", "?", "!"])
+        if is_terminal or len(current_sentence_words) >= 6:
+            process_and_flush_sentence(current_sentence_words)
+            current_sentence_words = []
+            
+    if current_sentence_words:
+        process_and_flush_sentence(current_sentence_words)
+
+    # Audio Compiling & Windows Safe Closing
+    voice = speech_audio.with_duration(total_duration)
+    
+    bg_music_clip = None
+    if music_path:
+        bg_music_clip = AudioFileClip(music_path).with_volume_scaled(0.08).with_duration(total_duration)
+        final_audio = CompositeAudioClip([voice, bg_music_clip])
+    else:
+        final_audio = voice
+    
+    video = CompositeVideoClip(layer_clips + text_clips, size=(SCREEN_W, SCREEN_H)).with_duration(total_duration).with_audio(final_audio)
+    print("🎥 Writing primary video composition...")
+    video.write_videofile(output_name, fps=30, codec="libx264", audio_codec="aac", threads=4, preset="ultrafast")
+    
+    if music_path and bg_music_clip:
+        bg_music_clip.close()
+    voice.close()
+    speech_audio.close()
+    if final_audio != voice:
+        final_audio.close()
+
+    return output_name
