@@ -6,6 +6,7 @@ import math
 import numpy as np
 import pandas as pd
 from PIL import Image, ImageDraw, ImageFont, ImageEnhance, ImageOps
+from moviepy import VideoFileClip, concatenate_videoclips
 
 # ================= MOVIEPY 2.X & WHISPER =================
 from moviepy import AudioFileClip, ImageClip, CompositeVideoClip, CompositeAudioClip
@@ -94,16 +95,15 @@ def create_word_data(text, font_path, max_width):
     return np.array(img), canvas_w, canvas_h
 
 def generate_coldcase_video(
-    style_name,
     audio_path, 
     bg_folder, 
     evidence_folder, 
     music_path, 
     credit_video_path,
     output_name,
-    cutout_folder=None
+    char_folder, 
+    sub_folder,
 ):
-    print(f"⚙️ Initializing render pipeline in [{style_name.upper()}] layout configuration...")
     
     model = get_whisper_model()
     bg_files = sorted(glob.glob(os.path.join(bg_folder, "*.jpg")) + glob.glob(os.path.join(bg_folder, "*.png")))
@@ -131,15 +131,6 @@ def generate_coldcase_video(
         clip = ImageClip(process_bg_image(random.choice(bg_files))).with_start(t_start).with_duration(dur)
         layer_clips.append(apply_ken_burns(clip, dur).with_position(("center", "center")).cropped(y1=0, y2=SCREEN_H, x1=0, x2=SCREEN_W))
 
-    # --- NIGHT STYLE CUTOUT INJECTION ---
-    if style_name == "night" and cutout_folder and os.path.exists(cutout_folder):
-        cutout_files = sorted(glob.glob(os.path.join(cutout_folder, "*.png")) + glob.glob(os.path.join(cutout_folder, "*.jpg")))
-        if cutout_files:
-            print("🌙 Applying special night layout cutouts layer...")
-            # Adds cutout asset behind evidence frame but in front of background
-            c_img = process_character_image(random.choice(cutout_files), SCREEN_W, int(SCREEN_H * 0.5))
-            c_clip = ImageClip(c_img).with_start(0).with_duration(total_duration).with_position(("center", "center"))
-            layer_clips.append(c_clip)
 
     # 2. Evidence Frame
     evidence_interval = 7.5
@@ -153,10 +144,6 @@ def generate_coldcase_video(
         clip = clip.transform(lambda gf, t: gf(t) * min(1.0, t / 0.5))
         layer_clips.append(clip)
 
-    # 3. Characters Setup
-    char_folder = "images/coldcase/characters"
-    sub_folder = "images/coldcase/characters/subscribe"
-    
     detective_poses = glob.glob(os.path.join(char_folder, "*.png"))
     subscribe_poses = glob.glob(os.path.join(sub_folder, "*.png"))
 
@@ -260,15 +247,55 @@ def generate_coldcase_video(
     else:
         final_audio = voice
     
-    video = CompositeVideoClip(layer_clips + text_clips, size=(SCREEN_W, SCREEN_H)).with_duration(total_duration).with_audio(final_audio)
-    print("🎥 Writing primary video composition...")
-    video.write_videofile(output_name, fps=30, codec="libx264", audio_codec="aac", threads=4, preset="ultrafast")
-    
+    video = CompositeVideoClip(
+    layer_clips + text_clips,
+    size=(SCREEN_W, SCREEN_H)
+    ).with_duration(total_duration).with_audio(final_audio)
+
+    # Append credits if provided
+    if credit_video_path and os.path.exists(credit_video_path):
+        print("🎬 Appending credit video...")
+        credit_clip = VideoFileClip(credit_video_path)
+
+        # Resize if necessary
+        if credit_clip.size != (SCREEN_W, SCREEN_H):
+            credit_clip = credit_clip.resized((SCREEN_W, SCREEN_H))
+
+        final_video = concatenate_videoclips(
+            [video, credit_clip],
+            method="compose"
+        )
+    else:
+        final_video = video
+
+    print("🎥 Writing final video...")
+    final_video.write_videofile(
+        output_name,
+        fps=30,
+        codec="libx264",
+        audio_codec="aac",
+        threads=4,
+        preset="ultrafast"
+    )
+
+    # 1. Close Final Video
+    final_video.close()
+
+    # 2. Safely close credit clip using 'is not' (Fixes the TypeError)
+    if final_video is not video:
+        credit_clip.close()
+
+    video.close()
+
+    # 3. Safely close audio clips using 'is not' (Fixes the TypeError)
     if music_path and bg_music_clip:
         bg_music_clip.close()
+    
     voice.close()
     speech_audio.close()
-    if final_audio != voice:
+    
+    if final_audio is not voice:
         final_audio.close()
 
+    print(f"✅ Video generation complete: {output_name}")
     return output_name

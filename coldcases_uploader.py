@@ -4,16 +4,6 @@ import random
 import pickle
 import pandas as pd
 
-# ================= CLOUDINARY =================
-# import cloudinary
-# import cloudinary.uploader
-
-# cloudinary.config(
-#     cloud_name="dusdbgfey",
-#     api_key="545263495647551",
-#     api_secret="KFRuIRsx-LkevEBul4YvfYBWfiY"
-# )
-
 # ================= YOUTUBE =================
 import googleapiclient.discovery
 from google.auth.transport.requests import Request
@@ -21,13 +11,13 @@ from googleapiclient.http import MediaFileUpload
 from google_auth_oauthlib.flow import InstalledAppFlow
 
 # ================= VIDEO GENERATOR =================
-from video_generator_coldcase import generate_coldcase_video
+from video_generator_coldcases import generate_coldcase_video
 
 SCOPES = ["https://www.googleapis.com/auth/youtube.upload"]
 
 def get_service():
     creds = None
-    pickle_file = "coldcases_pov_token.pickle"
+    pickle_file = "coldcases_token.pickle"
     client_secrets = "coldcases_auth.json"
 
     if os.path.exists(pickle_file):
