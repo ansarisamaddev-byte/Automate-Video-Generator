@@ -106,8 +106,8 @@ def generate_coldcase_video(
 ):
     
     model = get_whisper_model()
-    bg_files = sorted(glob.glob(os.path.join(bg_folder, "*.jpg")) + glob.glob(os.path.join(bg_folder, "*.png")))
-    evidence_files = sorted(glob.glob(os.path.join(evidence_folder, "*.jpg")) + glob.glob(os.path.join(evidence_folder, "*.png")))
+    bg_files = sorted(glob.glob(os.path.join(bg_folder, "*.jpg")) + glob.glob(os.path.join(bg_folder, "*.png")) + glob.glob(os.path.join(bg_folder, "*.jfif")))
+    evidence_files = sorted(glob.glob(os.path.join(evidence_folder, "*.jpg")) + glob.glob(os.path.join(evidence_folder, "*.png")) + glob.glob(os.path.join(evidence_folder, "*.jfif")))
 
     if not bg_files:
         raise ValueError(f"❌ Background pool empty: {bg_folder}")
@@ -144,8 +144,8 @@ def generate_coldcase_video(
         clip = clip.transform(lambda gf, t: gf(t) * min(1.0, t / 0.5))
         layer_clips.append(clip)
 
-    detective_poses = glob.glob(os.path.join(char_folder, "*.png"))
-    subscribe_poses = glob.glob(os.path.join(sub_folder, "*.png"))
+    detective_poses = glob.glob(os.path.join(char_folder, "*.png")) + glob.glob(os.path.join(char_folder, "*.jpg")) + glob.glob(os.path.join(char_folder, "*.jfif"))
+    subscribe_poses = glob.glob(os.path.join(sub_folder, "*.png")) + glob.glob(os.path.join(sub_folder, "*.jpg")) + glob.glob(os.path.join(sub_folder, "*.jfif"))
 
     outro_threshold = max(0.0, total_duration - 5.0)
 
