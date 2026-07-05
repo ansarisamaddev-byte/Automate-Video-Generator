@@ -303,9 +303,9 @@ def generate_coldcase_video(
 
 if __name__ == "__main__":
     # Define test parameters
-    test_audio = "audio/coldcases/audio (1).mp3"  # Ensure this file exists in your folder
+    test_audio = "audio/coldcases/audio (9).mp3"  # Ensure this file exists in your folder
     bg_folder = "images/coldcases/background_images"
-    evidence_folder = "images/coldcases/1" # Change 1 to your test case index folder
+    evidence_folder = "images/coldcases/9" # Change 1 to your test case index folder
     char_folder = "images/coldcases/characters"
     sub_folder = "images/coldcases/characters/subscribe"
     output = "final_test_video.mp4"
