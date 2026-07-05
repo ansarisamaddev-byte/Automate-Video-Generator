@@ -1,11 +1,10 @@
 name: YouTube Automation
-
 on:
   schedule:
-    # 7:15 AM IST → 01:45 UTC
-    - cron: '45 1 * * *'
-    # 7:30 PM IST → 14:00 UTC
-    - cron: '0 14 * * *'
+    # Intended: 8:00 AM NY (12:00 UTC) | Run early at 8:30 AM UTC to beat the 3.5h queue delay
+    - cron: '30 8 * * *'
+    # Intended: 7:00 PM NY (23:00 UTC) | Run early at 7:30 PM UTC to beat the 3.5h queue delay
+    - cron: '30 19 * * *'
   workflow_dispatch:
 
 permissions:
