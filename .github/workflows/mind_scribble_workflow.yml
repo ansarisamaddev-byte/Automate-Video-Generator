@@ -1,11 +1,12 @@
 name: Youtube MindScribble Video
 
+
 on:
   schedule:
-    # 8:00 AM IST (02:30 UTC)
-    - cron: '30 2 * * *'
-    # 8:00 PM IST (14:30 UTC)
-    - cron: '30 14 * * *'
+    # Intended: 8:00 AM New York | Runs early at 8:30 AM UTC to beat the 3.5h delay
+    - cron: '30 8 * * *'
+    # Intended: 7:00 PM New York | Runs early at 7:30 PM UTC to beat the 3.5h delay
+    - cron: '30 19 * * *'
   workflow_dispatch:
 
 permissions:
