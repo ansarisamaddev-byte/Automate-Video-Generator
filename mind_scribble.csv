@@ -8,7 +8,7 @@ id,audio_path,image_folder,posted,last_image_index,caption
 7,audio/mindscribble/audio (6).mp3,images/mindscribble,true,0,
 8,audio/mindscribble/audio (7).mp3,images/mindscribble,true,0,
 9,audio/mindscribble/audio (8).mp3,images/mindscribble,true,0,
-10,audio/mindscribble/audio (9).mp3,images/mindscribble,false,0,
+10,audio/mindscribble/audio (9).mp3,images/mindscribble,true,0,
 11,audio/mindscribble/audio (10).mp3,images/mindscribble,false,0,
 12,audio/mindscribble/audio (11).mp3,images/mindscribble,false,0,
 13,audio/mindscribble/audio (12).mp3,images/mindscribble,false,0,
