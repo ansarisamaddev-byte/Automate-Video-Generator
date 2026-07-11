@@ -94,6 +94,14 @@ def create_word_data(text, font_path, max_width):
     draw.text((canvas_w // 2, canvas_h // 2), text, font=font, fill=text_color, stroke_width=7, stroke_fill=(0, 0, 0), anchor="mm")
     return np.array(img), canvas_w, canvas_h
 
+def get_supported_files(folder_path):
+    """Helper to fetch images including GIFs case-insensitively"""
+    extensions = ["*.jpg", "*.jpeg", "*.png", "*.jfif", "*.gif", "*.GIF"]
+    files = []
+    for ext in extensions:
+        files.extend(glob.glob(os.path.join(folder_path, ext)))
+    return sorted(list(set(files)))
+
 def generate_coldcase_video(
     audio_path, 
     bg_folder, 
@@ -106,8 +114,8 @@ def generate_coldcase_video(
 ):
     
     model = get_whisper_model()
-    bg_files = sorted(glob.glob(os.path.join(bg_folder, "*.jpg")) + glob.glob(os.path.join(bg_folder, "*.png")) + glob.glob(os.path.join(bg_folder, "*.jfif")))
-    evidence_files = sorted(glob.glob(os.path.join(evidence_folder, "*.jpg")) + glob.glob(os.path.join(evidence_folder, "*.png")) + glob.glob(os.path.join(evidence_folder, "*.jfif")))
+    bg_files = get_supported_files(bg_folder)
+    evidence_files = get_supported_files(evidence_folder)
 
     if not bg_files:
         raise ValueError(f"❌ Background pool empty: {bg_folder}")
@@ -121,6 +129,7 @@ def generate_coldcase_video(
     speech_audio = AudioFileClip(audio_path)
     total_duration = speech_audio.duration - 0.05
     layer_clips, text_clips = [], []
+    clips_to_close = []  # Keep track of dynamically opened video clips (like animated GIFs)
 
     # 1. Background Track
     bg_interval = 5.0
@@ -128,9 +137,21 @@ def generate_coldcase_video(
         t_start = i * bg_interval
         dur = min(bg_interval, total_duration - t_start)
         if dur <= 0: break
-        clip = ImageClip(process_bg_image(random.choice(bg_files))).with_start(t_start).with_duration(dur)
-        layer_clips.append(apply_ken_burns(clip, dur).with_position(("center", "center")).cropped(y1=0, y2=SCREEN_H, x1=0, x2=SCREEN_W))
-
+        
+        chosen_bg = random.choice(bg_files)
+        
+        # Check if background is an animated GIF
+        if chosen_bg.lower().endswith('.gif'):
+            clip = VideoFileClip(chosen_bg).with_start(t_start).with_duration(dur)
+            # Resize to fill screen
+            ratio = max(SCREEN_W / clip.w, SCREEN_H / clip.h) * 1.1
+            clip = clip.resized(newsize=(int(clip.w * ratio), int(clip.h * ratio)))
+            clips_to_close.append(clip)
+        else:
+            clip = ImageClip(process_bg_image(chosen_bg)).with_start(t_start).with_duration(dur)
+            clip = apply_ken_burns(clip, dur)
+            
+        layer_clips.append(clip.with_position(("center", "center")).cropped(y1=0, y2=SCREEN_H, x1=0, x2=SCREEN_W))
 
     # 2. Evidence Frame
     evidence_interval = 12.0
@@ -139,13 +160,26 @@ def generate_coldcase_video(
         dur = min(evidence_interval, total_duration - t_start)
         if dur <= 1.0: break
         
-        raw_img = process_evidence_image(random.choice(evidence_files))
-        clip = ImageClip(raw_img).with_start(t_start).with_duration(dur).with_position(("center", int(SCREEN_H * 0.12)))
+        chosen_evidence = random.choice(evidence_files)
+        
+        if chosen_evidence.lower().endswith('.gif'):
+            clip = VideoFileClip(chosen_evidence).with_start(t_start).with_duration(dur)
+            # Scale down to fit evidence bounds
+            max_allowed_w = int(SCREEN_W * 0.88)
+            max_allowed_h = int(SCREEN_H * 0.38)
+            scale = min(max_allowed_w / clip.w, max_allowed_h / clip.h)
+            clip = clip.resized(newsize=(int(clip.w * scale), int(clip.h * scale)))
+            clips_to_close.append(clip)
+        else:
+            raw_img = process_evidence_image(chosen_evidence)
+            clip = ImageClip(raw_img)
+            
+        clip = clip.with_start(t_start).with_duration(dur).with_position(("center", int(SCREEN_H * 0.12)))
         clip = clip.transform(lambda gf, t: gf(t) * min(1.0, t / 0.5))
         layer_clips.append(clip)
 
-    detective_poses = glob.glob(os.path.join(char_folder, "*.png")) + glob.glob(os.path.join(char_folder, "*.jpg")) + glob.glob(os.path.join(char_folder, "*.jfif"))
-    subscribe_poses = glob.glob(os.path.join(sub_folder, "*.png")) + glob.glob(os.path.join(sub_folder, "*.jpg")) + glob.glob(os.path.join(sub_folder, "*.jfif"))
+    detective_poses = get_supported_files(char_folder)
+    subscribe_poses = get_supported_files(sub_folder)
 
     outro_threshold = max(0.0, total_duration - 5.0)
 
@@ -170,6 +204,7 @@ def generate_coldcase_video(
                 
             chosen_pose = shuffled_detective_poses.pop(0)
             
+            # Character images are processed as static frames via PIL
             det_arr = process_character_image(chosen_pose, CHAR_W, CHAR_H)
             char_clip = ImageClip(det_arr).with_start(c_start).with_duration(c_dur).with_position(("left", "bottom"))
             char_clip = char_clip.transform(lambda gf, t: gf(t) * min(1.0, t / 0.4))
@@ -297,20 +332,26 @@ def generate_coldcase_video(
     if final_audio is not voice:
         final_audio.close()
 
+    # Close any GIF video clips opened dynamically
+    for c in clips_to_close:
+        try:
+            c.close()
+        except:
+            pass
+
     print(f"✅ Video generation complete: {output_name}")
     return output_name
 
 
 if __name__ == "__main__":
     # Define test parameters
-    test_audio = "audio/coldcases/audio (9).mp3"  # Ensure this file exists in your folder
+    test_audio = "audio/coldcases/audio (9).mp3"  
     bg_folder = "images/coldcases/background_images"
-    evidence_folder = "images/coldcases/9" # Change 1 to your test case index folder
+    evidence_folder = "images/coldcases/9" 
     char_folder = "images/coldcases/characters"
     sub_folder = "images/coldcases/characters/subscribe"
     output = "final_test_video.mp4"
     
-    # Simple check to ensure folders exist before running
     if not os.path.exists(bg_folder):
         print(f"❌ Error: Background folder not found: {bg_folder}")
     elif not os.path.exists(test_audio):
@@ -322,7 +363,7 @@ if __name__ == "__main__":
                 audio_path=test_audio,
                 bg_folder=bg_folder,
                 evidence_folder=evidence_folder,
-                music_path=None, # Set to None for now to keep it simple
+                music_path=None, 
                 credit_video_path=None,
                 output_name=output,
                 char_folder=char_folder,
