@@ -145,7 +145,7 @@ def generate_coldcase_video(
             clip = VideoFileClip(chosen_bg).with_start(t_start).with_duration(dur)
             # Resize to fill screen
             ratio = max(SCREEN_W / clip.w, SCREEN_H / clip.h) * 1.1
-            clip = clip.resized(newsize=(int(clip.w * ratio), int(clip.h * ratio)))
+            clip = clip.resized((int(clip.w * ratio), int(clip.h * ratio)))  # FIXED HERE
             clips_to_close.append(clip)
         else:
             clip = ImageClip(process_bg_image(chosen_bg)).with_start(t_start).with_duration(dur)
@@ -168,7 +168,7 @@ def generate_coldcase_video(
             max_allowed_w = int(SCREEN_W * 0.88)
             max_allowed_h = int(SCREEN_H * 0.38)
             scale = min(max_allowed_w / clip.w, max_allowed_h / clip.h)
-            clip = clip.resized(newsize=(int(clip.w * scale), int(clip.h * scale)))
+            clip = clip.resized((int(clip.w * scale), int(clip.h * scale)))  # FIXED HERE
             clips_to_close.append(clip)
         else:
             raw_img = process_evidence_image(chosen_evidence)
