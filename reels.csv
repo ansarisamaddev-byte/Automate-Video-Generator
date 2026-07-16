@@ -119,7 +119,7 @@ id,audio_path,image_folder,posted,last_image_index
 118,audio/warrior/M (80).mp3,images/warrior/M,true,572
 119,audio/warrior/M (81).mp3,images/warrior/M,true,574
 120,audio/warrior/M (82).mp3,images/warrior/M,true,581
-121,audio/warrior/M (83).mp3,images/warrior/M,false,0
+121,audio/warrior/M (83).mp3,images/warrior/M,true,589
 122,audio/warrior/W (39).mp3,images/warrior/W,false,0
 123,audio/warrior/W (40).mp3,images/warrior/W,false,0
 124,audio/warrior/W (41).mp3,images/warrior/W,false,0
