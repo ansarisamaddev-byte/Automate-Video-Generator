@@ -30,7 +30,7 @@ id,audio_path,image_folder,posted,last_image_index,caption
 29,audio/mindscribble/audio (28).mp3,images/mindscribble,true,0,
 30,audio/mindscribble/audio (29).mp3,images/mindscribble,true,0,
 31,audio/mindscribble/audio (30).mp3,images/mindscribble,true,0,
-32,audio/mindscribble/audio (31).mp3,images/mindscribble,false,0,
+32,audio/mindscribble/audio (31).mp3,images/mindscribble,true,0,
 33,audio/mindscribble/audio (32).mp3,images/mindscribble,false,0,
 34,audio/mindscribble/audio (33).mp3,images/mindscribble,false,0,
 35,audio/mindscribble/audio (34).mp3,images/mindscribble,false,0,
