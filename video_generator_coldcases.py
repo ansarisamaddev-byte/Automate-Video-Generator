@@ -95,12 +95,18 @@ def create_word_data(text, font_path, max_width):
     return np.array(img), canvas_w, canvas_h
 
 def get_supported_files(folder_path):
-    """Helper to fetch images including GIFs case-insensitively"""
-    extensions = ["*.jpg", "*.jpeg", "*.png", "*.jfif", "*.gif", "*.GIF"]
+    """Helper to fetch images including common web formats case-insensitively"""
+    valid_exts = {".jpg", ".jpeg", ".png", ".jfif", ".gif", ".webp"}
     files = []
-    for ext in extensions:
-        files.extend(glob.glob(os.path.join(folder_path, ext)))
-    return sorted(list(set(files)))
+    if not os.path.exists(folder_path):
+        return []
+        
+    for fname in os.listdir(folder_path):
+        ext = os.path.splitext(fname)[1].lower()
+        if ext in valid_exts:
+            files.append(os.path.join(folder_path, fname))
+            
+    return sorted(files)
 
 def generate_coldcase_video(
     audio_path, 
@@ -131,21 +137,22 @@ def generate_coldcase_video(
     layer_clips, text_clips = [], []
     clips_to_close = []  # Keep track of dynamically opened video clips (like animated GIFs)
 
-    # 1. Background Track
-    bg_interval = 5.0
-    for i in range(math.ceil(total_duration / bg_interval)):
+    # ================= 1. Background Track (Every 8 sec - Sequential) =================
+    bg_interval = 8.0
+    num_bg_steps = math.ceil(total_duration / bg_interval)
+    
+    for i in range(num_bg_steps):
         t_start = i * bg_interval
         dur = min(bg_interval, total_duration - t_start)
         if dur <= 0: break
         
-        chosen_bg = random.choice(bg_files)
+        # Select image sequentially; loops back to start using modulo (%)
+        chosen_bg = bg_files[i % len(bg_files)]
         
-        # Check if background is an animated GIF
         if chosen_bg.lower().endswith('.gif'):
             clip = VideoFileClip(chosen_bg).with_start(t_start).with_duration(dur)
-            # Resize to fill screen
             ratio = max(SCREEN_W / clip.w, SCREEN_H / clip.h) * 1.1
-            clip = clip.resized((int(clip.w * ratio), int(clip.h * ratio)))  # FIXED HERE
+            clip = clip.resized((int(clip.w * ratio), int(clip.h * ratio)))
             clips_to_close.append(clip)
         else:
             clip = ImageClip(process_bg_image(chosen_bg)).with_start(t_start).with_duration(dur)
@@ -153,22 +160,24 @@ def generate_coldcase_video(
             
         layer_clips.append(clip.with_position(("center", "center")).cropped(y1=0, y2=SCREEN_H, x1=0, x2=SCREEN_W))
 
-    # 2. Evidence Frame
-    evidence_interval = 12.0
-    for i in range(math.ceil(total_duration / evidence_interval)):
+    # ================= 2. Evidence Frame (Every 8 sec - Sequential) =================
+    evidence_interval = 8.0
+    num_evidence_steps = math.ceil(total_duration / evidence_interval)
+    
+    for i in range(num_evidence_steps):
         t_start = i * evidence_interval
         dur = min(evidence_interval, total_duration - t_start)
-        if dur <= 1.0: break
+        if dur <= 0.5: break
         
-        chosen_evidence = random.choice(evidence_files)
+        # Select image sequentially; loops back to start using modulo (%)
+        chosen_evidence = evidence_files[i % len(evidence_files)]
         
         if chosen_evidence.lower().endswith('.gif'):
             clip = VideoFileClip(chosen_evidence).with_start(t_start).with_duration(dur)
-            # Scale down to fit evidence bounds
             max_allowed_w = int(SCREEN_W * 0.88)
             max_allowed_h = int(SCREEN_H * 0.38)
             scale = min(max_allowed_w / clip.w, max_allowed_h / clip.h)
-            clip = clip.resized((int(clip.w * scale), int(clip.h * scale)))  # FIXED HERE
+            clip = clip.resized((int(clip.w * scale), int(clip.h * scale)))
             clips_to_close.append(clip)
         else:
             raw_img = process_evidence_image(chosen_evidence)
@@ -178,6 +187,7 @@ def generate_coldcase_video(
         clip = clip.transform(lambda gf, t: gf(t) * min(1.0, t / 0.5))
         layer_clips.append(clip)
 
+    # ================= 3. Character Poses =================
     detective_poses = get_supported_files(char_folder)
     subscribe_poses = get_supported_files(sub_folder)
 
@@ -190,37 +200,29 @@ def generate_coldcase_video(
         char_interval = 4.0
         num_char_loops = math.ceil(outro_threshold / char_interval)
         
-        shuffled_detective_poses = detective_poses.copy()
-        random.shuffle(shuffled_detective_poses)
-        
         for i in range(num_char_loops):
             c_start = i * char_interval
             c_dur = min(char_interval, outro_threshold - c_start)
             if c_dur <= 0: break
             
-            if not shuffled_detective_poses:
-                shuffled_detective_poses = detective_poses.copy()
-                random.shuffle(shuffled_detective_poses)
-                
-            chosen_pose = shuffled_detective_poses.pop(0)
+            chosen_pose = detective_poses[i % len(detective_poses)]
             
-            # Character images are processed as static frames via PIL
             det_arr = process_character_image(chosen_pose, CHAR_W, CHAR_H)
             char_clip = ImageClip(det_arr).with_start(c_start).with_duration(c_dur).with_position(("left", "bottom"))
             char_clip = char_clip.transform(lambda gf, t: gf(t) * min(1.0, t / 0.4))
             layer_clips.append(char_clip)
 
     if subscribe_poses:
-        sub_arr = process_character_image(random.choice(subscribe_poses), SUB_W, SUB_H)
+        sub_arr = process_character_image(subscribe_poses[0], SUB_W, SUB_H)
         sub_clip = ImageClip(sub_arr).with_start(outro_threshold).with_duration(total_duration - outro_threshold).with_position(("center", "bottom"))
         sub_clip = sub_clip.transform(lambda gf, t: gf(t) * min(1.0, t / 0.4))
         layer_clips.append(sub_clip)
     elif detective_poses and outro_threshold == 0:
-        det_arr = process_character_image(random.choice(detective_poses), CHAR_W, CHAR_H)
+        det_arr = process_character_image(detective_poses[0], CHAR_W, CHAR_H)
         char_clip = ImageClip(det_arr).with_start(0).with_duration(total_duration).with_position(("left", "bottom"))
         layer_clips.append(char_clip)
 
-    # 4. Accumulative Subtitle Engine
+    # ================= 4. Accumulative Subtitle Engine =================
     active_font = FONTS[0] if os.path.exists(FONTS[0]) else "default"
     max_w = SCREEN_W - (SAFE_MARGIN * 2)
     
@@ -272,7 +274,7 @@ def generate_coldcase_video(
     if current_sentence_words:
         process_and_flush_sentence(current_sentence_words)
 
-    # Audio Compiling & Windows Safe Closing
+    # ================= Audio Compiling & Output =================
     voice = speech_audio.with_duration(total_duration)
     
     bg_music_clip = None
@@ -283,8 +285,8 @@ def generate_coldcase_video(
         final_audio = voice
     
     video = CompositeVideoClip(
-    layer_clips + text_clips,
-    size=(SCREEN_W, SCREEN_H)
+        layer_clips + text_clips,
+        size=(SCREEN_W, SCREEN_H)
     ).with_duration(total_duration).with_audio(final_audio)
 
     # Append credits if provided
@@ -292,7 +294,6 @@ def generate_coldcase_video(
         print("🎬 Appending credit video...")
         credit_clip = VideoFileClip(credit_video_path)
 
-        # Resize if necessary
         if credit_clip.size != (SCREEN_W, SCREEN_H):
             credit_clip = credit_clip.resized((SCREEN_W, SCREEN_H))
 
@@ -313,16 +314,14 @@ def generate_coldcase_video(
         preset="ultrafast"
     )
 
-    # 1. Close Final Video
+    # Cleanup memory
     final_video.close()
 
-    # 2. Safely close credit clip using 'is not' (Fixes the TypeError)
     if final_video is not video:
         credit_clip.close()
 
     video.close()
 
-    # 3. Safely close audio clips using 'is not' (Fixes the TypeError)
     if music_path and bg_music_clip:
         bg_music_clip.close()
     
@@ -332,7 +331,6 @@ def generate_coldcase_video(
     if final_audio is not voice:
         final_audio.close()
 
-    # Close any GIF video clips opened dynamically
     for c in clips_to_close:
         try:
             c.close()
@@ -344,7 +342,6 @@ def generate_coldcase_video(
 
 
 if __name__ == "__main__":
-    # Define test parameters
     test_audio = "audio/coldcases/audio (9).mp3"  
     bg_folder = "images/coldcases/background_images"
     evidence_folder = "images/coldcases/9" 
