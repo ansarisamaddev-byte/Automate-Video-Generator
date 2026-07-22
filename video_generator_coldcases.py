@@ -138,7 +138,7 @@ def generate_coldcase_video(
     clips_to_close = []  # Keep track of dynamically opened video clips (like animated GIFs)
 
     # ================= 1. Background Track (Every 8 sec - Sequential) =================
-    bg_interval = 8.0
+    bg_interval = 5.0
     num_bg_steps = math.ceil(total_duration / bg_interval)
     
     for i in range(num_bg_steps):
