@@ -137,7 +137,7 @@ id,audio_path,image_folder,posted,last_image_index
 136,audio/warrior/M (96).mp3,images/warrior/M,true,751
 137,audio/warrior/M (97).mp3,images/warrior/M,true,769
 138,audio/warrior/M (98).mp3,images/warrior/M,true,776
-139,audio/warrior/M (99).mp3,images/warrior/M,false,0
+139,audio/warrior/M (99).mp3,images/warrior/M,true,781
 140,audio/warrior/M (100).mp3,images/warrior/M,false,0
 141,audio/warrior/M (101).mp3,images/warrior/M,false,0
 142,audio/warrior/M (102).mp3,images/warrior/M,false,0
