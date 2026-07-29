@@ -46,7 +46,7 @@ id,audio_path,image_folder,posted,last_image_index,caption
 45,audio/mindscribble/audio (44).mp3,images/mindscribble,true,0,
 46,audio/mindscribble/audio (45).mp3,images/mindscribble,true,0,
 47,audio/mindscribble/audio (46).mp3,images/mindscribble,true,0,
-48,audio/mindscribble/audio (47).mp3,images/mindscribble,false,0,
+48,audio/mindscribble/audio (47).mp3,images/mindscribble,true,0,
 49,audio/mindscribble/audio (48).mp3,images/mindscribble,false,0,
 50,audio/mindscribble/audio (49).mp3,images/mindscribble,false,0,
 51,audio/mindscribble/audio (50).mp3,images/mindscribble,false,0,
