@@ -44,12 +44,12 @@ index,title,posted,audio_path
 43,The Cursed Phone Number,true,audio/coldcases/audio (43).mp3
 44,The Unsinkable Violet Jessop,true,audio/coldcases/audio (44).mp3
 45,The Overtoun Bridge: Why Do Dogs Jump?,true,audio/coldcases/audio (45).mp3
-46,The Man in the Iron Mask,false,audio/coldcases/audio (46).mp3
-47,The Wow! Signal,false,audio/coldcases/audio (47).mp3
-48,The Dancing Plague of 1518,false,audio/coldcases/audio (48).mp3
-49,The Mad Gasser of Mattoon,false,audio/coldcases/audio (49).mp3
-50,The Tarim Mummies,false,audio/coldcases/audio (50).mp3
-51,The Dyatlov Pass Incident,false,audio/coldcases/audio (51).mp3
+46,The Man in the Iron Mask,true,audio/coldcases/audio (46).mp3
+47,The Wow! Signal,true,audio/coldcases/audio (47).mp3
+48,The Dancing Plague of 1518,true,audio/coldcases/audio (48).mp3
+49,The Mad Gasser of Mattoon,true,audio/coldcases/audio (49).mp3
+50,The Tarim Mummies,true,audio/coldcases/audio (50).mp3
+51,The Dyatlov Pass Incident,true,audio/coldcases/audio (51).mp3
 52,Göbekli Tepe,false,audio/coldcases/audio (52).mp3
 53,The Disappearance of Frederick Valentich,false,audio/coldcases/audio (53).mp3
 54,The Hessdalen Lights,false,audio/coldcases/audio (54).mp3
@@ -67,7 +67,7 @@ index,title,posted,audio_path
 66,The Woman in the Iron Box,false,audio/coldcases/audio (66).mp3
 67,The Boy Who Remembered His Own Murder,false,audio/coldcases/audio (67).mp3
 68,The Map of Antarctica Before the Ice,false,audio/coldcases/audio (68).mp3
-69,The Coso Artifact A 500,000 Year Old Spark Plug,false,audio/coldcases/audio (69).mp3
+69,The Coso Artifact A 500000 Year Old Spark Plug,false,audio/coldcases/audio (69).mp3
 70,the Pollock Twins A Proven Case of Reincarnation,false,audio/coldcases/audio (70).mp3
 71,The Ghost Island of Frisland,false,audio/coldcases/audio (71).mp3
 72,The Man Who Didn't Sleep for Forty Years,false,audio/coldcases/audio (72).mp3
