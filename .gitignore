@@ -6,3 +6,4 @@ client_secret.json
 instagram_video_workflow.yml
 coldcases_auth.json
 coldcases_client_secret.json
+venv/

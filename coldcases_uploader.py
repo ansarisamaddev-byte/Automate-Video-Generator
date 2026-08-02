@@ -15,18 +15,38 @@ from video_generator_coldcases import generate_coldcase_video
 
 SCOPES = ["https://www.googleapis.com/auth/youtube.upload"]
 
+def get_supported_audio_files(folder_path):
+    """Helper to fetch all valid audio tracks regardless of extension"""
+    valid_exts = {".mp3", ".wav", ".aac", ".m4a", ".ogg"}
+    if not os.path.exists(folder_path):
+        return []
+    
+    files = []
+    for fname in os.listdir(folder_path):
+        ext = os.path.splitext(fname)[1].lower()
+        if ext in valid_exts:
+            files.append(os.path.join(folder_path, fname))
+    return files
+
 def get_service():
     creds = None
     pickle_file = "coldcases_pov_token.pickle"
     client_secrets = "coldcases_auth.json"
 
     if os.path.exists(pickle_file):
-        with open(pickle_file, "rb") as f:
-            creds = pickle.load(f)
+        try:
+            with open(pickle_file, "rb") as f:
+                creds = pickle.load(f)
+        except Exception as e:
+            print(f"⚠️ Could not load token file: {e}")
 
     if creds and creds.expired and creds.refresh_token:
-        print("🔄 Refreshing ColdCases access token...")
-        creds.refresh(Request())
+        try:
+            print("🔄 Refreshing ColdCases access token...")
+            creds.refresh(Request())
+        except Exception as e:
+            print(f"⚠️ Token refresh failed ({e}). Requesting new login...")
+            creds = None
 
     if not creds or not creds.valid:
         if not os.path.exists(client_secrets):
@@ -44,7 +64,7 @@ def get_service():
 
 
 def upload_to_youtube(video_path, title, description, tags):
-    """Safely uploads to YouTube just like the MindScribble script."""
+    """Safely uploads to YouTube @ColdCases-pov channel."""
     try:
         print("📤 Uploading to @ColdCases-pov YouTube Channel...")
         youtube = get_service()
@@ -56,7 +76,7 @@ def upload_to_youtube(video_path, title, description, tags):
                     "title": title,
                     "description": description,
                     "tags": tags,
-                    "categoryId": "22" 
+                    "categoryId": "22"  # People & Blogs
                 },
                 "status": {
                     "privacyStatus": "public"
@@ -66,7 +86,8 @@ def upload_to_youtube(video_path, title, description, tags):
         )
 
         response = request.execute()
-        print(f"✅ YouTube Uploaded: https://www.youtube.com/watch?v={response['id']}")
+        video_id = response.get("id")
+        print(f"✅ YouTube Uploaded: https://www.youtube.com/watch?v={video_id}")
         return True
 
     except Exception as e:
@@ -77,11 +98,11 @@ def upload_to_youtube(video_path, title, description, tags):
 def run_automation():
     csv_file = "coldcases.csv"
     if not os.path.exists(csv_file):
-        print("❌ CSV not found")
+        print(f"❌ CSV file not found: {csv_file}")
         return
 
     df = pd.read_csv(csv_file)
-    df["posted"] = df["posted"].astype(str).str.lower()
+    df["posted"] = df["posted"].astype(str).str.lower().str.strip()
     unposted_df = df[df["posted"] == "false"]
 
     if unposted_df.empty:
@@ -90,40 +111,50 @@ def run_automation():
 
     idx = unposted_df.index[0]
     row = df.loc[idx]
-    case_number = int(row["index"])
     
-    # Explicitly set the output name BEFORE generation
+    # Safe handling for index / case_number
+    try:
+        case_number = int(float(row["index"]))
+    except (ValueError, KeyError):
+        case_number = idx
+
     output_video = f"temp_coldcase_render_{idx}.mp4"
     
-    print(f"🎬 Generating content for Case {idx}...")
+    # Get random music track safely
+    music_tracks = get_supported_audio_files("background_music/coldcases")
+    selected_music = random.choice(music_tracks) if music_tracks else None
+    
+    # Get random ending/credit video safely
+    credit_videos = glob.glob("ending/coldcases/*.mp4")
+    selected_credit = random.choice(credit_videos) if credit_videos else None
+
+    print(f"🎬 Generating content for Case index {idx} (Case #{case_number})...")
     try:
-        # We capture the result, but remember: for coldcase, it's just a string!
         generator_result = generate_coldcase_video(
             audio_path=row["audio_path"],
             bg_folder="images/coldcases/background_images",
             evidence_folder=f"images/coldcases/{case_number}",
-            music_path=random.choice(glob.glob("background_music/*.mp3") or [None]),
-            credit_video_path=random.choice(glob.glob("ending/coldcases/*.mp4") or [None]),
+            music_path=selected_music,
+            credit_video_path=selected_credit,
             output_name=output_video,
             char_folder="images/coldcases/characters",
             sub_folder="images/coldcases/characters/subscribe"
         )
     except Exception as e:
-        print(f"❌ Generation failed: {e}")
+        print(f"❌ Generation failed for Case {idx}: {e}")
         return
 
     # --- CAPTION LOGIC ---
-    # Since generator_result is just a string, we MUST get the caption from the CSV
     if "title" in row and pd.notna(row["title"]) and str(row["title"]).strip() != "":
         caption = str(row["title"]).strip()
-        print(f"📖 Using title as caption: {caption}")
+        print(f"📖 Using title from CSV: {caption}")
     else:
         caption = "Unsolved Mystery Investigation"
 
     # --- METADATA ---
     title = f"{caption} | @ColdCases-pov #shorts"
     if len(title) > 100:
-        title = title[:90] + "... #shorts"
+        title = title[:90].strip() + "... #shorts"
 
     description = (
         f"{caption}\n\n"
@@ -139,9 +170,9 @@ def run_automation():
         
         if os.path.exists(output_video):
             os.remove(output_video)
-        print("✅ Process Complete.")
+        print(f"✅ Process Complete for Case {idx}.")
     else:
-        print("❌ Process aborted due to YouTube upload failure. Local video retained.")
+        print("❌ Process aborted due to YouTube upload failure. Local render retained for inspection.")
 
 if __name__ == "__main__":
     run_automation()

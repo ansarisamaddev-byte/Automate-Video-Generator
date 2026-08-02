@@ -6,10 +6,17 @@ import math
 import numpy as np
 import pandas as pd
 from PIL import Image, ImageDraw, ImageFont, ImageEnhance, ImageOps
-from moviepy import VideoFileClip, concatenate_videoclips
 
 # ================= MOVIEPY 2.X & WHISPER =================
-from moviepy import AudioFileClip, ImageClip, CompositeVideoClip, CompositeAudioClip
+from moviepy import (
+    VideoFileClip, 
+    AudioFileClip, 
+    ImageClip, 
+    CompositeVideoClip, 
+    CompositeAudioClip, 
+    concatenate_videoclips,
+    afx  # Audio effects for looping
+)
 from faster_whisper import WhisperModel
 
 # ================= CORE ENGINE SETUP =================
@@ -94,16 +101,17 @@ def create_word_data(text, font_path, max_width):
     draw.text((canvas_w // 2, canvas_h // 2), text, font=font, fill=text_color, stroke_width=7, stroke_fill=(0, 0, 0), anchor="mm")
     return np.array(img), canvas_w, canvas_h
 
-def get_supported_files(folder_path):
-    """Helper to fetch images including common web formats case-insensitively"""
-    valid_exts = {".jpg", ".jpeg", ".png", ".jfif", ".gif", ".webp"}
+def get_supported_files(folder_path, exts=None):
+    """Helper to fetch supported files case-insensitively"""
+    if exts is None:
+        exts = {".jpg", ".jpeg", ".png", ".jfif", ".gif", ".webp"}
     files = []
     if not os.path.exists(folder_path):
         return []
         
     for fname in os.listdir(folder_path):
         ext = os.path.splitext(fname)[1].lower()
-        if ext in valid_exts:
+        if ext in exts:
             files.append(os.path.join(folder_path, fname))
             
     return sorted(files)
@@ -135,9 +143,9 @@ def generate_coldcase_video(
     speech_audio = AudioFileClip(audio_path)
     total_duration = speech_audio.duration - 0.05
     layer_clips, text_clips = [], []
-    clips_to_close = []  # Keep track of dynamically opened video clips (like animated GIFs)
+    clips_to_close = []
 
-    # ================= 1. Background Track (Every 8 sec - Sequential) =================
+    # ================= 1. Background Track (Every 5 sec - Sequential) =================
     bg_interval = 5.0
     num_bg_steps = math.ceil(total_duration / bg_interval)
     
@@ -146,7 +154,6 @@ def generate_coldcase_video(
         dur = min(bg_interval, total_duration - t_start)
         if dur <= 0: break
         
-        # Select image sequentially; loops back to start using modulo (%)
         chosen_bg = bg_files[i % len(bg_files)]
         
         if chosen_bg.lower().endswith('.gif'):
@@ -169,7 +176,6 @@ def generate_coldcase_video(
         dur = min(evidence_interval, total_duration - t_start)
         if dur <= 0.5: break
         
-        # Select image sequentially; loops back to start using modulo (%)
         chosen_evidence = evidence_files[i % len(evidence_files)]
         
         if chosen_evidence.lower().endswith('.gif'):
@@ -222,7 +228,7 @@ def generate_coldcase_video(
         char_clip = ImageClip(det_arr).with_start(0).with_duration(total_duration).with_position(("left", "bottom"))
         layer_clips.append(char_clip)
 
-    # ================= 4. Accumulative Subtitle Engine =================
+    # ================= 4. Subtitle Engine =================
     active_font = FONTS[0] if os.path.exists(FONTS[0]) else "default"
     max_w = SCREEN_W - (SAFE_MARGIN * 2)
     
@@ -274,14 +280,24 @@ def generate_coldcase_video(
     if current_sentence_words:
         process_and_flush_sentence(current_sentence_words)
 
-    # ================= Audio Compiling & Output =================
+    # ================= 5. Audio Compiling (Voice + Background Music) =================
     voice = speech_audio.with_duration(total_duration)
     
     bg_music_clip = None
-    if music_path:
-        bg_music_clip = AudioFileClip(music_path).with_volume_scaled(0.08).with_duration(total_duration)
+    if music_path and os.path.exists(music_path):
+        print(f"🎵 Adding background music: {os.path.basename(music_path)}")
+        raw_music = AudioFileClip(music_path)
+        
+        # Loop music if it's shorter than the speech track
+        if raw_music.duration < total_duration:
+            num_loops = math.ceil(total_duration / raw_music.duration)
+            raw_music = afx.AudioLoop(raw_music, duration=total_duration)
+            
+        # Scale music to 8% volume so voiceover is crisp and dominant
+        bg_music_clip = raw_music.with_volume_scaled(0.08).with_duration(total_duration)
         final_audio = CompositeAudioClip([voice, bg_music_clip])
     else:
+        print("⚠️ No valid music file found, generating video with voiceover only.")
         final_audio = voice
     
     video = CompositeVideoClip(
@@ -322,7 +338,7 @@ def generate_coldcase_video(
 
     video.close()
 
-    if music_path and bg_music_clip:
+    if bg_music_clip:
         bg_music_clip.close()
     
     voice.close()
@@ -347,8 +363,19 @@ if __name__ == "__main__":
     evidence_folder = "images/coldcases/9" 
     char_folder = "images/coldcases/characters"
     sub_folder = "images/coldcases/characters/subscribe"
+    music_folder = "background_music/coldcases"  # <--- Folder containing audio files
     output = "final_test_video.mp4"
     
+    # Randomly select a background track from the background_music folder
+    selected_music = None
+    music_files = get_supported_files(music_folder, exts={".mp3", ".wav", ".aac", ".m4a", ".ogg"})
+    
+    if music_files:
+        selected_music = random.choice(music_files)
+        print(f"🎧 Selected background track: {selected_music}")
+    else:
+        print(f"⚠️ Warning: No music files found in folder '{music_folder}'.")
+
     if not os.path.exists(bg_folder):
         print(f"❌ Error: Background folder not found: {bg_folder}")
     elif not os.path.exists(test_audio):
@@ -360,7 +387,7 @@ if __name__ == "__main__":
                 audio_path=test_audio,
                 bg_folder=bg_folder,
                 evidence_folder=evidence_folder,
-                music_path=None, 
+                music_path=selected_music,  # <--- Pass selected random music track
                 credit_video_path=None,
                 output_name=output,
                 char_folder=char_folder,
