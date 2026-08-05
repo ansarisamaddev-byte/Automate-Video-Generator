@@ -60,7 +60,7 @@ id,audio_path,image_folder,posted,last_image_index,caption
 59,audio/mindscribble/audio (58).mp3,images/mindscribble,true,0,
 60,audio/mindscribble/audio (59).mp3,images/mindscribble,true,0,
 61,audio/mindscribble/audio (60).mp3,images/mindscribble,true,0,
-62,audio/mindscribble/audio (61).mp3,images/mindscribble,false,0,
+62,audio/mindscribble/audio (61).mp3,images/mindscribble,true,0,
 63,audio/mindscribble/audio (62).mp3,images/mindscribble,false,0,
 64,audio/mindscribble/audio (63).mp3,images/mindscribble,false,0,
 65,audio/mindscribble/audio (64).mp3,images/mindscribble,false,0,
