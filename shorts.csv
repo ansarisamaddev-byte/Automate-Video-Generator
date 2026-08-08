@@ -65,10 +65,10 @@ id,audio_path,image_folder,posted,last_image_index
 64,audio/warrior/W (9).mp3,images/warrior/W,true,558.0
 65,audio/warrior/W (29).mp3,images/warrior/W,true,566.0
 66,audio/warrior/M (11).mp3,images/warrior/M,true,576.0
-67,audio/warrior/M (44).mp3,images/warrior/M,false,0.0
-68,audio/warrior/M (23).mp3,images/warrior/M,false,0.0
-69,audio/warrior/M (5).mp3,images/warrior/M,false,0.0
-70,audio/warrior/M (10).mp3,images/warrior/M,false,0.0
+67,audio/warrior/M (44).mp3,images/warrior/M,true,580.0
+68,audio/warrior/M (23).mp3,images/warrior/M,true,584.0
+69,audio/warrior/M (5).mp3,images/warrior/M,true,596.0
+70,audio/warrior/M (10).mp3,images/warrior/M,true,603.0
 71,audio/warrior/M (13).mp3,images/warrior/M,false,0.0
 72,audio/warrior/M (30).mp3,images/warrior/M,false,0.0
 73,audio/warrior/W (25).mp3,images/warrior/W,false,0.0
