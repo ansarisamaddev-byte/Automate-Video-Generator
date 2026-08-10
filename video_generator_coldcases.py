@@ -15,8 +15,9 @@ from moviepy import (
     CompositeVideoClip, 
     CompositeAudioClip, 
     concatenate_videoclips,
-    afx  # Audio effects for looping
+    afx  # Audio effects
 )
+from moviepy.audio.fx.audio_loop import audio_loop
 from faster_whisper import WhisperModel
 
 # ================= CORE ENGINE SETUP =================
@@ -280,7 +281,7 @@ def generate_coldcase_video(
     if current_sentence_words:
         process_and_flush_sentence(current_sentence_words)
 
-# ================= 5. Audio Compiling (Voice + Background Music) =================
+    # ================= 5. Audio Compiling (Voice + Background Music) =================
     voice = speech_audio.with_duration(total_duration)
     
     bg_music_clip = None
@@ -290,14 +291,13 @@ def generate_coldcase_video(
         
         # Loop music if shorter than the main speech track
         if raw_music.duration < total_duration:
-            num_loops = math.ceil(total_duration / raw_music.duration)
-            raw_music = afx.AudioLoop(raw_music, duration=total_duration)
+            bg_music_clip = audio_loop(raw_music, duration=total_duration)
         else:
-            raw_music = raw_music.with_duration(total_duration)
+            bg_music_clip = raw_music.with_duration(total_duration)
             
-        bg_music_clip = raw_music.with_volume_scaled(0.30)
+        bg_music_clip = bg_music_clip.with_volume_scaled(0.30)
         
-        # Explicitly combine voice (100% volume) and background music (25% volume)
+        # Explicitly combine voice (100% volume) and background music (30% volume)
         final_audio = CompositeAudioClip([voice.with_volume_scaled(1.0), bg_music_clip])
     else:
         print("⚠️ No valid music file found, generating video with voiceover only.")
@@ -366,10 +366,9 @@ if __name__ == "__main__":
     evidence_folder = "images/coldcases/9" 
     char_folder = "images/coldcases/characters"
     sub_folder = "images/coldcases/characters/subscribe"
-    music_folder = "background_music/coldcases"  # <--- Folder containing audio files
+    music_folder = "background_music/coldcases"
     output = "final_test_video.mp4"
     
-    # Randomly select a background track from the background_music folder
     selected_music = None
     music_files = get_supported_files(music_folder, exts={".mp3", ".wav", ".aac", ".m4a", ".ogg"})
     
@@ -390,7 +389,7 @@ if __name__ == "__main__":
                 audio_path=test_audio,
                 bg_folder=bg_folder,
                 evidence_folder=evidence_folder,
-                music_path=selected_music,  # <--- Pass selected random music track
+                music_path=selected_music,
                 credit_video_path=None,
                 output_name=output,
                 char_folder=char_folder,
