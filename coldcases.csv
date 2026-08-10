@@ -63,7 +63,7 @@ index,title,posted,audio_path
 62,The Stairway to the Stone Ceiling,true,audio/coldcases/audio (62).mp3
 63,The Vanished Hiker of the Silent Peak,true,audio/coldcases/audio (63).mp3
 64,The Village of the Whispering Sands,true,audio/coldcases/audio (64).mp3
-65,The Violet Fog of 1702,false,audio/coldcases/audio (65).mp3
+65,The Violet Fog of 1702,true,audio/coldcases/audio (65).mp3
 66,The Woman in the Iron Box,false,audio/coldcases/audio (66).mp3
 67,The Boy Who Remembered His Own Murder,false,audio/coldcases/audio (67).mp3
 68,The Map of Antarctica Before the Ice,false,audio/coldcases/audio (68).mp3
@@ -101,5 +101,5 @@ index,title,posted,audio_path
 100,The Mystery of the Sleeping Beauty of Palermo,false,audio/coldcases/audio (100).mp3
 101,The Frozen Woman Who Woke Up,false,audio/coldcases/audio (101).mp3
 102,The Man Who Walked Out of a Cloud,false,audio/coldcases/audio (102).mp3
-103,You Notice Your Loved One Was Replaced,,
-104,You Step Into a Fog and Lose 30 Years,,
+103,You Notice Your Loved One Was Replaced,nan,
+104,You Step Into a Fog and Lose 30 Years,nan,
