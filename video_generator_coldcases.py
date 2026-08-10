@@ -15,9 +15,8 @@ from moviepy import (
     CompositeVideoClip, 
     CompositeAudioClip, 
     concatenate_videoclips,
-    afx  # Audio effects
+    afx  # Contains audio effects like afx.audio_loop
 )
-from moviepy.audio.fx.audio_loop import audio_loop
 from faster_whisper import WhisperModel
 
 # ================= CORE ENGINE SETUP =================
@@ -42,7 +41,7 @@ def apply_ken_burns(clip, duration):
 def process_bg_image(img_path):
     try:
         img = Image.open(img_path).convert("RGB")
-    except:
+    except Exception:
         img = Image.new("RGB", (SCREEN_W, SCREEN_H), (20, 20, 20))
     ratio = max(SCREEN_W / img.width, SCREEN_H / img.height) * 1.1
     img = img.resize((int(img.width * ratio), int(img.height * ratio)), Image.Resampling.LANCZOS)
@@ -153,7 +152,8 @@ def generate_coldcase_video(
     for i in range(num_bg_steps):
         t_start = i * bg_interval
         dur = min(bg_interval, total_duration - t_start)
-        if dur <= 0: break
+        if dur <= 0:
+            break
         
         chosen_bg = bg_files[i % len(bg_files)]
         
@@ -175,7 +175,8 @@ def generate_coldcase_video(
     for i in range(num_evidence_steps):
         t_start = i * evidence_interval
         dur = min(evidence_interval, total_duration - t_start)
-        if dur <= 0.5: break
+        if dur <= 0.5:
+            break
         
         chosen_evidence = evidence_files[i % len(evidence_files)]
         
@@ -210,7 +211,8 @@ def generate_coldcase_video(
         for i in range(num_char_loops):
             c_start = i * char_interval
             c_dur = min(char_interval, outro_threshold - c_start)
-            if c_dur <= 0: break
+            if c_dur <= 0:
+                break
             
             chosen_pose = detective_poses[i % len(detective_poses)]
             
@@ -289,15 +291,15 @@ def generate_coldcase_video(
         print(f"🎵 Adding background music: {os.path.basename(music_path)}")
         raw_music = AudioFileClip(music_path)
         
-        # Loop music if shorter than the main speech track
+        # Loop music if shorter than main speech track using .fx(afx.audio_loop)
         if raw_music.duration < total_duration:
-            bg_music_clip = audio_loop(raw_music, duration=total_duration)
+            bg_music_clip = raw_music.fx(afx.audio_loop, duration=total_duration)
         else:
             bg_music_clip = raw_music.with_duration(total_duration)
             
         bg_music_clip = bg_music_clip.with_volume_scaled(0.30)
         
-        # Explicitly combine voice (100% volume) and background music (30% volume)
+        # Combine voice (100% volume) and background music (30% volume)
         final_audio = CompositeAudioClip([voice.with_volume_scaled(1.0), bg_music_clip])
     else:
         print("⚠️ No valid music file found, generating video with voiceover only.")
@@ -353,7 +355,7 @@ def generate_coldcase_video(
     for c in clips_to_close:
         try:
             c.close()
-        except:
+        except Exception:
             pass
 
     print(f"✅ Video generation complete: {output_name}")
