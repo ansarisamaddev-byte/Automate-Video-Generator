@@ -170,7 +170,7 @@ id,audio_path,image_folder,posted,last_image_index
 169,audio/warrior/M (129).mp3,images/warrior/M,true,1046
 170,audio/warrior/W (42).mp3,images/warrior/W,true,1053
 171,audio/warrior/M (130).mp3,images/warrior/M,true,1061
-172,audio/warrior/M (131).mp3,images/warrior/M,false,0
+172,audio/warrior/M (131).mp3,images/warrior/M,true,1069
 173,audio/warrior/W (43).mp3,images/warrior/W,false,0
 174,audio/warrior/M (132).mp3,images/warrior/M,false,0
 175,audio/warrior/M (133).mp3,images/warrior/M,false,0
