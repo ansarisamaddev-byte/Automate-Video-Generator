@@ -1,0 +1,49 @@
+[
+  {
+    "video_id": "1",
+    "posted": false,
+    "voice_over_path": "trash/ms_1.mp3",
+    "person_folder": "images/person",
+    "images_folder": "images/mindscribble",
+    "characters_folder": "images/cutouts",
+    "scenes": [
+      {
+        "scene_id": 1,
+        "heading": "Dostoevsky's Dark Discovery",
+        "bg_track": "assets/music/dark_intro.mp3",
+        "sentences": [
+          "If you are suffering right now, Dostoevsky understood why.",
+          "Before Sigmund Freud ever studied the mind, Dostoevsky discovered the darkest psychological trap humans walk into."
+        ]
+      },
+      {
+        "scene_id": 2,
+        "heading": "The Trap of Suffering",
+        "bg_track": "assets/music/philosophical_piano.mp3",
+        "sentences": [
+          "He wrote: 'Man is sometimes extraordinarily, passionately in love with suffering.'",
+          "Why? Because pain gives us an easy excuse.",
+          "It lets us blame the world instead of facing our own choices."
+        ]
+      },
+      {
+        "scene_id": 3,
+        "heading": "Familiar Misery",
+        "bg_track": "assets/music/tense_build.mp3",
+        "sentences": [
+          "Your mind prefers familiar misery over the terror of responsibility.",
+          "Pain feels like an achievement, but holding onto it keeps you trapped."
+        ]
+      },
+      {
+        "scene_id": 4,
+        "heading": "Choosing Freedom",
+        "bg_track": "assets/music/hope_fule.mp3",
+        "sentences": [
+          "The moment you drop the story of your past... you become free.",
+          "Real strength isn't enduring pain—it's choosing to step out of it."
+        ]
+      }
+    ]
+  }
+]
