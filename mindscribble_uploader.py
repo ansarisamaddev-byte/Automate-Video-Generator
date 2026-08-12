@@ -38,8 +38,8 @@ def resolve_project_path(path_str):
 
 def get_service():
     creds = None
-    pickle_file = resolve_project_path("../mindscribble_token.pickle")
-    client_secrets = resolve_project_path("../client_secret_mindscribble.json")
+    pickle_file = resolve_project_path("mindscribble_token.pickle")
+    client_secrets = resolve_project_path("client_secret_mindscribble.json")
 
     # Load existing authentication session for MindScribble
     if os.path.exists(pickle_file):
