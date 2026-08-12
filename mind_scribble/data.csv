@@ -1,2 +1,6 @@
 id,audio_path,image_folder,person_image_folder,heading,posted,last_image_index,caption
-1,ms_1.mp3,images/mindscribble,images/person/dosto,The Dark Psychological Trap You’re Walking Into,false,0,Dostoevsky Discovered Your Brain’s Worst Addiction
+1,audio/thoughts/audio (1).mp3,images/mindscribble,images/person/dosto,The Monster in the Cubicle,false,0,Kafka’s Trap: The Horror of Being Useful
+1,audio/thoughts/audio (2).mp3,images/mindscribble,images/person/dosto,The Cage of Pure Logic,false,0,Dostoevsky’s Warning: The Curse of Living in Your Head
+1,audio/thoughts/audio (3).mp3,images/mindscribble,images/person/dosto,Guilt Without a Crime,false,0,The Modern Trial: Apologizing to a Court That Doesn't Exist
+1,audio/thoughts/audio (4).mp3,images/mindscribble,images/person/dosto,The Threat of an Easy Life,false,0,Dostoevsky’s Secret: Why Comfort Will Destroy Your Soul
+1,audio/thoughts/audio (5).mp3,images/mindscribble,images/person/dosto,Smiling in the Darkness,false,0,Camus and Kafka: The Freedom of Accepting the Absurd
