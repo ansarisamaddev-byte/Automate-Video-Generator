@@ -14,7 +14,7 @@ from google_auth_oauthlib.flow import InstalledAppFlow
 
 # ================= VIDEO GENERATOR ENGINE =================
 # Updated module name to match mindscribbble_editor.py
-from mindscribble_editor import generate_video_from_csv, resolve_project_path, load_folder_images
+from mindscribble_editor import generate_video_from_csv, load_folder_images
 from moviepy import AudioFileClip
 
 SCOPES = [
