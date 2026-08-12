@@ -41,7 +41,7 @@ jobs:
           CLOUDINARY_CLOUD_NAME: ${{ secrets.CLOUDINARY_CLOUD_NAME }}
           CLOUDINARY_API_KEY: ${{ secrets.CLOUDINARY_API_KEY }}
           CLOUDINARY_API_SECRET: ${{ secrets.CLOUDINARY_API_SECRET }}
-        run: python mindscribble_uploader.py
+        run: python run: python mind_scribble/mindscribble_uploader.py
 
       - name: Commit updated CSV
         run: |
@@ -57,8 +57,8 @@ jobs:
           # Re-apply stashed changes
           git stash pop || echo "No stashed changes to re-apply"
 
-          # Add and commit updated mind_scribble.csv
-          git add data.csv
+          # Add and commit updated data.csv
+          git add mind_scribble/data.csv
           git diff --quiet && git diff --staged --quiet || git commit -m "Auto-update mind_scribble.csv [posted state & last_image_index]"
 
           git push origin main
