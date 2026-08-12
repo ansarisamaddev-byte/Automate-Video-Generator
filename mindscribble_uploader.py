@@ -105,7 +105,7 @@ def upload_to_youtube(video_path, title, description, tags):
 
 # ================= MAIN AUTOMATION LOGIC =================
 def run_automation():
-    csv_file = "data.csv"
+    csv_file = "mind_scribble2.csv"
     csv_abs = resolve_project_path(csv_file)
 
     if not os.path.exists(csv_abs):
