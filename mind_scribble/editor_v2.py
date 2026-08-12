@@ -16,11 +16,11 @@ from faster_whisper import WhisperModel
 
 
 # ---------------- PATH RESOLUTION ---------------- #
+
 def resolve_project_path(raw_path):
     if not raw_path:
         return ""
     
-    # Clean slash direction and whitespace from CSV input
     clean_path = str(raw_path).strip().replace("/", "\\").lstrip("\\")
     p = Path(clean_path)
     
@@ -28,18 +28,15 @@ def resolve_project_path(raw_path):
         return str(p)
 
     script_dir = Path(__file__).resolve().parent
-    project_root = script_dir.parent  # Points directly to D:\Project\Automate-Video-Generator
+    project_root = script_dir.parent  # Resolves D:\Project\Automate-Video-Generator
 
-    # 1. Check directly relative to Project Root (Automate-Video-Generator)
     if (project_root / p).exists():
         return str(project_root / p)
-
-    # 2. Check relative to Script Directory (mind_scribble)
     if (script_dir / p).exists():
         return str(script_dir / p)
 
-    # Fallback to project root path
     return str(project_root / p)
+
 
 # ---------------- CORE CONFIG ---------------- #
 
@@ -63,7 +60,6 @@ def load_folder_images(folder_path):
     if not folder_path:
         return []
     p_folder = Path(resolve_project_path(folder_path))
-    print(p_folder)
     if not p_folder.exists():
         return []
     valid_exts = {".jpg", ".jpeg", ".png", ".webp", ".jfif"}
@@ -95,26 +91,68 @@ def process_bg_image(img_path):
 
     img = Image.alpha_composite(img, shadow_layer)
     return np.array(img.convert("RGB"))
-
-
 def process_person_image(img_path):
-    """Processes person image with heavily feathered alpha mask."""
+    """
+    Processes person portrait with a very soft feathered edge.
+    The image is intentionally oversized so the border
+    disappears into the background.
+    """
+
     try:
         img = Image.open(img_path).convert("RGBA")
     except Exception:
-        img = Image.new("RGBA", (700, 900), (40, 40, 40, 255))
+        img = Image.new(
+            "RGBA",
+            (700, 900),
+            (40, 40, 40, 255)
+        )
 
-    target_w = 750
+    # -----------------------------------------
+    # MAKE PERSON LARGER
+    # -----------------------------------------
+    target_w = 820
+
     ratio = target_w / img.width
     target_h = int(img.height * ratio)
-    img = img.resize((target_w, target_h), Image.Resampling.LANCZOS)
 
-    mask = Image.new("L", (target_w, target_h), 0)
+    img = img.resize(
+        (target_w, target_h),
+        Image.Resampling.LANCZOS
+    )
+
+    # -----------------------------------------
+    # SOFT RADIAL / ELLIPTICAL FEATHER
+    # -----------------------------------------
+    mask = Image.new(
+        "L",
+        (target_w, target_h),
+        0
+    )
+
     draw = ImageDraw.Draw(mask)
-    draw.ellipse([60, 60, target_w - 60, target_h - 60], fill=255)
-    mask = mask.filter(ImageFilter.GaussianBlur(60))
+
+    # Keep almost the entire person visible
+    margin_x = 15
+    margin_y = 15
+
+    draw.ellipse(
+        [
+            margin_x,
+            margin_y,
+            target_w - margin_x,
+            target_h - margin_y
+        ],
+        fill=255
+    )
+
+    # VERY HEAVY BLUR
+    # This makes the border blend into the background.
+    mask = mask.filter(
+        ImageFilter.GaussianBlur(120)
+    )
 
     img.putalpha(mask)
+
     return np.array(img)
 
 
@@ -134,44 +172,155 @@ def process_cutout_image(img_path):
 
 
 # ---------------- TEXT CARD RENDERERS ---------------- #
-
 def create_heading_card(text):
-    """Renders larger scene heading in red uppercase text with a slight tilt."""
+    """
+    Creates a bold YouTube Shorts-style heading:
+    - Anton font
+    - Red text
+    - Thick black outline
+    - Heavy black offset shadow
+    - Slight italic/slanted appearance
+    """
+
     font_path = resolve_project_path(FONT_HEADING)
+
     try:
-        font = ImageFont.truetype(font_path, 110) if os.path.exists(font_path) else ImageFont.load_default()
+        font = (
+            ImageFont.truetype(font_path, 105)
+            if os.path.exists(font_path)
+            else ImageFont.load_default()
+        )
     except Exception:
         font = ImageFont.load_default()
 
+    # -----------------------------------------
+    # PREPARE TEXT
+    # -----------------------------------------
     words = text.upper().split()
-    lines, curr_line = [], ""
-    for w in words:
-        test_line = f"{curr_line} {w}".strip()
-        if len(test_line) > 12:
-            lines.append(curr_line)
-            curr_line = w
+
+    lines = []
+    current_line = ""
+
+    # Keep heading around the same width
+    max_chars = 16
+
+    for word in words:
+        test_line = f"{current_line} {word}".strip()
+
+        if len(test_line) > max_chars and current_line:
+            lines.append(current_line)
+            current_line = word
         else:
-            curr_line = test_line
-    if curr_line:
-        lines.append(curr_line)
+            current_line = test_line
 
-    temp_img = Image.new("RGBA", (SCREEN_W, 800), (0, 0, 0, 0))
-    draw = ImageDraw.Draw(temp_img)
+    if current_line:
+        lines.append(current_line)
 
-    draw.multiline_text(
-        (SCREEN_W // 2, 400),
-        "\n".join(lines),
-        font=font,
-        fill=COLOR_RED_HEADING,
-        stroke_width=12,
-        stroke_fill=(0, 0, 0),
-        align="center",
-        anchor="mm",
-        spacing=20
+    # Maximum 3 lines
+    lines = lines[:3]
+
+    # -----------------------------------------
+    # CREATE LARGE TRANSPARENT CANVAS
+    # -----------------------------------------
+    temp_img = Image.new(
+        "RGBA",
+        (SCREEN_W, 700),
+        (0, 0, 0, 0)
     )
 
-    rotated_img = temp_img.rotate(-4, resample=Image.Resampling.BICUBIC, expand=False)
-    return np.array(rotated_img)
+    draw = ImageDraw.Draw(temp_img)
+
+    line_spacing = 10
+
+    # Calculate total height
+    line_heights = []
+
+    for line in lines:
+        bbox = draw.textbbox(
+            (0, 0),
+            line,
+            font=font,
+            stroke_width=10
+        )
+        line_heights.append(bbox[3] - bbox[1])
+
+    total_height = sum(line_heights) + line_spacing * (len(lines) - 1)
+
+    y = (700 - total_height) // 2
+
+    # -----------------------------------------
+    # DRAW EACH LINE
+    # -----------------------------------------
+    for line, line_h in zip(lines, line_heights):
+
+        bbox = draw.textbbox(
+            (0, 0),
+            line,
+            font=font,
+            stroke_width=10
+        )
+
+        text_w = bbox[2] - bbox[0]
+
+        x = (SCREEN_W - text_w) // 2
+
+        # -------------------------------------
+        # HEAVY BLACK OFFSET SHADOW
+        # -------------------------------------
+        draw.text(
+            (x + 10, y + 14),
+            line,
+            font=font,
+            fill=(0, 0, 0, 255),
+            stroke_width=10,
+            stroke_fill=(0, 0, 0, 255)
+        )
+
+        # -------------------------------------
+        # MAIN RED TEXT + BLACK OUTLINE
+        # -------------------------------------
+        draw.text(
+            (x, y),
+            line,
+            font=font,
+            fill=(245, 65, 65, 255),
+            stroke_width=8,
+            stroke_fill=(0, 0, 0, 255)
+        )
+
+        y += line_h + line_spacing
+
+    # -----------------------------------------
+    # SLIGHT ITALIC / FORWARD SLANT
+    # -----------------------------------------
+    shear_factor = -0.10
+
+    new_width = int(
+        temp_img.width + abs(shear_factor) * temp_img.height
+    )
+
+    temp_img = temp_img.transform(
+        (new_width, temp_img.height),
+        Image.Transform.AFFINE,
+        (1, shear_factor, 0, 0, 1, 0),
+        resample=Image.Resampling.BICUBIC
+    )
+
+    # Center the result back onto screen
+    final_img = Image.new(
+        "RGBA",
+        (SCREEN_W, 700),
+        (0, 0, 0, 0)
+    )
+
+    x_offset = (SCREEN_W - temp_img.width) // 2
+
+    final_img.alpha_composite(
+        temp_img,
+        (x_offset, 0)
+    )
+
+    return np.array(final_img)
 
 
 def render_evergreen_caption_frame(words_group, active_word_index):
@@ -239,6 +388,123 @@ def render_evergreen_caption_frame(words_group, active_word_index):
     return np.array(img)
 
 
+# ---------------- ANIMATION UTILS ---------------- #
+def animate_person_clip(person_arr, img_path, start_t, dur):
+    """
+    Person animation.
+
+    Filename controls the entrance direction:
+
+        person_left.png
+            -> enters from left
+
+        person_right.png
+            -> enters from right
+
+        person.png
+            -> stays centered
+
+    Also applies a subtle 15% zoom.
+    """
+
+    base_clip = (
+        ImageClip(person_arr)
+        .with_start(start_t)
+        .with_duration(dur)
+    )
+
+    # -----------------------------------------
+    # CHECK FILE NAME
+    # -----------------------------------------
+    filename = Path(img_path).stem.lower()
+
+    is_left = "left" in filename
+    is_right = "right" in filename
+
+    image_w = person_arr.shape[1]
+
+    # -----------------------------------------
+    # POSITION
+    # -----------------------------------------
+
+    center_x = (SCREEN_W - image_w) / 2
+
+    left_x = 20
+
+    right_x = SCREEN_W - image_w - 20
+
+    if is_left:
+
+        # Start slightly outside screen
+        start_x = -image_w * 0.20
+
+        # Finish near left edge
+        end_x = left_x
+
+    elif is_right:
+
+        # Start slightly outside screen
+        start_x = SCREEN_W - image_w * 0.80
+
+        # Finish near right edge
+        end_x = right_x
+
+    else:
+
+        # No left/right in filename
+        start_x = center_x
+        end_x = center_x
+
+    # -----------------------------------------
+    # MOVEMENT
+    # -----------------------------------------
+    def position_func(t):
+
+        if dur <= 0:
+            progress = 1.0
+        else:
+            progress = min(
+                1.0,
+                max(0.0, t / dur)
+            )
+
+        # Smooth ease-out
+        smooth = 1 - (1 - progress) ** 3
+
+        x_pos = (
+            start_x +
+            (end_x - start_x) * smooth
+        )
+
+        # Position slightly higher
+        y_pos = 100
+
+        return (x_pos, y_pos)
+
+    # -----------------------------------------
+    # 15% ZOOM
+    # -----------------------------------------
+    animated = (
+        base_clip
+        .resized(
+            lambda t:
+                1.0 +
+                0.15 * min(
+                    1.0,
+                    t / dur
+                )
+        )
+        .with_position(position_func)
+    )
+
+    # -----------------------------------------
+    # FADE IN
+    # -----------------------------------------
+    if hasattr(animated, "fadeIn"):
+        animated = animated.fadeIn(0.5)
+
+    return animated
+
 # ---------------- MASTER ENGINE ---------------- #
 
 def generate_video_from_csv(csv_path, target_id=1, output_name="rendered_output.mp4"):
@@ -266,7 +532,7 @@ def generate_video_from_csv(csv_path, target_id=1, output_name="rendered_output.
 
     speech_audio = AudioFileClip(audio_file)
 
-    HEADING_DUR = 1.0  # Heading displays for 1.0s at the start
+    HEADING_DUR = 1.0
     total_duration = speech_audio.duration + HEADING_DUR
 
     layer_clips = []
@@ -286,25 +552,27 @@ def generate_video_from_csv(csv_path, target_id=1, output_name="rendered_output.
         clip = clip.with_position(("center", "center")).cropped(y1=0, y2=SCREEN_H, x1=0, x2=SCREEN_W)
         layer_clips.append(clip)
 
-    # 2. LAYER 2: PERSON IMAGE (Positioned at Top-Center)
+    # 2. LAYER 2: PERSON IMAGE (Fade-in, 0.1x Zoom-in, 0.3x speed random pan)
     if person_files:
         person_interval = 5.0
         person_count = math.ceil(total_duration / person_interval)
         for i in range(person_count):
             t_start = i * person_interval
             dur = min(person_interval, total_duration - t_start)
-            person_arr = process_person_image(person_files[i % len(person_files)])
+            person_path = person_files[i % len(person_files)]
 
-            person_clip = (
-                ImageClip(person_arr)
-                .with_start(t_start)
-                .with_duration(dur)
-                .resized(lambda t: 1.0 + 0.012 * (t / dur))
-                .with_position(("center", 180))
+            person_arr = process_person_image(person_path)
+
+            person_clip = animate_person_clip(
+                person_arr,
+                person_path,
+                t_start,
+                dur
             )
+
             layer_clips.append(person_clip)
 
-    # 3. LAYER 3: CHARACTER CUTOUT (Positioned at Bottom-Right Corner)
+    # 3. LAYER 3: CHARACTER CUTOUT
     if cutout_files:
         cutout_interval = 3.5
         cutout_count = math.ceil(total_duration / cutout_interval)
@@ -321,7 +589,7 @@ def generate_video_from_csv(csv_path, target_id=1, output_name="rendered_output.
             )
             layer_clips.append(cutout_clip)
 
-    # 4. LAYER 4: LARGER HEADING AT BEGINNING (0.0s to 1.0s)
+    # 4. LAYER 4: HEADING CARD AT BEGINNING
     heading_img = create_heading_card(heading_text)
     heading_clip = (
         ImageClip(heading_img)
@@ -331,7 +599,7 @@ def generate_video_from_csv(csv_path, target_id=1, output_name="rendered_output.
     )
     text_clips.append(heading_clip)
 
-    # 5. LAYER 5: SYNCHRONIZED CAPTIONS (Starts at 1.0s)
+    # 5. LAYER 5: SYNCHRONIZED CAPTIONS
     chunk_size = 10
     for i in range(0, len(all_words), chunk_size):
         group_words = all_words[i:i + chunk_size]
