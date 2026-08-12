@@ -13,7 +13,7 @@ from googleapiclient.http import MediaFileUpload
 from google_auth_oauthlib.flow import InstalledAppFlow
 
 # ================= VIDEO GENERATOR ENGINE =================
-# Updated module name to match mindscribbble_editor.py
+# Updated module name to match mindscribble_editor.py
 from mindscribble_editor import generate_video_from_csv, load_folder_images
 from moviepy import AudioFileClip
 
@@ -21,11 +21,25 @@ SCOPES = [
     "https://www.googleapis.com/auth/youtube.upload"
 ]
 
+def resolve_project_path(path_str):
+    """
+    Resolves relative paths cleanly based on the script's root folder location.
+    Handles cross-platform paths (Windows/Linux/GitHub Actions).
+    """
+    if not path_str or pd.isna(path_str):
+        return ""
+    path_str = str(path_str).strip()
+    if os.path.isabs(path_str):
+        return path_str
+    
+    base_dir = os.path.dirname(os.path.abspath(__file__))
+    return os.path.abspath(os.path.join(base_dir, path_str))
+
 
 def get_service():
     creds = None
-    pickle_file = "../mindscribble_token.pickle"
-    client_secrets = "../client_secret_mindscribble.json"
+    pickle_file = resolve_project_path("../mindscribble_token.pickle")
+    client_secrets = resolve_project_path("../client_secret_mindscribble.json")
 
     # Load existing authentication session for MindScribble
     if os.path.exists(pickle_file):
@@ -44,7 +58,7 @@ def get_service():
     # First-time setup: Create the token file using client_secret.json
     if not creds or not creds.valid:
         if not os.path.exists(client_secrets):
-            raise FileNotFoundError(f"❌ Missing '{client_secrets}' in this folder. Add it to authenticate MindScribble.")
+            raise FileNotFoundError(f"❌ Missing '{client_secrets}' at {client_secrets}. Add it to authenticate MindScribble.")
         
         print("\n--- AUTHENTICATION REQUIRED FOR: MindScribble ---")
         print("Opening browser. Select your Google account and explicitly pick the MindScribble channel.")
@@ -137,10 +151,10 @@ def run_automation():
     output_video = resolve_project_path(f"mindscribble_output_{target_id}.mp4")
 
     # --- GENERATION CALL ---
-    print(f"🎬 Generating video using mindscribbble_editor script...")
+    print(f"🎬 Generating video using mindscribble_editor script...")
     try:
         generate_video_from_csv(
-            csv_path=csv_file,
+            csv_path=csv_abs,
             target_id=target_id,
             output_name=output_video
         )
@@ -154,10 +168,14 @@ def run_automation():
 
     # --- CALCULATE CONSUMED BACKGROUND IMAGES ---
     audio_path = resolve_project_path(str(row["audio_path"]))
-    with AudioFileClip(audio_path) as speech_audio:
-        # Editor adds HEADING_DUR = 1.0s and switches backgrounds every 6.0s
-        total_dur = speech_audio.duration + 1.0
-        bg_images_used = math.ceil(total_dur / 6.0)
+    if os.path.exists(audio_path):
+        with AudioFileClip(audio_path) as speech_audio:
+            # Editor adds HEADING_DUR = 1.0s and switches backgrounds every 6.0s
+            total_dur = speech_audio.duration + 1.0
+            bg_images_used = math.ceil(total_dur / 6.0)
+    else:
+        print(f"⚠️ Audio path not found: {audio_path}, defaulting to 1 image used.")
+        bg_images_used = 1
 
     new_image_index = current_img_index + bg_images_used
 
