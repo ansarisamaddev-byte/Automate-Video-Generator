@@ -55,9 +55,12 @@ jobs:
 
           # Sync latest remote changes
           git pull origin main --rebase
-
-          # Track the correct path to the CSV file inside mind_scribble/
-          git add mind_scribble/data.csv
           
-          # Commit and push only if changes exist
-          git diff --staged --quiet || (git commit -m "Auto-update mind_scribble.csv [posted state & last_image_index]" && git push origin main)
+          # Re-apply stashed changes
+          git stash pop || echo "No stashed changes to re-apply"
+
+          # Add and commit updated mind_scribble.csv
+          git add mind_scribble2.csv
+          git diff --quiet && git diff --staged --quiet || git commit -m "Auto-update mind_scribble.csv [posted state & last_image_index]"
+
+          git push origin main

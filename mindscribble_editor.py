@@ -587,4 +587,4 @@ def generate_video_from_csv(csv_path, target_id=1, output_name="rendered_output.
 
 
 if __name__ == "__main__":
-    generate_video_from_csv("data.csv", target_id=1, output_name="rendered_output.mp4")
+    generate_video_from_csv("mind_scribble2.csv", target_id=1, output_name="rendered_output.mp4")
