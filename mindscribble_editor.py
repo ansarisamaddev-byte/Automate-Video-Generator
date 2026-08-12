@@ -16,27 +16,27 @@ from faster_whisper import WhisperModel
 
 
 # ---------------- PATH RESOLUTION ---------------- #
-
+# NEW (Works on both Windows and Linux):
 def resolve_project_path(raw_path):
-    if not raw_path:
+    if not raw_path or pd.isna(raw_path):
         return ""
     
-    clean_path = str(raw_path).strip().replace("/", "\\").lstrip("\\")
-    p = Path(clean_path)
+    # Clean up mixed slashes safely using Path
+    clean_str = str(raw_path).strip().replace("\\", "/").lstrip("/")
+    p = Path(clean_str)
     
     if p.is_absolute():
         return str(p)
 
     script_dir = Path(__file__).resolve().parent
-    project_root = script_dir.parent  # Resolves D:\Project\Automate-Video-Generator
+    project_root = script_dir.parent
 
-    if (project_root / p).exists():
-        return str(project_root / p)
-    if (script_dir / p).exists():
-        return str(script_dir / p)
+    # Check candidates cross-platform
+    for candidate in [project_root / p, script_dir / p, p]:
+        if candidate.exists():
+            return str(candidate)
 
     return str(project_root / p)
-
 
 # ---------------- CORE CONFIG ---------------- #
 
