@@ -2,8 +2,7 @@ name: Youtube New MindScribble Video
 
 on:
   schedule:
-    # Runs at 12:00 UTC (8:00 AM New York EDT / UTC-4)
-    # Change to '0 13 * * *' during Standard Time (EST / UTC-5)
+    # Runs at 12:00 UTC (8:00 AM EDT)
     - cron: '0 12 * * *'
   workflow_dispatch:
 
@@ -19,6 +18,7 @@ jobs:
         uses: actions/checkout@v4
         with:
           persist-credentials: true
+          lfs: true # CRITICAL: Ensures image and audio media files are fully pulled
 
       - name: Set up Python
         uses: actions/setup-python@v5
@@ -33,7 +33,7 @@ jobs:
       - name: Install Python Dependencies
         run: |
           python -m pip install --upgrade pip
-          pip install moviepy==2.1.1 
+          pip install moviepy==2.1.1
           pip install pandas google-api-python-client google-auth google-auth-oauthlib \
                       cloudinary pillow numpy faster-whisper
 
@@ -42,9 +42,6 @@ jobs:
           CLOUDINARY_CLOUD_NAME: ${{ secrets.CLOUDINARY_CLOUD_NAME }}
           CLOUDINARY_API_KEY: ${{ secrets.CLOUDINARY_API_KEY }}
           CLOUDINARY_API_SECRET: ${{ secrets.CLOUDINARY_API_SECRET }}
-          # Add YouTube / Google Auth secrets here if required by your script:
-          # YOUTUBE_CLIENT_SECRET: ${{ secrets.YOUTUBE_CLIENT_SECRET }}
-          # YOUTUBE_REFRESH_TOKEN: ${{ secrets.YOUTUBE_REFRESH_TOKEN }}
         run: python mindscribble_uploader.py
 
       - name: Commit updated CSV
@@ -52,14 +49,14 @@ jobs:
           git config --global user.name "github-actions[bot]"
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
 
-          # Sync latest remote changes
-          git pull origin main --rebase
-          
-          # Re-apply stashed changes
-          git stash pop || echo "No stashed changes to re-apply"
-
-          # Add and commit updated mind_scribble.csv
+          # Add modified CSV first
           git add mind_scribble2.csv
-          git diff --quiet && git diff --staged --quiet || git commit -m "Auto-update mind_scribble.csv [posted state & last_image_index]"
 
-          git push origin main
+          # Commit if changes exist
+          if ! git diff --staged --quiet; then
+            git commit -m "Auto-update mind_scribble2.csv [posted state & last_image_index]"
+            git pull origin main --rebase
+            git push origin main
+          else
+            echo "No CSV changes to commit."
+          fi
