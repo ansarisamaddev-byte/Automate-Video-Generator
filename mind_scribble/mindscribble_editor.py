@@ -77,7 +77,7 @@ def process_bg_image(img_path):
     w_new, h_new = int(img.width * ratio), int(img.height * ratio)
     img = img.resize((w_new, h_new), Image.Resampling.LANCZOS)
 
-    dark_overlay = Image.new("RGBA", (w_new, h_new), (0, 0, 0, 90))
+    dark_overlay = Image.new("RGBA", (w_new, h_new), (0, 0, 0, 150))
     img = Image.alpha_composite(img, dark_overlay)
 
     vignette_mask = Image.new("L", (w_new, h_new), 0)
@@ -86,16 +86,16 @@ def process_bg_image(img_path):
     vignette_mask = vignette_mask.filter(ImageFilter.GaussianBlur(150))
     vignette_mask = ImageOps.invert(vignette_mask)
 
-    shadow_layer = Image.new("RGBA", (w_new, h_new), (0, 0, 0, 180))
+    shadow_layer = Image.new("RGBA", (w_new, h_new), (0, 0, 0, 200))
     shadow_layer.putalpha(vignette_mask)
 
     img = Image.alpha_composite(img, shadow_layer)
     return np.array(img.convert("RGB"))
+
 def process_person_image(img_path):
     """
-    Processes person portrait with a very soft feathered edge.
-    The image is intentionally oversized so the border
-    disappears into the background.
+    Loads the already-edited portrait.
+    No additional feathering or background processing.
     """
 
     try:
@@ -108,9 +108,9 @@ def process_person_image(img_path):
         )
 
     # -----------------------------------------
-    # MAKE PERSON LARGER
+    # RESIZE
     # -----------------------------------------
-    target_w = 820
+    target_w = 900
 
     ratio = target_w / img.width
     target_h = int(img.height * ratio)
@@ -120,41 +120,9 @@ def process_person_image(img_path):
         Image.Resampling.LANCZOS
     )
 
-    # -----------------------------------------
-    # SOFT RADIAL / ELLIPTICAL FEATHER
-    # -----------------------------------------
-    mask = Image.new(
-        "L",
-        (target_w, target_h),
-        0
-    )
-
-    draw = ImageDraw.Draw(mask)
-
-    # Keep almost the entire person visible
-    margin_x = 15
-    margin_y = 15
-
-    draw.ellipse(
-        [
-            margin_x,
-            margin_y,
-            target_w - margin_x,
-            target_h - margin_y
-        ],
-        fill=255
-    )
-
-    # VERY HEAVY BLUR
-    # This makes the border blend into the background.
-    mask = mask.filter(
-        ImageFilter.GaussianBlur(120)
-    )
-
-    img.putalpha(mask)
-
+    # Keep the original alpha/feathering exactly
+    # as it exists in the source image.
     return np.array(img)
-
 
 def process_cutout_image(img_path):
     """Processes character cutout image to fit in the bottom corner."""
@@ -293,7 +261,7 @@ def create_heading_card(text):
     # -----------------------------------------
     # SLIGHT ITALIC / FORWARD SLANT
     # -----------------------------------------
-    shear_factor = -0.10
+    shear_factor = -0.025
 
     new_width = int(
         temp_img.width + abs(shear_factor) * temp_img.height
@@ -389,22 +357,14 @@ def render_evergreen_caption_frame(words_group, active_word_index):
 
 
 # ---------------- ANIMATION UTILS ---------------- #
+
 def animate_person_clip(person_arr, img_path, start_t, dur):
     """
-    Person animation.
-
-    Filename controls the entrance direction:
-
-        person_left.png
-            -> enters from left
-
-        person_right.png
-            -> enters from right
-
-        person.png
-            -> stays centered
-
-    Also applies a subtle 15% zoom.
+    Person animation:
+    - Slow 0.3x movement
+    - 15% zoom
+    - Left/right based on filename
+    - Smooth fade-in
     """
 
     base_clip = (
@@ -413,9 +373,6 @@ def animate_person_clip(person_arr, img_path, start_t, dur):
         .with_duration(dur)
     )
 
-    # -----------------------------------------
-    # CHECK FILE NAME
-    # -----------------------------------------
     filename = Path(img_path).stem.lower()
 
     is_left = "left" in filename
@@ -430,45 +387,36 @@ def animate_person_clip(person_arr, img_path, start_t, dur):
     center_x = (SCREEN_W - image_w) / 2
 
     left_x = 20
-
     right_x = SCREEN_W - image_w - 20
 
     if is_left:
-
-        # Start slightly outside screen
         start_x = -image_w * 0.20
-
-        # Finish near left edge
         end_x = left_x
 
     elif is_right:
-
-        # Start slightly outside screen
         start_x = SCREEN_W - image_w * 0.80
-
-        # Finish near right edge
         end_x = right_x
 
     else:
-
-        # No left/right in filename
         start_x = center_x
         end_x = center_x
 
     # -----------------------------------------
-    # MOVEMENT
+    # 0.3x ANIMATION SPEED
     # -----------------------------------------
+
+    ANIMATION_SPEED = 0.3
+
     def position_func(t):
 
-        if dur <= 0:
-            progress = 1.0
-        else:
-            progress = min(
-                1.0,
-                max(0.0, t / dur)
-            )
+        # At 0.3x speed, the movement only
+        # progresses 30% as quickly.
+        progress = min(
+            1.0,
+            (t / dur) * ANIMATION_SPEED
+        )
 
-        # Smooth ease-out
+        # Smooth movement
         smooth = 1 - (1 - progress) ** 3
 
         x_pos = (
@@ -476,14 +424,14 @@ def animate_person_clip(person_arr, img_path, start_t, dur):
             (end_x - start_x) * smooth
         )
 
-        # Position slightly higher
         y_pos = 100
 
         return (x_pos, y_pos)
 
     # -----------------------------------------
-    # 15% ZOOM
+    # 15% SLOW ZOOM
     # -----------------------------------------
+
     animated = (
         base_clip
         .resized(
@@ -491,7 +439,7 @@ def animate_person_clip(person_arr, img_path, start_t, dur):
                 1.0 +
                 0.15 * min(
                     1.0,
-                    t / dur
+                    (t / dur) * 0.3
                 )
         )
         .with_position(position_func)
@@ -500,6 +448,7 @@ def animate_person_clip(person_arr, img_path, start_t, dur):
     # -----------------------------------------
     # FADE IN
     # -----------------------------------------
+
     if hasattr(animated, "fadeIn"):
         animated = animated.fadeIn(0.5)
 
@@ -574,7 +523,7 @@ def generate_video_from_csv(csv_path, target_id=1, output_name="rendered_output.
 
     # 3. LAYER 3: CHARACTER CUTOUT
     if cutout_files:
-        cutout_interval = 3.5
+        cutout_interval = 5
         cutout_count = math.ceil(total_duration / cutout_interval)
         for i in range(cutout_count):
             t_start = i * cutout_interval
