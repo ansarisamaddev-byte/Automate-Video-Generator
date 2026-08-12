@@ -2,10 +2,11 @@ name: Youtube New MindScribble Video
 
 on:
   schedule:
-    # Intended: 8:00 AM New York | Runs early at 8:30 AM UTC
-    - cron: '30 10 * * *'
+    # Runs at 12:00 UTC (8:00 AM New York EDT / UTC-4)
+    # Change to '0 13 * * *' during Standard Time (EST / UTC-5)
+    - cron: '0 12 * * *'
   workflow_dispatch:
- 
+
 permissions:
   contents: write
 
@@ -37,10 +38,14 @@ jobs:
                       cloudinary pillow numpy faster-whisper
 
       - name: Run Script
+        working-directory: mind_scribble
         env:
           CLOUDINARY_CLOUD_NAME: ${{ secrets.CLOUDINARY_CLOUD_NAME }}
           CLOUDINARY_API_KEY: ${{ secrets.CLOUDINARY_API_KEY }}
           CLOUDINARY_API_SECRET: ${{ secrets.CLOUDINARY_API_SECRET }}
+          # Add YouTube / Google Auth secrets here if required by your script:
+          # YOUTUBE_CLIENT_SECRET: ${{ secrets.YOUTUBE_CLIENT_SECRET }}
+          # YOUTUBE_REFRESH_TOKEN: ${{ secrets.YOUTUBE_REFRESH_TOKEN }}
         run: python mindscribble_uploader.py
 
       - name: Commit updated CSV
@@ -48,12 +53,9 @@ jobs:
           git config --global user.name "github-actions[bot]"
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
 
-          # Stash any local working directory edits
-          git stash
-
-          # Sync with repository head
+          # Sync latest remote changes
           git pull origin main --rebase
-
+          
           # Re-apply stashed changes
           git stash pop || echo "No stashed changes to re-apply"
 

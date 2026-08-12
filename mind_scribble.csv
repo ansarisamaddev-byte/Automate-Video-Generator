@@ -71,10 +71,10 @@ id,audio_path,image_folder,posted,last_image_index,caption
 70,audio/mindscribble/audio (69).mp3,images/mindscribble,true,0,The Addictive Loop of Stress
 71,audio/mindscribble/audio (70).mp3,images/mindscribble,true,0,The Danger of Toxic Positivity
 72,audio/mindscribble/audio (71).mp3,images/mindscribble,true,0,The Echo of Your Childhood Self
-73,audio/mindscribble/audio (72).mp3,images/mindscribble,false,0,The Psychology of Main Character Syndrome
-74,audio/mindscribble/audio (73).mp3,images/mindscribble,false,0,The Silent Saboteur?
-75,audio/mindscribble/audio (74).mp3,images/mindscribble,false,0,The Truth About Resilience?
-76,audio/mindscribble/audio (75).mp3,images/mindscribble,false,0,Why We Judge Others for the Things We Do?
+73,audio/mindscribble/audio (72).mp3,images/mindscribble,true,0,The Psychology of Main Character Syndrome
+74,audio/mindscribble/audio (73).mp3,images/mindscribble,true,0,The Silent Saboteur?
+75,audio/mindscribble/audio (74).mp3,images/mindscribble,true,0,The Truth About Resilience?
+76,audio/mindscribble/audio (75).mp3,images/mindscribble,true,0,Why We Judge Others for the Things We Do?
 77,audio/mindscribble/audio (76).mp3,images/mindscribble,false,0,Why We Love false Crime and Dark Stories?
 78,audio/mindscribble/audio (77).mp3,images/mindscribble,false,0,Why We Procrastinate on the Things We Love?
 79,audio/mindscribble/audio (78).mp3,images/mindscribble,false,0,Why You Forget Everything When It Matters
