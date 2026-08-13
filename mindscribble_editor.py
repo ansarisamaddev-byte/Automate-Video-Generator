@@ -58,8 +58,7 @@ def process_bg_image(img_path):
     w_new, h_new = int(img.width * ratio), int(img.height * ratio)
     img = img.resize((w_new, h_new), Image.Resampling.LANCZOS)
 
-    # FIX 2A: Darkened base overlay (alpha increased from 150 -> 210)
-    dark_overlay = Image.new("RGBA", (w_new, h_new), (0, 0, 0, 210))
+    dark_overlay = Image.new("RGBA", (w_new, h_new), (0, 0, 0, 200))
     img = Image.alpha_composite(img, dark_overlay)
 
     # FIX 2B: Narrower clear area so vignette shadows cover more space
@@ -69,8 +68,7 @@ def process_bg_image(img_path):
     vignette_mask = vignette_mask.filter(ImageFilter.GaussianBlur(180))
     vignette_mask = ImageOps.invert(vignette_mask)
 
-    # FIX 2C: Darker vignette shadow layer (alpha increased from 200 -> 240)
-    shadow_layer = Image.new("RGBA", (w_new, h_new), (0, 0, 0, 240))
+    shadow_layer = Image.new("RGBA", (w_new, h_new), (0, 0, 0, 220))
     shadow_layer.putalpha(vignette_mask)
 
     img = Image.alpha_composite(img, shadow_layer)
@@ -350,7 +348,7 @@ def generate_video_from_csv(csv_path="mind_scribble2.csv", target_id=1, output_n
 
     # 3. LAYER 3: CHARACTER CUTOUT
     if cutout_files:
-        cutout_interval = 5.0
+        cutout_interval = 8.0
         cutout_count = math.ceil(total_duration / cutout_interval)
         for i in range(cutout_count):
             t_start = i * cutout_interval
