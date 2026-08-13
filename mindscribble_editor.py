@@ -48,7 +48,7 @@ def load_folder_images(folder_path):
 
 
 def process_bg_image(img_path):
-    """Processes background image with dark overlay and radial vignette shadow."""
+    """Processes background image with extra dark overlay and deep radial vignette shadow."""
     try:
         img = Image.open(img_path).convert("RGBA")
     except Exception:
@@ -58,16 +58,19 @@ def process_bg_image(img_path):
     w_new, h_new = int(img.width * ratio), int(img.height * ratio)
     img = img.resize((w_new, h_new), Image.Resampling.LANCZOS)
 
-    dark_overlay = Image.new("RGBA", (w_new, h_new), (0, 0, 0, 150))
+    # FIX 2A: Darkened base overlay (alpha increased from 150 -> 210)
+    dark_overlay = Image.new("RGBA", (w_new, h_new), (0, 0, 0, 210))
     img = Image.alpha_composite(img, dark_overlay)
 
+    # FIX 2B: Narrower clear area so vignette shadows cover more space
     vignette_mask = Image.new("L", (w_new, h_new), 0)
     draw_vignette = ImageDraw.Draw(vignette_mask)
-    draw_vignette.ellipse([int(w_new * 0.05), int(h_new * 0.05), int(w_new * 0.95), int(h_new * 0.95)], fill=255)
-    vignette_mask = vignette_mask.filter(ImageFilter.GaussianBlur(150))
+    draw_vignette.ellipse([int(w_new * 0.15), int(h_new * 0.15), int(w_new * 0.85), int(h_new * 0.85)], fill=255)
+    vignette_mask = vignette_mask.filter(ImageFilter.GaussianBlur(180))
     vignette_mask = ImageOps.invert(vignette_mask)
 
-    shadow_layer = Image.new("RGBA", (w_new, h_new), (0, 0, 0, 200))
+    # FIX 2C: Darker vignette shadow layer (alpha increased from 200 -> 240)
+    shadow_layer = Image.new("RGBA", (w_new, h_new), (0, 0, 0, 240))
     shadow_layer.putalpha(vignette_mask)
 
     img = Image.alpha_composite(img, shadow_layer)
@@ -242,7 +245,7 @@ def render_evergreen_caption_frame(words_group, active_word_index):
 # ---------------- ANIMATION UTILS ---------------- #
 
 def animate_person_clip(person_arr, img_path, start_t, dur):
-    """Applies pan, zoom, and fade effects to person overlay."""
+    """Applies smooth pan, zoom, and fade effects to person overlay."""
     base_clip = (
         ImageClip(person_arr)
         .with_start(start_t)
@@ -259,26 +262,26 @@ def animate_person_clip(person_arr, img_path, start_t, dur):
     right_x = SCREEN_W - image_w - 20
 
     if is_left:
-        start_x = -image_w * 0.20
+        start_x = -image_w * 0.10
         end_x = left_x
     elif is_right:
-        start_x = SCREEN_W - image_w * 0.80
+        start_x = SCREEN_W - image_w * 0.90
         end_x = right_x
     else:
         start_x = center_x
         end_x = center_x
 
-    ANIMATION_SPEED = 0.3
-
+    # FIX 1A: Smooth out movement across full clip duration (reduced speed scaling)
     def position_func(t):
-        progress = min(1.0, (t / dur) * ANIMATION_SPEED)
-        smooth = 1 - (1 - progress) ** 3
+        progress = min(1.0, t / dur)
+        smooth = 1 - (1 - progress) ** 2  # Gentle quadratic ease-out
         x_pos = start_x + (end_x - start_x) * smooth
         return (x_pos, 100)
 
+    # FIX 1B: Slower, subtler zoom effect stretched over clip duration
     animated = (
         base_clip
-        .resized(lambda t: 1.0 + 0.15 * min(1.0, (t / dur) * 0.3))
+        .resized(lambda t: 1.0 + 0.05 * (t / dur))
         .with_position(position_func)
     )
 
@@ -334,7 +337,7 @@ def generate_video_from_csv(csv_path="mind_scribble2.csv", target_id=1, output_n
 
     # 2. LAYER 2: PERSON OVERLAY
     if person_files:
-        person_interval = 5.0
+        person_interval = 10.0
         person_count = math.ceil(total_duration / person_interval)
         for i in range(person_count):
             t_start = i * person_interval
