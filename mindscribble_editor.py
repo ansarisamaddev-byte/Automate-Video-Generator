@@ -30,7 +30,24 @@ FONT_HEADING = "fonts/dejavu-sans-bold.ttf"
 FONT_CAPTION = "fonts/dejavu-sans-bold.ttf"
 
 
-# ---------------- IMAGE PROCESSORS ---------------- #
+# ---------------- AUDIO & IMAGE PROCESSORS ---------------- #
+
+def load_random_bgm(folder_path):
+    """Selects a random audio file from the specified folder."""
+    if not folder_path or pd.isna(folder_path):
+        return None
+    
+    clean_path = str(folder_path).strip().replace("\\", "/")
+    p_folder = Path(clean_path)
+    
+    if not p_folder.exists():
+        return None
+        
+    valid_exts = {".mp3", ".wav", ".m4a", ".aac", ".ogg", ".flac"}
+    audio_files = [str(p) for p in p_folder.glob("*") if p.is_file() and p.suffix.lower() in valid_exts]
+    
+    return random.choice(audio_files) if audio_files else None
+
 
 def load_folder_images(folder_path):
     """Loads all valid image paths from a given folder relative to current execution context."""
@@ -61,7 +78,6 @@ def process_bg_image(img_path):
     dark_overlay = Image.new("RGBA", (w_new, h_new), (0, 0, 0, 200))
     img = Image.alpha_composite(img, dark_overlay)
 
-    # FIX 2B: Narrower clear area so vignette shadows cover more space
     vignette_mask = Image.new("L", (w_new, h_new), 0)
     draw_vignette = ImageDraw.Draw(vignette_mask)
     draw_vignette.ellipse([int(w_new * 0.15), int(h_new * 0.15), int(w_new * 0.85), int(h_new * 0.85)], fill=255)
@@ -269,14 +285,12 @@ def animate_person_clip(person_arr, img_path, start_t, dur):
         start_x = center_x
         end_x = center_x
 
-    # FIX 1A: Smooth out movement across full clip duration (reduced speed scaling)
     def position_func(t):
         progress = min(1.0, t / dur)
-        smooth = 1 - (1 - progress) ** 2  # Gentle quadratic ease-out
+        smooth = 1 - (1 - progress) ** 2
         x_pos = start_x + (end_x - start_x) * smooth
         return (x_pos, 100)
 
-    # FIX 1B: Slower, subtler zoom effect stretched over clip duration
     animated = (
         base_clip
         .resized(lambda t: 1.0 + 0.05 * (t / dur))
@@ -397,8 +411,39 @@ def generate_video_from_csv(csv_path="mind_scribble2.csv", target_id=1, output_n
             )
             text_clips.append(caption_clip)
 
-    # Audio track starts at t = 1.0s
-    final_audio = CompositeAudioClip([speech_audio.with_start(HEADING_DUR)]).with_duration(total_duration)
+    # 6. AUDIO COMPOSITION: VOICE OVER + BACKGROUND MUSIC
+    audio_tracks = [speech_audio.with_start(HEADING_DUR)]
+
+    bgm_folder = "background_music/mindscribble"
+    bgm_file = load_random_bgm(bgm_folder)
+
+    if bgm_file:
+        try:
+            print(f"[Audio] Selected BGM track: {bgm_file}")
+            bgm_clip = AudioFileClip(bgm_file)
+
+            # Loop BGM if shorter than overall video duration
+            if bgm_clip.duration < total_duration:
+                loop_count = math.ceil(total_duration / bgm_clip.duration)
+                bgm_clip = CompositeAudioClip([bgm_clip.with_start(i * bgm_clip.duration) for i in range(loop_count)])
+
+            # Crop BGM to total video length
+            bgm_clip = bgm_clip.with_duration(total_duration)
+
+            # Set background music volume to half (0.5) of standard voiceover level
+            if hasattr(bgm_clip, "multiply_volume"):
+                bgm_clip = bgm_clip.multiply_volume(0.5)
+            elif hasattr(bgm_clip, "volumex"):
+                bgm_clip = bgm_clip.volumex(0.5)
+            else:
+                from moviepy.audio.fx.MultiplyVolume import MultiplyVolume
+                bgm_clip = bgm_clip.with_effects([MultiplyVolume(0.5)])
+
+            audio_tracks.append(bgm_clip.with_start(0.0))
+        except Exception as e:
+            print(f"[Warning] Failed to mix background music: {e}")
+
+    final_audio = CompositeAudioClip(audio_tracks).with_duration(total_duration)
 
     video = (
         CompositeVideoClip(layer_clips + text_clips, size=(SCREEN_W, SCREEN_H))
