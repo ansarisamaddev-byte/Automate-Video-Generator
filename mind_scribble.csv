@@ -81,7 +81,7 @@ id,audio_path,image_folder,posted,last_image_index,caption
 80,audio/mindscribble/audio (79).mp3,images/mindscribble,true,0,Why Wisdom Beat IQ?
 81,audio/mindscribble/audio (80).mp3,images/mindscribble,true,0,Why Your Best Ideas Come in the Shower?
 82,audio/mindscribble/audio (81).mp3,images/mindscribble,true,0,
-83,audio/mindscribble/audio (82).mp3,images/mindscribble,false,0,
+83,audio/mindscribble/audio (82).mp3,images/mindscribble,true,0,
 84,audio/mindscribble/audio (83).mp3,images/mindscribble,false,0,
 85,audio/mindscribble/audio (84).mp3,images/mindscribble,false,0,
 86,audio/mindscribble/audio (85).mp3,images/mindscribble,false,0,
