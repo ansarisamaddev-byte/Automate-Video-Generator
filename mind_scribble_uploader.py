@@ -5,16 +5,6 @@ import pickle
 import datetime
 import pandas as pd
 
-# ================= CLOUDINARY =================
-import cloudinary
-import cloudinary.uploader
-
-cloudinary.config(
-    cloud_name="dusdbgfey",
-    api_key="545263495647551",
-    api_secret="KFRuIRsx-LkevEBul4YvfYBWfiY"
-)
-
 # ================= YOUTUBE =================
 import googleapiclient.discovery
 from google.auth.transport.requests import Request
@@ -132,7 +122,7 @@ def run_automation():
     output_video = f"mindscribble_output_{current_index}.mp4"
 
     # --- ASSET SELECTION ---
-    bg_music = random.choice(glob.glob("background_music/*.mp3") or [None])
+    bg_music = random.choice(glob.glob("background_music/mindscribble/*.mp3") or [None])
     selected_ending = random.choice(glob.glob("ending/mindscribble/*.mp4") or [None])
 
     # --- GENERIC GENERATION CALL ---

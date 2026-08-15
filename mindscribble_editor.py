@@ -312,7 +312,8 @@ def generate_video_from_csv(csv_path="mind_scribble2.csv", target_id=1, output_n
     bg_folder = str(row["image_folder"]).strip().replace("\\", "/")
     person_folder = str(row["person_image_folder"]).strip().replace("\\", "/")
     cutout_folder = str(row.get("character_folder", row.get("characters_folder", "images/cutouts"))).strip().replace("\\", "/")
-    heading_text = str(row.get("heading", row.get("caption", "HEADER")))
+    heading_text = str(row["heading"]).strip().replace("\\", "/")
+
 
     bg_files = load_folder_images(bg_folder)
     person_files = load_folder_images(person_folder)
