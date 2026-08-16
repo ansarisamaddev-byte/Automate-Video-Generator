@@ -27,12 +27,20 @@ BANNER_Y = int(SCREEN_H * 0.45)
 
 FONTS = [r"fonts/dejavu-sans-bold.ttf"]
 
+# Evergreen Caption Colors
+COLOR_GREEN_BG = (38, 64, 52, 245)      # Dark green highlighter box
+COLOR_WHITE = (245, 245, 245)
+COLOR_UNDERLINE = (255, 255, 255)       # Active word underline
+
 _whisper_model = None
 def get_whisper_model():
     global _whisper_model
     if _whisper_model is None:
         _whisper_model = WhisperModel("tiny", device="cpu", compute_type="int8", cpu_threads=4)
     return _whisper_model
+
+
+# ================= IMAGE PROCESSORS =================
 
 def apply_ken_burns(clip, duration):
     mode = random.choice(["zoom_in", "zoom_out"])
@@ -81,7 +89,11 @@ def process_character_image(img_path, max_w, max_h):
     img = img.resize((target_w, target_h), Image.Resampling.LANCZOS)
     return np.array(img)
 
-def create_word_data(text, font_path, max_width):
+
+# ================= CAPTION RENDERERS =================
+
+# STYLE 1: COLDCASE (Amber/Gold Text with Black Stroke)
+def create_word_data_coldcase(text, font_path, max_width):
     target_size, min_size = 75, 55
     font = ImageFont.truetype(font_path, target_size) if os.path.exists(font_path) else ImageFont.load_default()
     tdraw = ImageDraw.Draw(Image.new("RGBA", (1, 1)))
@@ -101,8 +113,74 @@ def create_word_data(text, font_path, max_width):
     draw.text((canvas_w // 2, canvas_h // 2), text, font=font, fill=text_color, stroke_width=7, stroke_fill=(0, 0, 0), anchor="mm")
     return np.array(img), canvas_w, canvas_h
 
+
+# STYLE 2: EVERGREEN (Green Box Container + White Underline Active Word)
+def render_evergreen_caption_frame(words_group, active_word_index, font_path):
+    try:
+        font = ImageFont.truetype(font_path, 52) if os.path.exists(font_path) else ImageFont.load_default()
+    except Exception:
+        font = ImageFont.load_default()
+
+    pad_x, pad_y = 20, 12
+    max_line_w = 880
+    temp_draw = ImageDraw.Draw(Image.new("RGBA", (1, 1)))
+
+    lines, current_line, current_w = [], [], 0
+    for i, w_data in enumerate(words_group):
+        w_str = w_data["word"]
+        bbox = temp_draw.textbbox((0, 0), w_str + " ", font=font)
+        w_len = bbox[2] - bbox[0]
+
+        if current_w + w_len > max_line_w and current_line:
+            lines.append(current_line)
+            current_line = []
+            current_w = 0
+
+        current_line.append((i, w_str, w_len))
+        current_w += w_len
+
+    if current_line:
+        lines.append(current_line)
+
+    lines = lines[:3]
+    line_spacing = 74
+    total_h = len(lines) * line_spacing + (pad_y * 2)
+
+    img = Image.new("RGBA", (SCREEN_W, total_h + 40), (0, 0, 0, 0))
+    draw = ImageDraw.Draw(img)
+
+    curr_y = pad_y
+    for line in lines:
+        line_text_w = sum(w_len for _, _, w_len in line)
+        box_w = line_text_w + (pad_x * 2)
+        start_x = (SCREEN_W - box_w) // 2
+
+        draw.rounded_rectangle(
+            [start_x, curr_y, start_x + box_w, curr_y + line_spacing - 10],
+            radius=10,
+            fill=COLOR_GREEN_BG
+        )
+
+        x_pos = start_x + pad_x
+        for word_idx, word_str, word_w in line:
+            draw.text((x_pos, curr_y + 4), word_str, font=font, fill=COLOR_WHITE)
+
+            if word_idx == active_word_index:
+                bbox = temp_draw.textbbox((0, 0), word_str, font=font)
+                actual_w = bbox[2] - bbox[0]
+                underline_y = curr_y + 54
+                draw.line([(x_pos, underline_y), (x_pos + actual_w, underline_y)], fill=COLOR_UNDERLINE, width=5)
+
+            x_pos += word_w
+
+        curr_y += line_spacing
+
+    return np.array(img)
+
+
+# ================= FILE UTILS =================
+
 def get_supported_files(folder_path, exts=None):
-    """Helper to fetch supported files case-insensitively"""
     if exts is None:
         exts = {".jpg", ".jpeg", ".png", ".jfif", ".gif", ".webp"}
     files = []
@@ -116,6 +194,9 @@ def get_supported_files(folder_path, exts=None):
             
     return sorted(files)
 
+
+# ================= MASTER ENGINE =================
+
 def generate_coldcase_video(
     audio_path, 
     bg_folder, 
@@ -125,6 +206,7 @@ def generate_coldcase_video(
     output_name,
     char_folder, 
     sub_folder,
+    caption_style=None  # Optional override: 'coldcase' or 'evergreen'
 ):
     
     model = get_whisper_model()
@@ -135,6 +217,12 @@ def generate_coldcase_video(
         raise ValueError(f"❌ Background pool empty: {bg_folder}")
     if not evidence_files:
         raise ValueError(f"❌ Evidence pool empty: {evidence_folder}")
+
+    # Randomly select caption style if not explicitly passed
+    if caption_style not in ["coldcase", "evergreen"]:
+        caption_style = random.choice(["coldcase", "evergreen"])
+    
+    print(f"🎨 Selected Caption Style: {caption_style.upper()}")
 
     segments_gen, _ = model.transcribe(audio_path, word_timestamps=True)
     segments = list(segments_gen)
@@ -233,55 +321,82 @@ def generate_coldcase_video(
 
     # ================= 4. Subtitle Engine =================
     active_font = FONTS[0] if os.path.exists(FONTS[0]) else "default"
-    max_w = SCREEN_W - (SAFE_MARGIN * 2)
-    
-    current_sentence_words = []
-    
-    def process_and_flush_sentence(word_group):
-        if not word_group:
-            return
-        sentence_end_time = word_group[-1]["end"]
-        curr_x, curr_y = SAFE_MARGIN, BANNER_Y + 30
-        line_h = 0
-        
-        for item in word_group:
-            word_str = item["word"]
-            arr, w, h = create_word_data(word_str, active_font, max_w)
-            
-            if curr_x + w > SCREEN_W - SAFE_MARGIN:
-                curr_x = SAFE_MARGIN
-                curr_y += line_h + 20
-                line_h = 0
-            
-            line_h = max(line_h, h)
-            duration = sentence_end_time - item["start"]
-            if duration > 0:
-                word_clip = (ImageClip(arr)
-                             .with_start(item["start"])
-                             .with_duration(duration)
-                             .with_position((curr_x, curr_y)))
-                text_clips.append(word_clip)
-                
-            curr_x += w + 20
 
-    for w_obj in all_words:
-        word_text = w_obj.word.strip().upper()
-        if not word_text:
-            continue
-            
-        current_sentence_words.append({
-            "word": word_text,
-            "start": w_obj.start,
-            "end": w_obj.end
-        })
+    if caption_style == "coldcase":
+        # ------------ COLDCASE STYLE (Gold Text / Line Flow) ------------
+        max_w = SCREEN_W - (SAFE_MARGIN * 2)
+        current_sentence_words = []
         
-        is_terminal = any(char in word_text for char in [".", "?", "!"])
-        if is_terminal or len(current_sentence_words) >= 6:
-            process_and_flush_sentence(current_sentence_words)
-            current_sentence_words = []
+        def process_and_flush_sentence(word_group):
+            if not word_group:
+                return
+            sentence_end_time = word_group[-1]["end"]
+            curr_x, curr_y = SAFE_MARGIN, BANNER_Y + 30
+            line_h = 0
             
-    if current_sentence_words:
-        process_and_flush_sentence(current_sentence_words)
+            for item in word_group:
+                word_str = item["word"]
+                arr, w, h = create_word_data_coldcase(word_str, active_font, max_w)
+                
+                if curr_x + w > SCREEN_W - SAFE_MARGIN:
+                    curr_x = SAFE_MARGIN
+                    curr_y += line_h + 20
+                    line_h = 0
+                
+                line_h = max(line_h, h)
+                duration = sentence_end_time - item["start"]
+                if duration > 0:
+                    word_clip = (ImageClip(arr)
+                                 .with_start(item["start"])
+                                 .with_duration(duration)
+                                 .with_position((curr_x, curr_y)))
+                    text_clips.append(word_clip)
+                    
+                curr_x += w + 20
+
+        for w_obj in all_words:
+            word_text = w_obj.word.strip().upper()
+            if not word_text:
+                continue
+                
+            current_sentence_words.append({
+                "word": word_text,
+                "start": w_obj.start,
+                "end": w_obj.end
+            })
+            
+            is_terminal = any(char in word_text for char in [".", "?", "!"])
+            if is_terminal or len(current_sentence_words) >= 6:
+                process_and_flush_sentence(current_sentence_words)
+                current_sentence_words = []
+                
+        if current_sentence_words:
+            process_and_flush_sentence(current_sentence_words)
+
+    elif caption_style == "evergreen":
+        # ------------ EVERGREEN STYLE (Green Pill Box + Karaoke Underline) ------------
+        chunk_size = 8
+        for i in range(0, len(all_words), chunk_size):
+            group_words = all_words[i:i + chunk_size]
+            if not group_words:
+                continue
+
+            group_data = [{"word": w.word.strip().upper()} for w in group_words]
+
+            for idx, w_obj in enumerate(group_words):
+                word_start = w_obj.start
+                word_end = (w_obj.end if idx == len(group_words) - 1 else group_words[idx + 1].start)
+                word_dur = max(0.1, word_end - word_start)
+
+                frame_arr = render_evergreen_caption_frame(group_data, active_word_index=idx, font_path=active_font)
+
+                caption_clip = (
+                    ImageClip(frame_arr)
+                    .with_start(word_start)
+                    .with_duration(word_dur)
+                    .with_position(("center", BANNER_Y))
+                )
+                text_clips.append(caption_clip)
 
     # ================= 5. Audio Compiling (Voice + Background Music) =================
     voice = speech_audio.with_duration(total_duration)
@@ -362,7 +477,7 @@ def generate_coldcase_video(
         except Exception:
             pass
 
-    print(f"✅ Video generation complete: {output_name}")
+    print(f"✅ Video generation complete ({caption_style.upper()} style): {output_name}")
     return output_name
 
 
@@ -400,6 +515,7 @@ if __name__ == "__main__":
                 output_name=output,
                 char_folder=char_folder,
                 sub_folder=sub_folder
+                # caption_style="evergreen"  # Optionally force a style, otherwise it randomly chooses
             )
             print(f"✅ Success! Saved to {output}")
         except Exception as e:
