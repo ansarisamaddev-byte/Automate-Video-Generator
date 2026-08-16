@@ -291,16 +291,20 @@ def generate_coldcase_video(
         print(f"🎵 Adding background music: {os.path.basename(music_path)}")
         raw_music = AudioFileClip(music_path)
         
-        # Loop music if shorter than main speech track using .fx(afx.audio_loop)
         if raw_music.duration < total_duration:
-            bg_music_clip = raw_music.fx(afx.audio_loop, duration=total_duration)
+            bg_music_clip = raw_music.with_effects([
+                afx.AudioLoop(duration=total_duration)
+            ])
         else:
             bg_music_clip = raw_music.with_duration(total_duration)
-            
+
         bg_music_clip = bg_music_clip.with_volume_scaled(0.30)
-        
+
         # Combine voice (100% volume) and background music (30% volume)
-        final_audio = CompositeAudioClip([voice.with_volume_scaled(1.0), bg_music_clip])
+        final_audio = CompositeAudioClip([
+            voice.with_volume_scaled(1.0),
+            bg_music_clip
+        ])
     else:
         print("⚠️ No valid music file found, generating video with voiceover only.")
         final_audio = voice.with_volume_scaled(1.0)
