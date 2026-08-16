@@ -180,7 +180,7 @@ id,audio_path,image_folder,posted,last_image_index
 179,audio/warrior/M (136).mp3,images/warrior/M,true,1130
 180,audio/warrior/M (137).mp3,images/warrior/M,true,1135
 181,audio/warrior/M (138).mp3,images/warrior/M,true,1145
-182,audio/warrior/W (45).mp3,images/warrior/W,false,0
+182,audio/warrior/W (45).mp3,images/warrior/W,true,1155
 183,audio/warrior/M (139).mp3,images/warrior/M,false,0
 184,audio/warrior/M (140).mp3,images/warrior/M,false,0
 185,audio/warrior/M (141).mp3,images/warrior/M,false,0
