@@ -12,6 +12,7 @@ from moviepy import (
     CompositeVideoClip,
     CompositeAudioClip
 )
+from moviepy.video.fx import CrossFadeIn
 from faster_whisper import WhisperModel
 
 # ---------------- CORE CONFIG ---------------- #
@@ -383,6 +384,27 @@ def generate_video_from_csv(csv_path="mind_scribble2.csv", target_id=1, output_n
                 .with_position((SCREEN_W - c_arr.shape[1] - 20, SCREEN_H - c_arr.shape[0] - 10))
             )
             layer_clips.append(cutout_clip)
+
+    # 3b. LAYER 3b: END SUBSCRIBE PANEL (5 seconds before end)
+    subscribe_folder = os.path.join(cutout_folder, "subscribe")
+    sub_files = load_folder_images(subscribe_folder)
+
+    if sub_files:
+        sub_path = random.choice(sub_files)
+        sub_arr = process_cutout_image(sub_path)
+        
+        sub_start = max(0.0, total_duration - 5.0)
+        sub_dur = total_duration - sub_start
+        
+        if sub_dur > 0:
+            sub_clip = (
+                ImageClip(sub_arr)
+                .with_start(sub_start)
+                .with_duration(sub_dur)
+                .with_position(("center", "center"))
+                .with_effects([CrossFadeIn(0.5)])
+            )
+            layer_clips.append(sub_clip)
 
     # 4. LAYER 4: HEADING CARD AT BEGINNING
     heading_img = create_heading_card(heading_text)
