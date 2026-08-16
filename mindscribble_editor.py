@@ -301,7 +301,6 @@ def animate_person_clip(person_arr, img_path, start_t, dur):
 
 
 # ---------------- MASTER ENGINE ---------------- #
-
 def generate_video_from_csv(csv_path="mind_scribble2.csv", target_id=1, output_name="rendered_output.mp4"):
     clean_csv_path = str(csv_path).strip().replace("\\", "/")
     df = pd.read_csv(clean_csv_path)
@@ -313,7 +312,6 @@ def generate_video_from_csv(csv_path="mind_scribble2.csv", target_id=1, output_n
     person_folder = str(row["person_image_folder"]).strip().replace("\\", "/")
     cutout_folder = str(row.get("character_folder", row.get("characters_folder", "images/cutouts"))).strip().replace("\\", "/")
     heading_text = str(row["heading"]).strip().replace("\\", "/")
-
 
     bg_files = load_folder_images(bg_folder)
     person_files = load_folder_images(person_folder)
@@ -334,13 +332,16 @@ def generate_video_from_csv(csv_path="mind_scribble2.csv", target_id=1, output_n
     layer_clips = []
     text_clips = []
 
-    # 1. LAYER 1: ANIMATED BACKGROUND
+    # 1. LAYER 1: ANIMATED BACKGROUND (Random selection)
     bg_interval = 6.0
     bg_count = math.ceil(total_duration / bg_interval)
     for i in range(bg_count):
         t_start = i * bg_interval
         dur = min(bg_interval, total_duration - t_start)
-        bg_arr = process_bg_image(bg_files[i % len(bg_files)])
+        
+        # Pick a random background image
+        bg_path = random.choice(bg_files)
+        bg_arr = process_bg_image(bg_path)
 
         clip = ImageClip(bg_arr).with_start(t_start).with_duration(dur)
         zoom_delta = 0.024 * (1 if i % 2 == 0 else -1)
@@ -348,27 +349,32 @@ def generate_video_from_csv(csv_path="mind_scribble2.csv", target_id=1, output_n
         clip = clip.with_position(("center", "center")).cropped(y1=0, y2=SCREEN_H, x1=0, x2=SCREEN_W)
         layer_clips.append(clip)
 
-    # 2. LAYER 2: PERSON OVERLAY
+    # 2. LAYER 2: PERSON OVERLAY (Random selection)
     if person_files:
         person_interval = 10.0
         person_count = math.ceil(total_duration / person_interval)
         for i in range(person_count):
             t_start = i * person_interval
             dur = min(person_interval, total_duration - t_start)
-            person_path = person_files[i % len(person_files)]
+            
+            # Pick a random person overlay image
+            person_path = random.choice(person_files)
 
             person_arr = process_person_image(person_path)
             person_clip = animate_person_clip(person_arr, person_path, t_start, dur)
             layer_clips.append(person_clip)
 
-    # 3. LAYER 3: CHARACTER CUTOUT
+    # 3. LAYER 3: CHARACTER CUTOUT (Random selection)
     if cutout_files:
         cutout_interval = 8.0
         cutout_count = math.ceil(total_duration / cutout_interval)
         for i in range(cutout_count):
             t_start = i * cutout_interval
             dur = min(cutout_interval, total_duration - t_start)
-            c_arr = process_cutout_image(cutout_files[i % len(cutout_files)])
+            
+            # Pick a random character cutout image
+            cutout_path = random.choice(cutout_files)
+            c_arr = process_cutout_image(cutout_path)
 
             cutout_clip = (
                 ImageClip(c_arr)
@@ -423,15 +429,12 @@ def generate_video_from_csv(csv_path="mind_scribble2.csv", target_id=1, output_n
             print(f"[Audio] Selected BGM track: {bgm_file}")
             bgm_clip = AudioFileClip(bgm_file)
 
-            # Loop BGM if shorter than overall video duration
             if bgm_clip.duration < total_duration:
                 loop_count = math.ceil(total_duration / bgm_clip.duration)
                 bgm_clip = CompositeAudioClip([bgm_clip.with_start(i * bgm_clip.duration) for i in range(loop_count)])
 
-            # Crop BGM to total video length
             bgm_clip = bgm_clip.with_duration(total_duration)
 
-            # Set background music volume to half (0.5) of standard voiceover level
             if hasattr(bgm_clip, "multiply_volume"):
                 bgm_clip = bgm_clip.multiply_volume(0.5)
             elif hasattr(bgm_clip, "volumex"):
@@ -455,7 +458,6 @@ def generate_video_from_csv(csv_path="mind_scribble2.csv", target_id=1, output_n
     clean_output = str(output_name).strip().replace("\\", "/")
     print(f"[Render] Writing video to: {clean_output}")
     video.write_videofile(clean_output, fps=30, codec="libx264", audio_codec="aac", threads=4, preset="ultrafast")
-
 
 if __name__ == "__main__":
     generate_video_from_csv("mind_scribble2.csv", target_id=1, output_name="rendered_output.mp4")

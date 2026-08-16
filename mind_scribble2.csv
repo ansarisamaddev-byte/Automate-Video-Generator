@@ -8,3 +8,23 @@ id,audio_path,image_folder,person_image_folder,heading,posted,last_image_index,c
 7,audio/thoughts/audio (7).mp3,images/mindscribble,images/person/nietzsche,The Danger of Unchecked Darkness,false,0,Nietzsche’s Abyss: What Happens When You Stare Too Long
 8,audio/thoughts/audio (8).mp3,images/mindscribble,images/person/camus,Punished for Being Honest,false,0,Camus’ Stranger: The Danger of Refusing to Fake It
 9,audio/thoughts/audio (9).mp3,images/mindscribble,images/person/orwell,The Art of Living a Lie,false,0,Orwell’s Doublethink: How You Lie to Yourself Every Day
+10,audio/thoughts/audio (10).mp3,images/mindscribble,images/person/kafka,"Built to Hide, Built to Trap",False,11,"Kafka’s Burrow: The Prison of Perfectionism"
+11,audio/thoughts/audio (11).mp3,images/mindscribble,images/person/kafka,"The Art of Starving Yourself",False,11,"Kafka’s Hunger Artist: Dying for an Impossible Standard"
+12,audio/thoughts/audio (12).mp3,images/mindscribble,images/person/dosto,"When Logic Outsmarts Your Soul",False,11,"Dostoevsky’s Raskolnikov: The Madness of Self-Justification"
+13,audio/thoughts/audio (13).mp3,images/mindscribble,images/person/dosto,"The Threat of Genuine Kindness",False,11,"Dostoevsky’s Idiot: Why Pure Goodness Feels Like Madness"
+14,audio/thoughts/audio (14).mp3,images/mindscribble,images/person/nietzsche,"The Trap of Endless Entertainment",False,11,"Nietzsche’s Last Man: The Horror of Being Comfortable"
+15,audio/thoughts/audio (15).mp3,images/mindscribble,images/person/nietzsche,"Welcoming the Wreckage",False,11,"Nietzsche’s Amor Fati: The Art of Loving Your Fate"
+16,audio/thoughts/audio (16).mp3,images/mindscribble,images/person/camus,"The Judge-Penitent in the Mirror",False,11,"Camus’ Fall: The Hypocrisy of Judging Others"
+17,audio/thoughts/audio (17).mp3,images/mindscribble,images/person/camus,"The Line You Must Draw",False,11,"Camus’ Rebel: Why Saying ""No"" Defines You"
+18,audio/thoughts/audio (18).mp3,images/mindscribble,images/person/orwell,"Rewriting the Story of You",False,11,"Orwell’s Memory Hole: The Erasure of Your Own History"
+19,audio/thoughts/audio (19).mp3,images/mindscribble,images/person/orwell,"Becoming What You Fought",False,11,"Orwell’s Animal Farm: How Ideals Turn into Tyranny"
+20,audio/thoughts/audio (20).mp3,images/mindscribble,images/person/kafka,"The Machine You Cannot Stop",False,11,"Kafka’s In the Penal Colony: Executed by Your Own Rules"
+21,audio/thoughts/audio (21).mp3,images/mindscribble,images/person/dosto,"In Love with an Illusion",False,11,"Dostoevsky’s White Nights: The Phantom of Romantic Solitude"
+22,audio/thoughts/audio (22).mp3,images/mindscribble,images/person/nietzsche,"Conquering Yourself First",False,11,"Nietzsche’s Will to Power: The Misunderstood Spark Within"
+23,audio/thoughts/audio (23).mp3,images/mindscribble,images/person/camus,"The Power of Eternal Repetition",False,11,"Camus’ Myth of Sisyphus: The Courage to Keep Moving"
+24,audio/thoughts/audio (24).mp3,images/mindscribble,images/person/orwell,"The Death of Honest Thought",False,11,"Orwell’s Politics and the English Language: How Words Decay"
+25,audio/thoughts/audio (25).mp3,images/mindscribble,images/person/schopenhauer,"Frozen Alone or Stung Together",False,11,"Schopenhauer’s Hedgehog Dilemma: The Pain of Getting Close"
+26,audio/thoughts/audio (26).mp3,images/mindscribble,images/person/kierkegaard,"Standing on the Edge of Choice",False,11,"Kierkegaard’s Anxiety: The Dizziness of Ultimate Freedom"
+27,audio/thoughts/audio (27).mp3,images/mindscribble,images/person/kafka,"Answering Calls You Cannot Save",False,11,"Kafka’s A Country Doctor: The Trap of Unreasonable Demands"
+28,audio/thoughts/audio (28).mp3,images/mindscribble,images/person/dosto,"Bound to the One Who Hurt You",False,11,"Dostoevsky’s Eternal Husband: The Cycle of Betrayal and Obsession"
+29,audio/thoughts/audio (29).mp3,images/mindscribble,images/person/nietzsche,"The Three Transformations",False,11,"Nietzsche’s Camel, Lion, and Child: The Evolution of Your Spirit"
