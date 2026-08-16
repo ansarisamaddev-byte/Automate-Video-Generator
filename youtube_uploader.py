@@ -4,16 +4,6 @@ import glob
 import random
 import pickle
 
-# ================= CLOUDINARY =================
-import cloudinary
-import cloudinary.uploader
-
-cloudinary.config(
-    cloud_name="dusdbgfey",
-    api_key="545263495647551",
-    api_secret="KFRuIRsx-LkevEBul4YvfYBWfiY"
-)
-
 # ================= YOUTUBE =================
 import googleapiclient.discovery
 from google.auth.transport.requests import Request
