@@ -183,7 +183,9 @@ def run_automation():
     csv_heading = str(row.get("heading", "")).strip() if pd.notna(row.get("heading")) else ""
     csv_caption = str(row.get("caption", "")).strip() if pd.notna(row.get("caption")) else ""
 
-    caption = csv_heading or csv_caption or "Deep Human Insights"
+    # Use the actual title/caption from the CSV as the public-facing caption.
+    # Fall back to the heading only if no custom title was provided.
+    caption = csv_caption or csv_heading or "Deep Human Insights"
     hashtags = ["darkpsychology", "manipulation", "mindcontrol", "psychologyfacts", "shorts"]
     emoji = "🧠👁️"
 
