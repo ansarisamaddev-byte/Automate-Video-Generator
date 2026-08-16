@@ -1,6 +1,6 @@
 id,audio_path,image_folder,person_image_folder,heading,posted,last_image_index,caption
 1,audio/thoughts/audio (1).mp3,images/mindscribble,images/person/kafka,The Monster in the Cubicle,True,0,Kafka’s Trap: The Horror of Being Useful
-2,audio/thoughts/audio (2).mp3,images/mindscribble,images/person/dosto,The Cage of Pure Logic,true,0,Dostoevsky’s Warning: The Curse of Living in Your Head
+2,audio/thoughts/audio (2).mp3,images/mindscribble,images/person/dosto,The Cage of Pure Logic,false,0,Dostoevsky’s Warning: The Curse of Living in Your Head
 3,audio/thoughts/audio (3).mp3,images/mindscribble,images/person/dosto,Guilt Without a Crime,False,0,The Modern Trial: Apologizing to a Court That Doesn't Exist
 4,audio/thoughts/audio (4).mp3,images/mindscribble,images/person/dosto,The Threat of an Easy Life,False,0,Dostoevsky’s Secret: Why Comfort Will Destroy Your Soul
 5,audio/thoughts/audio (5).mp3,images/mindscribble,images/person/kafka,Running Toward a Moving Horizon,false,0,Kafka’s Castle: The Illusion of Reaching the Top
@@ -38,3 +38,23 @@ id,audio_path,image_folder,person_image_folder,heading,posted,last_image_index,c
 37,audio/thoughts/audio (37).mp3,images/mindscribble,images/person/camus,"The Fake Smile",False,0,"Camus’ Warning: The Dangerous Cost of Fitting In"
 38,audio/thoughts/audio (38).mp3,images/mindscribble,images/person/orwell,"Thinking What You are Told",False,0,"Orwell’s Prophecy: The Invisible Cage in Your Mind"
 39,audio/thoughts/audio (39).mp3,images/mindscribble,images/person/orwell,"The Lying Mind",False,0,"Orwell’s Doublethink: How You Lie to Yourself Daily"
+40,audio/thoughts/audio (40).mp3,images/mindscribble,images/person/kafka,"Accused by Your Own Mind",False,0,"Kafka’s Trial: The Unseen Executioner"
+41,audio/thoughts/audio (41).mp3,images/mindscribble,images/person/kafka,"Chasing a Phantom Goal",False,0,"Kafka’s Castle: The Illusion of ""Making It"""
+42,audio/thoughts/audio (42).mp3,images/mindscribble,images/person/dosto,"The Smartest Person in a Cage",False,0,"Dostoevsky’s Underground: The Curse of Overthinking"
+43,audio/thoughts/audio (43).mp3,images/mindscribble,images/person/dosto,"The Temptation of Absolute Darkness",False,0,"Dostoevsky’s Dream: What If You Could Destroy the World?"
+44,audio/thoughts/audio (44).mp3,images/mindscribble,images/person/nietzsche,"The Persona That Devours You",False,0,"Nietzsche’s Mask: The Price of Being Loved"
+45,audio/thoughts/audio (45).mp3,images/mindscribble,images/person/nietzsche,"The Poison of Revenge",False,0,"Nietzsche’s Abyss: Becoming What You Hate"
+46,audio/thoughts/audio (46).mp3,images/mindscribble,images/person/camus,"Judging Others to Hide Yourself",False,0,"Camus’ Fall: The Hypocrite in the Mirror"
+47,audio/thoughts/audio (47).mp3,images/mindscribble,images/person/camus,"The Quiet Terror of Silence",False,0,"Camus’ Absurd: Why Searching for Meaning Will Break You"
+48,audio/thoughts/audio (48).mp3,images/mindscribble,images/person/orwell,"The Erasure of Thought",False,0,"Orwell’s Language: How They Control Your Mind"
+49,audio/thoughts/audio (49).mp3,images/mindscribble,images/person/orwell,"The Pigs are in Charge",False,0,"Orwell’s Animal Farm: The Danger of Blind Loyalty"
+50,audio/thoughts/audio (50).mp3,images/mindscribble,images/person/kafka,"The Approval You’ll Never Get",False,0,"Kafka’s Judgment: Living to Satisfy a Ghost"
+51,audio/thoughts/audio (51).mp3,images/mindscribble,images/person/kafka,"Locked in Your Own Fortress",False,0,"Kafka’s Burrow: The Prison of Over-Preparation"
+52,audio/thoughts/audio (52).mp3,images/mindscribble,images/person/dosto,"The Secret You Keep from Yourself",False,0,"Dostoevsky’s Brother: The Poison of Hidden Resentment"
+53,audio/thoughts/audio (53).mp3,images/mindscribble,images/person/dosto,"Chasing the Lost High",False,0,"Dostoevsky’s Gambler: The Illusion of ""One More Time"""
+54,audio/thoughts/audio (54).mp3,images/mindscribble,images/person/nietzsche,"The Loneliness of Growth",False,0,"Nietzsche’s Higher Man: The Courage to Stand Alone"
+55,audio/thoughts/audio (55).mp3,images/mindscribble,images/person/nietzsche,"When Helping Hurts You",False,0,"Nietzsche’s Heavy Weight: The Trap of Pity"
+56,audio/thoughts/audio (56).mp3,images/mindscribble,images/person/camus,"Alienated from the Crowd",False,0,"Camus’ Exile: The Feeling of Being an Outcast in Your Own Life"
+57,audio/thoughts/audio (57).mp3,images/mindscribble,images/person/camus,"The Mask Falls Away",False,0,"Camus’ Plague: How Crises Reveal Who You Really Are"
+58,audio/thoughts/audio (58).mp3,images/mindscribble,images/person/orwell,"The Memory You Distort",False,0,"Orwell’s Past: He Who Controls History Controls You"
+59,audio/thoughts/audio (59).mp3,images/mindscribble,images/person/orwell,"What Would Break You?",False,0,"Orwell’s Room 101: Facing Your Absolute Worst Nightmare"
