@@ -1,7 +1,7 @@
 id,audio_path,image_folder,person_image_folder,heading,posted,last_image_index,caption
 1,audio/thoughts/audio (1).mp3,images/mindscribble,images/person/kafka,The Monster in the Cubicle,True,0,Kafka’s Trap: The Horror of Being Useful
-2,audio/thoughts/audio (2).mp3,images/mindscribble,images/person/dosto,The Cage of Pure Logic,true,11,Dostoevsky’s Warning: The Curse of Living in Your Head
-3,audio/thoughts/audio (3).mp3,images/mindscribble,images/person/dosto,Guilt Without a Crime,False,0,The Modern Trial: Apologizing to a Court That Doesn't Exist
+2,audio/thoughts/audio (2).mp3,images/mindscribble,images/person/dosto,The Cage of Pure Logic,True,11,Dostoevsky’s Warning: The Curse of Living in Your Head
+3,audio/thoughts/audio (3).mp3,images/mindscribble,images/person/dosto,Guilt Without a Crime,true,13,The Modern Trial: Apologizing to a Court That Doesn't Exist
 4,audio/thoughts/audio (4).mp3,images/mindscribble,images/person/dosto,The Threat of an Easy Life,False,0,Dostoevsky’s Secret: Why Comfort Will Destroy Your Soul
 5,audio/thoughts/audio (5).mp3,images/mindscribble,images/person/kafka,Running Toward a Moving Horizon,False,0,Kafka’s Castle: The Illusion of Reaching the Top
 6,audio/thoughts/audio (6).mp3,images/mindscribble,images/person/dosto,The Heavy Burden of Choice,False,0,Dostoevsky’s Grand Inquisitor: Why Freedom Scares Us
