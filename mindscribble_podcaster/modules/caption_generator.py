@@ -6,13 +6,27 @@ from moviepy.video.VideoClip import ImageClip
 from moviepy.video.compositing.CompositeVideoClip import CompositeVideoClip
 from faster_whisper import WhisperModel
 
+# Dynamically set BASE_DIR relative to repository root
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+
+# Define font paths dynamically
+DEFAULT_FONT = os.path.join(BASE_DIR, "fonts", "dejavu-sans-bold.ttf")
+HIGHLIGHT_FONT = os.path.join(BASE_DIR, "fonts", "MilkyCoffee-X3mWd.otf")
+
+# Fallback to system fonts if local font files are not found in repo
+if not os.path.exists(DEFAULT_FONT):
+    DEFAULT_FONT = "/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf"
+
+if not os.path.exists(HIGHLIGHT_FONT):
+    HIGHLIGHT_FONT = DEFAULT_FONT
+
 # -------------------------------------------------------------------
 # CONFIGURATIONS
 # -------------------------------------------------------------------
 CONFIG_STYLE_1 = {
     "style": "card_box",                        # Full line white background box
-    "font_path": "D:\\AI\\Automate-Video-Generator\\fonts\\dejavu-sans-bold.ttf", 
-    "highlight_font_path": "D:\\AI\\Automate-Video-Generator\\fonts\\MilkyCoffee-X3mWd.otf", 
+    "font_path": DEFAULT_FONT, 
+    "highlight_font_path": HIGHLIGHT_FONT, 
     "font_size": 52,                            
     "text_transform": "uppercase",             # 'uppercase', 'lowercase', 'none'
     "padding_x": 24,                            
@@ -32,8 +46,8 @@ CONFIG_STYLE_1 = {
 
 CONFIG_STYLE_2 = {
     "style": "active_word_box",                # Floating text + active word orange box
-    "font_path": "D:\\AI\\Automate-Video-Generator\\fonts\\dejavu-sans-bold.ttf", 
-    "highlight_font_path": "D:\\AI\\Automate-Video-Generator\\fonts\\MilkyCoffee-X3mWd.otf", 
+    "font_path": DEFAULT_FONT, 
+    "highlight_font_path": HIGHLIGHT_FONT, 
     "font_size": 56,                            
     "text_transform": "lowercase",             
     "padding_x": 16,                            
