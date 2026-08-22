@@ -234,57 +234,77 @@
         "id": 4,
         "script_title": "Dark Psychology of the Decoy Effect",
         "total_segments": 10,
-        "posted": false,
+        "posted": true,
         "timeline": [
             {
                 "segment_id": 1,
                 "folder": "16_podcaster_hoody",
-                "text": "Companies use an asymmetric choice model to manipulate your brain into spending more money."
+                "text": "Companies use an asymmetric choice model to manipulate your brain into spending more money.",
+                "start": 0.0,
+                "end": 4.72
             },
             {
                 "segment_id": 2,
                 "folder": "09_traps_and_mazes",
-                "text": "It\u2019s called the Decoy Effect, and it triggers an automatic flaw in human value judgment."
+                "text": "It\u2019s called the Decoy Effect, and it triggers an automatic flaw in human value judgment.",
+                "start": 4.9,
+                "end": 9.52
             },
             {
                 "segment_id": 3,
                 "folder": "08_time_mechanisms",
-                "text": "When offered a small option for three dollars and a large for seven, most people choose the small."
+                "text": "When offered a small option for three dollars and a large for seven, most people choose the small.",
+                "start": 10.04,
+                "end": 10.96
             },
             {
                 "segment_id": 4,
                 "folder": "16_podcaster_hoody",
-                "text": "So marketers introduce a medium option for six dollars and fifty cents\u2014a decoy designed solely to make the large look like a steal."
+                "text": "So marketers introduce a medium option for six dollars and fifty cents\u2014a decoy designed solely to make the large look like a steal.",
+                "start": 15.58,
+                "end": 23.7
             },
             {
                 "segment_id": 5,
                 "folder": "01_brain_anatomy",
-                "text": "Your brain hates evaluating items in isolation, so it looks for shortcut comparisons."
+                "text": "Your brain hates evaluating items in isolation, so it looks for shortcut comparisons.",
+                "start": 23.7,
+                "end": 27.58
             },
             {
                 "segment_id": 6,
                 "folder": "02_neural_networks",
-                "text": "The decoy creates a cognitive illusion of high value, overriding rational calculation."
+                "text": "The decoy creates a cognitive illusion of high value, overriding rational calculation.",
+                "start": 27.58,
+                "end": 32.72
             },
             {
                 "segment_id": 7,
                 "folder": "16_podcaster_hoody",
-                "text": "You think you made a smart financial decision, but you were engineered to spend seven dollars all along."
+                "text": "You think you made a smart financial decision, but you were engineered to spend seven dollars all along.",
+                "start": 33.22,
+                "end": 38.0
             },
             {
                 "segment_id": 8,
                 "folder": "12_dark_textures",
-                "text": "This exact psychological vulnerability is exploited in subscriptions, pricing tiers, and political campaigns."
+                "text": "This exact psychological vulnerability is exploited in subscriptions, pricing tiers, and political campaigns.",
+                "start": 38.42,
+                "end": 44.56
             },
             {
                 "segment_id": 9,
                 "folder": "10_clarity_light",
-                "text": "Recognizing the third option breaks the illusion immediately."
+                "text": "Recognizing the third option breaks the illusion immediately.",
+                "start": 45.12,
+                "end": 47.96
             },
             {
                 "segment_id": 10,
                 "folder": "16_podcaster_hoody",
-                "text": "Save this to protect yourself from cognitive marketing traps."
+                "text": "Save this to protect yourself from cognitive marketing traps.",
+                "start": 48.52,
+                "end": 51.38
             }
         ]
     },
