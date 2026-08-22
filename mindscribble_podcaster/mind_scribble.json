@@ -3,7 +3,7 @@
         "id": 1,
         "script_title": "The Psychology of Silent Rejection",
         "total_segments": 12,
-        "posted": false,
+        "posted": true,
         "timeline": [
             {
                 "segment_id": 1,
@@ -71,7 +71,7 @@
         "id": 2,
         "script_title": "Why You Procrastinate on Things You Want",
         "total_segments": 11,
-        "posted": true,
+        "posted": false,
         "timeline": [
             {
                 "segment_id": 1,
