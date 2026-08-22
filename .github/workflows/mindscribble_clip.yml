@@ -1,0 +1,66 @@
+name: Youtube Clip MindScribble Video
+
+on:
+  schedule:
+    # Runs daily at 18:30 UTC (7:00 PM EST target)
+    - cron: '30 18 * * *'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+          lfs: true # Ensures image/audio media assets managed by LFS are pulled
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.10'
+
+      - name: Install System Dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y ffmpeg
+
+      - name: Install Python Dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install moviepy==2.1.1
+          pip install pandas google-api-python-client google-auth google-auth-oauthlib \
+                      google-auth-httplib2 pillow numpy faster-whisper
+
+      - name: Run Script
+        env:
+          YOUTUBE_TOKEN_PICKLE_BASE64: ${{ secrets.YOUTUBE_TOKEN_PICKLE_BASE64 }}
+          CLOUDINARY_CLOUD_NAME: ${{ secrets.CLOUDINARY_CLOUD_NAME }}
+          CLOUDINARY_API_KEY: ${{ secrets.CLOUDINARY_API_KEY }}
+          CLOUDINARY_API_SECRET: ${{ secrets.CLOUDINARY_API_SECRET }}
+        run: python mindscribble_clips_uploader.py
+
+      - name: Commit updated JSON status
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+
+          # Stash uncommitted changes if any exist
+          git stash
+
+          # Rebase to pull latest changes from main
+          git pull origin main --rebase
+
+          # Re-apply local changes
+          git stash pop || echo "No changes to pop"
+
+          # Stage and commit the updated JSON file tracking posted status
+          git add mindscribble_podcaster/mind_scribble.json
+          git diff --quiet && git diff --staged --quiet || git commit -m "Auto-update posted status in mind_scribble.json [skip ci]"
+
+          git push origin main
