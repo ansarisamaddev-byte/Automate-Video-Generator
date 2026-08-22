@@ -2,9 +2,9 @@ id,audio_path,image_folder,person_image_folder,heading,posted,last_image_index,c
 1,audio/thoughts/audio (1).mp3,images/mindscribble,images/person/kafka,The Monster in the Cubicle,True,0,Kafka’s Trap: The Horror of Being Useful
 2,audio/thoughts/audio (2).mp3,images/mindscribble,images/person/dosto,The Cage of Pure Logic,True,11,Dostoevsky’s Warning: The Curse of Living in Your Head
 3,audio/thoughts/audio (3).mp3,images/mindscribble,images/person/dosto,Guilt Without a Crime,True,13,The Modern Trial: Apologizing to a Court That Doesn't Exist
-4,audio/thoughts/audio (4).mp3,images/mindscribble,images/person/dosto,The Threat of an Easy Life,False,12,Dostoevsky’s Secret: Why Comfort Will Destroy Your Soul
-5,audio/thoughts/audio (5).mp3,images/mindscribble,images/person/kafka,Running Toward a Moving Horizon,False,0,Kafka’s Castle: The Illusion of Reaching the Top
-6,audio/thoughts/audio (6).mp3,images/mindscribble,images/person/dosto,The Heavy Burden of Choice,False,0,Dostoevsky’s Grand Inquisitor: Why Freedom Scares Us
+4,audio/thoughts/audio (4).mp3,images/mindscribble,images/person/dosto,The Threat of an Easy Life,True,24,Dostoevsky’s Secret: Why Comfort Will Destroy Your Soul
+5,audio/thoughts/audio (5).mp3,images/mindscribble,images/person/kafka,Running Toward a Moving Horizon,True,12,Kafka’s Castle: The Illusion of Reaching the Top
+6,audio/thoughts/audio (6).mp3,images/mindscribble,images/person/dosto,The Heavy Burden of Choice,true,13,Dostoevsky’s Grand Inquisitor: Why Freedom Scares Us
 7,audio/thoughts/audio (7).mp3,images/mindscribble,images/person/nietzsche,The Danger of Unchecked Darkness,False,0,Nietzsche’s Abyss: What Happens When You Stare Too Long
 8,audio/thoughts/audio (8).mp3,images/mindscribble,images/person/camus,Punished for Being Honest,False,0,Camus’ Stranger: The Danger of Refusing to Fake It
 9,audio/thoughts/audio (9).mp3,images/mindscribble,images/person/orwell,The Art of Living a Lie,False,0,Orwell’s Doublethink: How You Lie to Yourself Every Day
