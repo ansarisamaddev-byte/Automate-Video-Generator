@@ -449,7 +449,7 @@ if __name__ == "__main__":
             "test_transition_output.mp4"
         ),
         transition_type=(
-            "cut_smooth"
+            "zoom_dissolve"
         ),
         transition_duration=0.6
     )
