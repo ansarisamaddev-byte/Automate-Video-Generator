@@ -8,17 +8,20 @@ if BASE_DIR not in sys.path:
 
 import re
 import glob
+import math
 
 from moviepy.audio.io.AudioFileClip import AudioFileClip
 from moviepy.video.VideoClip import ImageClip
 from moviepy.video.io.VideoFileClip import VideoFileClip
+from moviepy.video import fx as vfx
 from moviepy.video.compositing.CompositeVideoClip import CompositeVideoClip
-import moviepy.video.fx as vfx
+from moviepy import concatenate_videoclips
 
 # Import modules from D:\AI\Automate-Video-Generator\modules
 from modules.caption_generator import (
     CONFIG_STYLE_2,
-    generate_caption_overlay
+    generate_caption_overlay,
+    align_timeline_with_audio  # Dynamically aligns timestamps
 )
 
 from modules.transitions import (
@@ -61,6 +64,37 @@ def normalize_media_dimensions(clip, target_w=1080, target_h=1920):
 
     return clip
 
+def loop_video_to_duration(source_clip, target_duration, crossfade_duration=0.5):
+    """
+    Safely loops a video clip with a crossfade transition between loops
+    to cover target_duration seamlessly.
+    """
+    if source_clip.duration >= target_duration:
+        return source_clip.subclipped(0, target_duration)
+
+    # Determine crossfade length (ensure it doesn't exceed half the clip's length)
+    cf_dur = min(crossfade_duration, source_clip.duration / 2.0)
+    effective_unit_duration = source_clip.duration - cf_dur
+
+    # Calculate exact repetitions needed including overlap loss
+    repeats = math.ceil((target_duration - cf_dur) / effective_unit_duration) + 1
+
+    looped_clips = []
+    current_start = 0.0
+
+    for i in range(repeats):
+        clip = source_clip.copy()
+        if i > 0 and cf_dur > 0:
+            # Fade in each looped iteration over the tail of the previous iteration
+            clip = clip.with_effects([vfx.CrossFadeIn(cf_dur)])
+        
+        clip = clip.with_start(current_start)
+        looped_clips.append(clip)
+        current_start += effective_unit_duration
+
+    # Composite overlapping looped clips together into a single continuous track
+    composite = CompositeVideoClip(looped_clips)
+    return composite.subclipped(0, target_duration)
 
 def process_script_item(
     script_data: dict,
@@ -91,14 +125,31 @@ def process_script_item(
     audio_duration = audio_clip.duration
     print(f"[+] Audio loaded: {os.path.basename(audio_path)} ({audio_duration:.2f}s)")
 
+    # Dynamically align timeline timestamps using Whisper word transcription
+    print("[+] Calculating timeline timestamps directly from audio...")
+    timeline = align_timeline_with_audio(audio_path, timeline)
+
     media_clips = []
+    background = None
+    caption_overlay = None
 
     try:
+        num_segments = len(timeline)
+        
         for idx, segment in enumerate(timeline):
             folder_name = segment.get("folder")
-            start_time = segment.get("start")
-            end_time = segment.get("end")
-            clip_duration = end_time - start_time
+            start_time = segment.get("start", 0.0)
+            
+            # Calculate next segment start to absorb voiceover silence gaps
+            if idx < num_segments - 1:
+                next_start = timeline[idx + 1].get("start", audio_duration)
+                base_duration = next_start - start_time
+            else:
+                base_duration = audio_duration - start_time
+
+            # Add transition padding to absorb crossfade overlap time loss
+            # Every clip except the first loses transition_duration during build_transitioned_timeline
+            clip_duration = base_duration + transition_duration
 
             segment_folder_path = os.path.join(assets_dir, folder_name)
             if not os.path.exists(segment_folder_path):
@@ -115,7 +166,7 @@ def process_script_item(
             file_path = sorted(media_files)[0]
             ext = os.path.splitext(file_path)[1].lower()
 
-            print(f"\nProcessing Segment {idx + 1}: {folder_name} ({clip_duration:.2f}s)")
+            print(f"\nProcessing Segment {idx + 1}/{num_segments}: {folder_name} (Calculated Target Dur: {clip_duration:.2f}s)")
 
             if ext == ".mp4":
                 try:
@@ -125,11 +176,7 @@ def process_script_item(
                     continue
 
                 source_video = source_video.with_fps(30)
-
-                if source_video.duration < clip_duration:
-                    source_video = source_video.with_effects([vfx.Loop(duration=clip_duration)])
-
-                media_clip = source_video.subclipped(0, clip_duration).with_duration(clip_duration)
+                media_clip = loop_video_to_duration(source_video, clip_duration)
             else:
                 media_clip = ImageClip(file_path).with_duration(clip_duration)
 
@@ -146,6 +193,9 @@ def process_script_item(
             size=(1080, 1920),
             final_duration=audio_duration
         )
+
+        # Ensure background matches exact audio duration cleanly
+        background = background.with_duration(audio_duration)
 
         print("[+] Generating Whisper caption overlay...")
         caption_overlay = generate_caption_overlay(
@@ -181,64 +231,48 @@ def process_script_item(
         return output_filepath
 
     finally:
-        if 'audio_clip' in locals():
+        if 'audio_clip' in locals() and audio_clip is not None:
             audio_clip.close()
-        if 'background' in locals():
+        if background is not None:
             background.close()
-        if 'caption_overlay' in locals():
+        if caption_overlay is not None:
             caption_overlay.close()
         for m in media_clips:
-            m.close()
+            if m is not None:
+                m.close()
+
+
 if __name__ == "__main__":
-    sample_script ={
-        "id": 2,
-        "script_title": "Why You Procrastinate on Things You Want Copy",
-        "total_segments": 11,
+    sample_script = {
+        "id": 1,
+        "script_title": "Testing File",
+        "total_segments": 3,
         "posted": False,
         "timeline": [
             {
                 "segment_id": 1,
-                "start": 0.00,
-                "end": 3.50,
                 "folder": "16_podcaster_hoody",
                 "text": "Procrastination is almost never about laziness—it is an emotional regulation problem."
             },
             {
                 "segment_id": 2,
-                "start": 3.50,
-                "end": 7.20,
                 "folder": "04_anxiety_overwhelm",
                 "text": "When you avoid starting a project, your brain isn't rejecting the work; it’s rejecting the fear of failure attached to it."
             },
             {
                 "segment_id": 3,
-                "start": 7.20,
-                "end": 10.90,
                 "folder": "01_brain_anatomy",
-                "text": "Your amygdala perceives creative uncertainty as an immediate physical threat..."
-            },
-            {
-                "segment_id": 4,
-                "start": 10.90,
-                "end": 14.50,
-                "folder": "13_addiction_dopamine",
-                "text": "...hijacking your logical prefrontal cortex and driving you toward cheap dopamine like social media."
-            },
-            {
-                "segment_id": 5,
-                "start": 14.50,
-                "end": 18.00,
-                "folder": "16_podcaster_hoody",
-                "text": "This creates an instant relief loop that tricks your brain into thinking avoidance is safety."
+                "text": "Your amygdala perceives creative uncertainty as an immediate physical threat,"
             }
         ]
     }
+
     process_script_item(
         script_data=sample_script,
         assets_dir=r"D:\AI\Automate-Video-Generator\asset_library",
-        audio_dir=r"D:\AI\Automate-Video-Generator\mindscribble_podcaster\voiceover",
+        audio_dir=r"D:\AI\Automate-Video-Generator\mindscribble_podcaster\voiceovers",
         output_dir=r"D:\AI\Automate-Video-Generator\mindscribble_podcaster",
-        transition_type="zoom_dissolve",  # Options: cross_dissolve, blur_dissolve, dip_to_black, zoom_dissolve, slide_left, etc.
+        transition_type="zoom_dissolve",
         transition_duration=0.6,
-        caption_config=CONFIG_STYLE_2     # Use CONFIG_STYLE_1 or CONFIG_STYLE_2
+        caption_config=CONFIG_STYLE_2
     )

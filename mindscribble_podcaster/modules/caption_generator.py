@@ -13,11 +13,11 @@ CONFIG_STYLE_1 = {
     "style": "card_box",                        # Full line white background box
     "font_path": "D:\\AI\\Automate-Video-Generator\\fonts\\dejavu-sans-bold.ttf", 
     "highlight_font_path": "D:\\AI\\Automate-Video-Generator\\fonts\\MilkyCoffee-X3mWd.otf", 
-    "font_size": 52,                           
+    "font_size": 52,                            
     "text_transform": "uppercase",             # 'uppercase', 'lowercase', 'none'
-    "padding_x": 24,                           
-    "padding_y": 12,                           
-    "line_gap": 8,                             
+    "padding_x": 24,                            
+    "padding_y": 12,                            
+    "line_gap": 8,                              
     "max_words_per_batch": 5,                  
     "max_line_width": 850,                     
     "video_width": 1080,
@@ -34,12 +34,12 @@ CONFIG_STYLE_2 = {
     "style": "active_word_box",                # Floating text + active word orange box
     "font_path": "D:\\AI\\Automate-Video-Generator\\fonts\\dejavu-sans-bold.ttf", 
     "highlight_font_path": "D:\\AI\\Automate-Video-Generator\\fonts\\MilkyCoffee-X3mWd.otf", 
-    "font_size": 56,                           
+    "font_size": 56,                            
     "text_transform": "lowercase",             
-    "padding_x": 16,                           
-    "padding_y": 8,                            
+    "padding_x": 16,                            
+    "padding_y": 8,                             
     "box_corner_radius": 10,                   
-    "line_gap": 16,                            
+    "line_gap": 16,                             
     "max_words_per_batch": 5,                  
     "max_line_width": 800,                     
     "video_width": 1080,
@@ -222,8 +222,6 @@ def render_style_active_word_box(lines, config, base_font, special_font, space_w
 RENDER_REGISTRY = {
     "card_box": render_style_card_box,
     "active_word_box": render_style_active_word_box,
-    # Example for future styles:
-    # "neon_glow": render_style_neon_glow,
 }
 
 def render_caption_card(word_batch, active_index, config):
@@ -271,7 +269,7 @@ def render_caption_card(word_batch, active_index, config):
     return render_fn(lines, config, base_font, special_font, space_w, active_index)
 
 # -------------------------------------------------------------------
-# 4. MOVIEPY PIPELINE COMPOSITOR
+# 4. TIMING & MOVIEPY PIPELINE COMPOSITOR
 # -------------------------------------------------------------------
 def get_word_timestamps(audio_path, model_size="base"):
     model = WhisperModel(model_size, device="cpu", compute_type="int8")
@@ -279,9 +277,75 @@ def get_word_timestamps(audio_path, model_size="base"):
     
     words_data = []
     for segment in segments:
-        for word_info in segment.words:
-            words_data.append({"word": word_info.word.strip(), "start": word_info.start, "end": word_info.end})
+        if segment.words:
+            for word_info in segment.words:
+                cleaned = clean_word(word_info.word)
+                if cleaned:
+                    words_data.append({
+                        "word": word_info.word.strip(),
+                        "clean_word": cleaned,
+                        "start": word_info.start,
+                        "end": word_info.end
+                    })
     return words_data
+
+
+def align_timeline_with_audio(audio_path: str, timeline: list, model_size: str = "base") -> list:
+    """
+    Compares the first and last word of each timeline segment against 
+    Faster-Whisper word timestamps to determine exact start_time and end_time.
+    """
+    words_data = get_word_timestamps(audio_path, model_size=model_size)
+    if not words_data:
+        return timeline
+
+    search_cursor = 0
+    total_words = len(words_data)
+
+    for seg in timeline:
+        raw_words = seg.get("text", "").split()
+        if not raw_words:
+            continue
+
+        first_word_clean = clean_word(raw_words[0])
+        last_word_clean = clean_word(raw_words[-1])
+
+        start_time = None
+        end_time = None
+
+        # 1. Match First Word
+        match_first_idx = None
+        for i in range(search_cursor, total_words):
+            if words_data[i]["clean_word"] == first_word_clean:
+                match_first_idx = i
+                start_time = words_data[i]["start"]
+                break
+
+        # Fallback if first word wasn't found linearly
+        if start_time is None and search_cursor < total_words:
+            start_time = words_data[search_cursor]["start"]
+            match_first_idx = search_cursor
+
+        # 2. Match Last Word starting from the matched first word
+        scan_from = match_first_idx if match_first_idx is not None else search_cursor
+        for j in range(scan_from, total_words):
+            if words_data[j]["clean_word"] == last_word_clean:
+                end_time = words_data[j]["end"]
+                search_cursor = j + 1
+                break
+
+        # Fallback if last word couldn't be matched
+        if end_time is None:
+            expected_word_count = len(raw_words)
+            fallback_idx = min(scan_from + expected_word_count - 1, total_words - 1)
+            end_time = words_data[fallback_idx]["end"]
+            search_cursor = fallback_idx + 1
+
+        seg["start"] = round(start_time, 2)
+        seg["end"] = round(end_time, 2)
+
+    return timeline
+
 
 def generate_caption_overlay(audio_path, config=CONFIG_STYLE_1):
     words_data = get_word_timestamps(audio_path)
