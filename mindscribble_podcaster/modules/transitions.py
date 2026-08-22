@@ -143,19 +143,38 @@ def transition_dip_to_white(clip_a, clip_b, duration, size=DEFAULT_SIZE):
 # ============================================================
 # ZOOM DISSOLVE
 # ============================================================
-
 def transition_zoom_dissolve(clip_a, clip_b, duration, size=DEFAULT_SIZE, zoom_start=1.15):
     """
     clip_b zooms from `zoom_start`x down to 1.0x while it
-    crossfades in, giving a "punch in" dissolve.
+    crossfades in, staying perfectly centered on canvas.
     """
+    canvas_w, canvas_h = size
 
-    def _scale(t):
-        progress = _progress(t, duration)
-        return zoom_start - (zoom_start - 1.0) * progress
+    def _zoom_and_center(get_frame, t):
+        frame = get_frame(t)
+        
+        # Only scale during the transition duration
+        if t < duration:
+            progress = _progress(t, duration)
+            scale = zoom_start - (zoom_start - 1.0) * progress
+            
+            # 1. Resize frame using PIL
+            h, w = frame.shape[:2]
+            new_w, new_h = int(w * scale), int(h * scale)
+            
+            img = Image.fromarray(frame)
+            img_resized = img.resize((new_w, new_h), Image.Resampling.BILINEAR)
+            resized_frame = np.array(img_resized)
 
-    incoming = clip_b.resized(_scale)
-    incoming = incoming.with_position("center")
+            # 2. Crop centered portion back to canvas size (1080x1920)
+            crop_x = (new_w - canvas_w) // 2
+            crop_y = (new_h - canvas_h) // 2
+            
+            return resized_frame[crop_y : crop_y + canvas_h, crop_x : crop_x + canvas_w]
+
+        return frame
+
+    incoming = clip_b.transform(_zoom_and_center)
     incoming = incoming.with_effects([vfx.CrossFadeIn(duration)])
     return incoming
 
