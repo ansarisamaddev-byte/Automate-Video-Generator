@@ -1,340 +1,385 @@
 import numpy as np
 from PIL import Image, ImageFilter
-from moviepy.video.VideoClip import VideoClip
+
 from moviepy.video.compositing.CompositeVideoClip import CompositeVideoClip
+import moviepy.video.fx as vfx
 
-# ============================================================
-# HELPER: ANIMATED FADE MASK (uniform scalar alpha)
-# ============================================================
-def create_fade_mask(clip, duration, invert=False):
-    """
-    IMPORTANT: the mask's own .duration must match the CLIP's full duration,
-    not the transition length. Several moviepy versions treat a clip's mask
-    duration as gating how long that clip stays visible in a composite -
-    capping it at the transition length made every clip disappear right
-    after its fade-in finished, instead of staying visible for its full
-    screen time. The fade itself still only takes `duration` seconds
-    because progress is clamped to 1.0 (or 0.0) beyond that point below.
-    """
-    width = int(clip.w)
-    height = int(clip.h)
 
-    def frame_function(t):
-        progress = max(0.0, min(1.0, t / duration))
-        if invert:
-            progress = 1.0 - progress
-        return np.full((height, width), progress, dtype=np.float32)
-
-    mask = VideoClip(frame_function=frame_function, is_mask=True)
-    return mask.with_duration(clip.duration)
+DEFAULT_SIZE = (1080, 1920)
 
 
 # ============================================================
-# HELPER: SYMMETRIC "HAT" CURVE (0 -> 1 -> 0, peak at midpoint)
+# HELPERS
 # ============================================================
-def _hat(progress):
-    """
-    Used by blur_dissolve, additive_dissolve, and smooth_cut so both
-    clips intensify and resolve on the SAME clock, peaking together
-    exactly at the cut point. This is the shape that hides the seam.
-    """
-    p = max(0.0, min(1.0, progress))
-    return 4.0 * p * (1.0 - p)
+
+def _progress(t, duration):
+    """0 -> 1 linear progress through a transition, clamped."""
+    if duration <= 0:
+        return 1.0
+    return min(max(t / duration, 0.0), 1.0)
 
 
-# ============================================================
-# HELPER: FAST GAUSSIAN BLUR (downsample -> blur -> upsample)
-# ============================================================
-def _fast_gaussian_blur(frame, radius, downsample=0.5):
-    """
-    Blurring at full resolution every frame is the main render-time cost.
-    Real-time NLE blurs (including Resolve's GPU pipeline) typically work
-    at reduced resolution for exactly this reason - visually near-identical
-    for the radii used in transitions, much cheaper to compute.
-    """
-    if radius <= 0.3:
+def _blur_frame(frame, radius):
+    if radius <= 0.05:
         return frame
-    img = Image.fromarray(frame)
-    if 0 < downsample < 1.0:
-        w, h = img.size
-        sw, sh = max(1, int(w * downsample)), max(1, int(h * downsample))
-        small = img.resize((sw, sh), Image.Resampling.BILINEAR)
-        small = small.filter(ImageFilter.GaussianBlur(radius=radius * downsample))
-        img = small.resize((w, h), Image.Resampling.BILINEAR)
-    else:
-        img = img.filter(ImageFilter.GaussianBlur(radius=radius))
-    return np.array(img)
+    original_dtype = frame.dtype
+    img = Image.fromarray(frame.astype(np.uint8))
+    img = img.filter(ImageFilter.GaussianBlur(radius=radius))
+    return np.array(img).astype(original_dtype)
 
 
-# ============================================================
-# 1. CROSS DISSOLVE
-# ============================================================
-def transition_cross_dissolve(clip_a, clip_b, duration):
-    """Standard linear alpha blend - this is how Resolve's default Cross
-    Dissolve actually works, no change needed."""
-    duration = min(duration, clip_a.duration, clip_b.duration)
-    mask = create_fade_mask(clip_b, duration)
-    incoming = clip_b.with_mask(mask)
-    return clip_a, incoming
+def _fade_frame_towards_color(frame, color, alpha):
+    """Blend `frame` towards `color` by `alpha` (0 = untouched, 1 = solid color)."""
+    if alpha <= 0.0:
+        return frame
+    original_dtype = frame.dtype
+    color_arr = np.array(color, dtype=np.float64)
+    blended = frame.astype(np.float64) * (1.0 - alpha) + color_arr * alpha
+    return np.clip(blended, 0, 255).astype(original_dtype)
 
 
-# ============================================================
-# 2. ADDITIVE DISSOLVE - FIXED
-# ============================================================
-def transition_additive_dissolve(clip_a, clip_b, duration, boost_amount=0.5):
+def _fade_out_to_color(clip, duration, color):
     """
-    Real Additive Dissolve sums luminance from BOTH clips through the
-    overlap, producing a brief "glow" at the crossover. Previously only
-    the incoming clip was boosted - fixed so both sides brighten on the
-    same synced hat curve.
+    Fade the tail of `clip` towards `color` over its last
+    `duration` seconds. Works for any color, unlike moviepy's
+    built-in FadeOut which only ever fades through black.
     """
-    duration = min(duration, clip_a.duration, clip_b.duration)
-    blur_start_a = clip_a.duration - duration
+    total = clip.duration
 
-    def boost(frame, progress):
-        peak = 1.0 + boost_amount * _hat(progress)
-        return np.clip(frame.astype(np.float32) * peak, 0, 255).astype(np.uint8)
-
-    def outgoing_frame(get_frame, t):
+    def _make_frame(get_frame, t):
         frame = get_frame(t)
-        if t >= blur_start_a:
-            frame = boost(frame, (t - blur_start_a) / duration)
-        return frame
+        alpha = _progress(t - (total - duration), duration)
+        return _fade_frame_towards_color(frame, color, alpha)
 
-    def incoming_frame(get_frame, t):
-        frame = get_frame(t)
-        if t <= duration:
-            frame = boost(frame, t / duration)
-        return frame
-
-    boosted_outgoing = clip_a.transform(outgoing_frame, keep_duration=True)
-    boosted_incoming = clip_b.transform(incoming_frame, keep_duration=True)
-
-    mask = create_fade_mask(boosted_incoming, duration)
-    return boosted_outgoing, boosted_incoming.with_mask(mask)
+    return clip.transform(_make_frame)
 
 
-# ============================================================
-# 3. NON-ADDITIVE DISSOLVE - NEW (was wrongly aliased to additive)
-# ============================================================
-def transition_non_additive_dissolve(clip_a, clip_b, duration, softness=0.35):
+def _fade_in_from_color(clip, duration, color):
     """
-    Real Non-Additive Dissolve is luminance-driven, not a flat alpha fade:
-    the incoming clip's brightest pixels reveal first, darkest pixels
-    resolve last, giving a textured "developing" look. This is genuinely
-    different from Additive Dissolve and needed its own implementation
-    rather than reusing that function.
+    Fade the head of `clip` in from `color` over its first
+    `duration` seconds. Works for any color, unlike moviepy's
+    built-in FadeIn which only ever fades through black.
     """
-    duration = min(duration, clip_a.duration, clip_b.duration)
 
-    def mask_frame_function(t):
-        progress = max(0.0, min(1.0, t / duration))
-        frame_b = clip_b.get_frame(t).astype(np.float32) / 255.0
-        luminance = 0.299 * frame_b[..., 0] + 0.587 * frame_b[..., 1] + 0.114 * frame_b[..., 2]
-        threshold = (1.0 + softness) * (1.0 - progress) - softness * progress
-        alpha = np.clip((luminance - threshold) / softness + 0.5, 0.0, 1.0)
-        return alpha.astype(np.float32)
-
-    # Same fix as create_fade_mask: mask must last the full clip, not just
-    # the transition window, or the clip vanishes right after the reveal.
-    mask = VideoClip(frame_function=mask_frame_function, is_mask=True).with_duration(clip_b.duration)
-    incoming = clip_b.with_mask(mask)
-    return clip_a, incoming
-
-
-# ============================================================
-# 4. BLUR DISSOLVE - FIXED (synced hat curve, fast blur)
-# ============================================================
-def transition_blur_dissolve(clip_a, clip_b, duration, max_blur=25, downsample=0.5):
-    duration = min(duration, clip_a.duration, clip_b.duration)
-    blur_start_a = clip_a.duration - duration
-
-    def blur_outgoing_frame(get_frame, t):
+    def _make_frame(get_frame, t):
         frame = get_frame(t)
-        if t >= blur_start_a:
-            progress = (t - blur_start_a) / duration
-            radius = _hat(progress) * max_blur
-            frame = _fast_gaussian_blur(frame, radius, downsample)
-        return frame
+        alpha = 1.0 - _progress(t, duration)
+        return _fade_frame_towards_color(frame, color, alpha)
 
-    def blur_incoming_frame(get_frame, t):
-        frame = get_frame(t)
-        if t <= duration:
-            progress = t / duration
-            radius = _hat(progress) * max_blur
-            frame = _fast_gaussian_blur(frame, radius, downsample)
-        return frame
-
-    blurred_outgoing = clip_a.transform(blur_outgoing_frame, keep_duration=True)
-    blurred_incoming = clip_b.transform(blur_incoming_frame, keep_duration=True)
-
-    mask = create_fade_mask(blurred_incoming, duration)
-    return blurred_outgoing, blurred_incoming.with_mask(mask)
+    return clip.transform(_make_frame)
 
 
 # ============================================================
-# 5. DIP TO COLOR - FIXED (hard step at midpoint, not a crossfade)
+# CROSS DISSOLVE
 # ============================================================
-def transition_dip_to_color(clip_a, clip_b, duration, color=(0, 0, 0)):
+
+def transition_cross_dissolve(clip_a, clip_b, duration, size=DEFAULT_SIZE):
     """
-    Real Dip to Color Dissolve is sequential, not a crossfade of two
-    color-blended clips: A dissolves to solid color for the first half,
-    then color dissolves to B for the second half. Previously both were
-    composited across the FULL duration with a linear mask, making B
-    partially visible too early. Fixed with a hard step exactly at the
-    midpoint - seamless because both sides equal the same color there.
+    Plain crossfade: clip_b fades in on top of clip_a.
     """
-    duration = min(duration, clip_a.duration, clip_b.duration)
-    half_d = duration / 2.0
-    color_arr = np.array(color, dtype=np.float32)
-
-    def dip_out_frame(get_frame, t):
-        frame = get_frame(t)
-        start = clip_a.duration - half_d
-        if t >= start:
-            progress = max(0.0, min(1.0, (t - start) / half_d))
-            blended = frame.astype(np.float32) * (1.0 - progress) + color_arr * progress
-            return np.clip(blended, 0, 255).astype(np.uint8)
-        return frame
-
-    def dip_in_frame(get_frame, t):
-        frame = get_frame(t)
-        if t <= half_d:
-            progress = max(0.0, min(1.0, t / half_d))
-            blended = color_arr * (1.0 - progress) + frame.astype(np.float32) * progress
-            return np.clip(blended, 0, 255).astype(np.uint8)
-        return frame
-
-    outgoing = clip_a.transform(dip_out_frame, keep_duration=True)
-    incoming = clip_b.transform(dip_in_frame, keep_duration=True)
-
-    width, height = int(clip_b.w), int(clip_b.h)
-
-    def step_mask_frame(t):
-        val = 0.0 if t < half_d else 1.0
-        return np.full((height, width), val, dtype=np.float32)
-
-    # Same fix as create_fade_mask: mask must last the full clip, not just
-    # the transition window.
-    mask = VideoClip(frame_function=step_mask_frame, is_mask=True).with_duration(clip_b.duration)
-    return outgoing, incoming.with_mask(mask)
+    return clip_b.with_effects([vfx.CrossFadeIn(duration)])
 
 
 # ============================================================
-# 6. SMOOTH CUT - FIXED (synced hat curve, fast blur)
+# BLUR DISSOLVE
 # ============================================================
-def transition_smooth_cut(clip_a, clip_b, duration, punch=0.08, blur_strength=10, downsample=0.5):
+
+def transition_blur_dissolve(clip_a, clip_b, duration, size=DEFAULT_SIZE, max_blur=18):
     """
-    Approximation of Resolve's optical-flow Smooth Cut (see note in prior
-    message re: true optical flow being a separate, heavier implementation).
-    Keep duration SHORT (0.12-0.25s) - this is meant to be a snap, not a
-    slow dissolve.
+    clip_b starts blurred and sharpens while it crossfades in.
+
+    Note: this runs a PIL GaussianBlur per-frame during the
+    transition window, so it is noticeably slower to render
+    than the other transitions. Only the first `duration`
+    seconds of clip_b are blurred; after that it's rendered
+    at full sharpness.
     """
-    duration = min(duration, clip_a.duration, clip_b.duration)
-    blur_start_a = clip_a.duration - duration
 
-    def zoom_blur_frame(frame, progress):
-        intensity = _hat(progress)
-        if intensity <= 0:
-            return frame
-        scale = 1.0 + intensity * punch
-        h, w = frame.shape[:2]
-        img = Image.fromarray(frame)
-        new_w, new_h = max(1, int(w * scale)), max(1, int(h * scale))
-        img = img.resize((new_w, new_h), Image.Resampling.BILINEAR)
-        crop_x, crop_y = (new_w - w) // 2, (new_h - h) // 2
-        img = img.crop((crop_x, crop_y, crop_x + w, crop_y + h))
-        frame = np.array(img)
-        radius = intensity * blur_strength
-        return _fast_gaussian_blur(frame, radius, downsample)
-
-    def outgoing_frame(get_frame, t):
+    def _make_frame(get_frame, t):
         frame = get_frame(t)
-        if t >= blur_start_a:
-            frame = zoom_blur_frame(frame, (t - blur_start_a) / duration)
-        return frame
+        progress = _progress(t, duration)
+        radius = max_blur * (1.0 - progress)
+        return _blur_frame(frame, radius)
 
-    def incoming_frame(get_frame, t):
-        frame = get_frame(t)
-        if t <= duration:
-            frame = zoom_blur_frame(frame, t / duration)
-        return frame
-
-    outgoing = clip_a.transform(outgoing_frame, keep_duration=True)
-    incoming = clip_b.transform(incoming_frame, keep_duration=True)
-
-    mask = create_fade_mask(incoming, duration)
-    return outgoing, incoming.with_mask(mask)
+    incoming = clip_b.transform(_make_frame)
+    incoming = incoming.with_effects([vfx.CrossFadeIn(duration)])
+    return incoming
 
 
 # ============================================================
-# TRANSITION REGISTRY
+# DIP TO BLACK
 # ============================================================
+
+def transition_dip_to_black(clip_a, clip_b, duration, size=DEFAULT_SIZE):
+    """
+    Standalone "incoming half" of a dip-to-black: clip_b fades
+    in from black. The matching "outgoing half" (clip_a fading
+    OUT to black) is applied to the previous clip directly by
+    build_transitioned_timeline, since a true dip needs both
+    sides to hit black at the same instant with no crossfade
+    overlap. Call this function on its own only if you're
+    stitching things together manually.
+    """
+    half = duration / 2.0
+    return _fade_in_from_color(clip_b, half, (0, 0, 0))
+
+
+# ============================================================
+# DIP TO WHITE
+# ============================================================
+
+def transition_dip_to_white(clip_a, clip_b, duration, size=DEFAULT_SIZE):
+    """
+    Same idea as transition_dip_to_black but through white.
+    See that function's docstring for the important caveat
+    about how the outgoing half is handled. Note this fades
+    the actual pixel values towards white (not moviepy's
+    built-in FadeIn, which only ever fades through black).
+    """
+    half = duration / 2.0
+    return _fade_in_from_color(clip_b, half, (255, 255, 255))
+
+
+# ============================================================
+# ZOOM DISSOLVE
+# ============================================================
+
+def transition_zoom_dissolve(clip_a, clip_b, duration, size=DEFAULT_SIZE, zoom_start=1.15):
+    """
+    clip_b zooms from `zoom_start`x down to 1.0x while it
+    crossfades in, giving a "punch in" dissolve.
+    """
+
+    def _scale(t):
+        progress = _progress(t, duration)
+        return zoom_start - (zoom_start - 1.0) * progress
+
+    incoming = clip_b.resized(_scale)
+    incoming = incoming.with_position("center")
+    incoming = incoming.with_effects([vfx.CrossFadeIn(duration)])
+    return incoming
+
+
+# ============================================================
+# SLIDE LEFT
+# ============================================================
+
+def transition_slide_left(clip_a, clip_b, duration, size=DEFAULT_SIZE):
+    """
+    clip_b slides in from the right edge and settles at (0, 0),
+    covering clip_a as it travels across.
+    """
+    w = size[0]
+
+    def _pos(t):
+        progress = _progress(t, duration)
+        x = w * (1.0 - progress)
+        return (x, 0)
+
+    return clip_b.with_position(_pos)
+
+
+# ============================================================
+# SLIDE RIGHT
+# ============================================================
+
+def transition_slide_right(clip_a, clip_b, duration, size=DEFAULT_SIZE):
+    """
+    clip_b slides in from the left edge and settles at (0, 0).
+    """
+    w = size[0]
+
+    def _pos(t):
+        progress = _progress(t, duration)
+        x = -w * (1.0 - progress)
+        return (x, 0)
+
+    return clip_b.with_position(_pos)
+
+
+# ============================================================
+# CUT SMOOTH
+# ============================================================
+
+def transition_cut_smooth(clip_a, clip_b, duration, size=DEFAULT_SIZE):
+    """
+    Approximation of DaVinci Resolve's "Smooth Cut": a very
+    short, snappy crossfade (clamped well below the requested
+    duration) so it reads as a quick cut rather than a slow
+    dissolve.
+
+    Caveat: Resolve's real Smooth Cut uses optical-flow motion
+    estimation to morph matching frames together, which needs
+    something like OpenCV's calcOpticalFlowFarneback and isn't
+    implemented here. This gives a similar "feel" for a fraction
+    of the complexity, but it will not intelligently match
+    motion between the two clips. If you want the real thing,
+    add an OpenCV optical-flow warp here instead of the plain
+    crossfade.
+    """
+    snap_duration = min(duration, 0.15)
+    return clip_b.with_effects([vfx.CrossFadeIn(snap_duration)])
+
+
+# ============================================================
+# REGISTRY
+# ============================================================
+
 TRANSITION_REGISTRY = {
     "cross_dissolve": transition_cross_dissolve,
     "blur_dissolve": transition_blur_dissolve,
-    "additive_dissolve": transition_additive_dissolve,
-    "non_additive_dissolve": transition_non_additive_dissolve,
-    "smooth_cut": transition_smooth_cut,
-    "dip_to_black": lambda a, b, d: transition_dip_to_color(a, b, d, (0, 0, 0)),
-    "dip_to_white": lambda a, b, d: transition_dip_to_color(a, b, d, (255, 255, 255)),
+    "dip_to_black": transition_dip_to_black,
+    "dip_to_white": transition_dip_to_white,
+    "zoom_dissolve": transition_zoom_dissolve,
+    "slide_left": transition_slide_left,
+    "slide_right": transition_slide_right,
+    "cut_smooth": transition_cut_smooth,
 }
 
-# ============================================================
-# MASTER TIMELINE (unchanged)
-# ============================================================
+# Transitions that need a black/white flash handled sequentially
+# (no overlap) rather than as a simple overlapping crossfade.
+DIP_TRANSITIONS = {"dip_to_black", "dip_to_white"}
+
+
 def build_transitioned_timeline(
     clip_list,
     transition_type="cross_dissolve",
     duration=0.6,
-    size=(1080, 1920),
+    size=DEFAULT_SIZE,
     final_duration=None
 ):
+
     if not clip_list:
         return None
 
     if len(clip_list) == 1:
-        clip = clip_list[0]
-        if final_duration is not None:
-            clip = clip.with_duration(final_duration)
-        return clip
+        return clip_list[0].with_duration(
+            final_duration
+            if final_duration is not None
+            else clip_list[0].duration
+        )
 
-    transition_fn = TRANSITION_REGISTRY.get(
-        transition_type,
-        transition_cross_dissolve
-    )
+    if transition_type not in TRANSITION_REGISTRY:
+        print(
+            f"Unknown transition_type '{transition_type}', "
+            f"falling back to 'cross_dissolve'. Valid options: "
+            f"{sorted(TRANSITION_REGISTRY.keys())}"
+        )
+        transition_type = "cross_dissolve"
 
     duration = min(
         duration,
-        min(clip.duration for clip in clip_list)
+        min(c.duration for c in clip_list) / 2
     )
+
+    # Smooth cut is meant to be snappy no matter what duration
+    # was requested for the other transitions.
+    if transition_type == "cut_smooth":
+        duration = min(duration, 0.15)
 
     timeline = []
     current_start = 0.0
 
-    first_clip = clip_list[0].with_start(0)
-    timeline.append(first_clip)
+    # --------------------------------------------------------
+    # FIRST CLIP
+    # --------------------------------------------------------
+
+    first = clip_list[0].with_start(0)
+    timeline.append(first)
+
+    print(
+        f"Clip 1: start=0.00 duration={first.duration:.2f}"
+    )
+
+    # --------------------------------------------------------
+    # FOLLOWING CLIPS
+    # --------------------------------------------------------
 
     for i in range(1, len(clip_list)):
-        previous_clip = clip_list[i - 1]
-        current_clip = clip_list[i]
 
-        processed_outgoing, incoming_clip = transition_fn(
-            previous_clip,
-            current_clip,
-            duration
-        )
+        previous = clip_list[i - 1]
+        incoming = clip_list[i]
 
-        timeline[i - 1] = processed_outgoing.with_start(
-            timeline[i - 1].start
-        )
+        if transition_type in DIP_TRANSITIONS:
 
-        current_start += (previous_clip.duration - duration)
-        incoming_clip = incoming_clip.with_start(current_start)
-        timeline.append(incoming_clip)
+            # --------------------------------------------
+            # Sequential dip-through-color: no overlap.
+            # Previous clip fades OUT to the dip color at
+            # its own tail end; incoming clip fades IN from
+            # that same color at its own head. Because both
+            # sides hit the same solid color at the seam,
+            # this reads as a clean dip even without
+            # overlapping the two clips in time. Both fades
+            # go through the real target color (black OR
+            # white) via _fade_out_to_color / _fade_in_from_color,
+            # not moviepy's built-in FadeOut/FadeIn (which only
+            # ever fade through black).
+            # --------------------------------------------
+
+            half = duration / 2.0
+            color = (0, 0, 0) if transition_type == "dip_to_black" else (255, 255, 255)
+
+            timeline[-1] = _fade_out_to_color(timeline[-1], half, color)
+
+            start = current_start + previous.duration
+            incoming_clip = _fade_in_from_color(incoming, half, color)
+            incoming_clip = incoming_clip.with_start(start)
+
+            timeline.append(incoming_clip)
+
+            print(
+                f"Clip {i + 1}: start={start:.2f} "
+                f"duration={incoming.duration:.2f} (via {transition_type})"
+            )
+
+            current_start = start
+
+        else:
+
+            # --------------------------------------------
+            # Overlapping transitions: incoming begins
+            # `duration` seconds before previous ends, and
+            # whichever effect is registered for this
+            # transition_type is applied to the incoming clip.
+            # --------------------------------------------
+
+            start = (
+                current_start
+                + previous.duration
+                - duration
+            )
+
+            effect_fn = TRANSITION_REGISTRY[transition_type]
+            incoming_clip = effect_fn(previous, incoming, duration, size=size)
+            incoming_clip = incoming_clip.with_start(start)
+
+            timeline.append(incoming_clip)
+
+            print(
+                f"Clip {i + 1}: start={start:.2f} "
+                f"duration={incoming_clip.duration:.2f} (via {transition_type})"
+            )
+
+            current_start = start
+
+    # --------------------------------------------------------
+    # FINAL DURATION
+    # --------------------------------------------------------
 
     if final_duration is None:
-        final_duration = max(clip.start + clip.duration for clip in timeline)
+        final_duration = (
+            current_start
+            + clip_list[-1].duration
+        )
 
-    result = CompositeVideoClip(timeline, size=size)
+    # --------------------------------------------------------
+    # COMPOSITE
+    # --------------------------------------------------------
+
+    result = CompositeVideoClip(
+        timeline,
+        size=size,
+        bg_color=(0, 0, 0)
+    )
+
     return result.with_duration(final_duration)
