@@ -17,8 +17,8 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
         with:
+          lfs: true  # Enables downloading full Git LFS video binaries
           persist-credentials: true
-          lfs: true # Pulls LFS metadata
 
       - name: Fetch LFS video binary files
         run: |
