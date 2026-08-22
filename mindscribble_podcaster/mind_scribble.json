@@ -156,57 +156,77 @@
         "id": 3,
         "script_title": "The Spotlight Effect Trap",
         "total_segments": 10,
-        "posted": false,
+        "posted": true,
         "timeline": [
             {
                 "segment_id": 1,
                 "folder": "16_podcaster_hoody",
-                "text": "You are judging yourself ten times harsher than anyone else in the room ever will."
+                "text": "You are judging yourself ten times harsher than anyone else in the room ever will.",
+                "start": 0.0,
+                "end": 4.38
             },
             {
                 "segment_id": 2,
                 "folder": "06_social_crowds",
-                "text": "Social psychologists call this the Spotlight Effect\u2014a cognitive bias where you overestimate how much people notice your appearance or mistakes."
+                "text": "Social psychologists call this the Spotlight Effect\u2014a cognitive bias where you overestimate how much people notice your appearance or mistakes.",
+                "start": 4.58,
+                "end": 12.1
             },
             {
                 "segment_id": 3,
                 "folder": "14_memory_and_past",
-                "text": "You remember every awkward word you spoke today, assuming others are replaying it too."
+                "text": "You remember every awkward word you spoke today, assuming others are replaying it too.",
+                "start": 12.66,
+                "end": 16.88
             },
             {
                 "segment_id": 4,
                 "folder": "16_podcaster_hoody",
-                "text": "In reality? Everyone around you is trapped in their own spotlight, worrying about how they come across to you."
+                "text": "In reality? Everyone around you is trapped in their own spotlight, worrying about how they come across to you.",
+                "start": 17.36,
+                "end": 19.16
             },
             {
                 "segment_id": 5,
                 "folder": "03_isolation_shadows",
-                "text": "Your brain treats social judgment like a survival threat, making minor blunders feel catastrophic."
+                "text": "Your brain treats social judgment like a survival threat, making minor blunders feel catastrophic.",
+                "start": 23.18,
+                "end": 28.22
             },
             {
                 "segment_id": 6,
                 "folder": "07_masks_identity",
-                "text": "When you realize you are barely a background extra in someone else\u2019s movie, the weight disappears."
+                "text": "When you realize you are barely a background extra in someone else\u2019s movie, the weight disappears.",
+                "start": 28.22,
+                "end": 33.02
             },
             {
                 "segment_id": 7,
                 "folder": "16_podcaster_hoody",
-                "text": "People aren't watching your every move. They're too busy managing their own insecurities."
+                "text": "People aren't watching your every move. They're too busy managing their own insecurities.",
+                "start": 33.56,
+                "end": 37.72
             },
             {
                 "segment_id": 8,
                 "folder": "10_clarity_light",
-                "text": "The moment you stop seeking external validation, social anxiety loses its power."
+                "text": "The moment you stop seeking external validation, social anxiety loses its power.",
+                "start": 38.14,
+                "end": 42.64
             },
             {
                 "segment_id": 9,
                 "folder": "15_ego_and_power",
-                "text": "Step into the room like you don't need anyone's approval, and watch the dynamic shift."
+                "text": "Step into the room like you don't need anyone's approval, and watch the dynamic shift.",
+                "start": 42.96,
+                "end": 47.12
             },
             {
                 "segment_id": 10,
                 "folder": "16_podcaster_hoody",
-                "text": "Share this with someone who overthinks every social situation."
+                "text": "Share this with someone who overthinks every social situation.",
+                "start": 47.5,
+                "end": 50.44
             }
         ]
     },
