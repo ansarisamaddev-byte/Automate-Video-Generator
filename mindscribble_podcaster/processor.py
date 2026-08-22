@@ -1,4 +1,11 @@
 import os
+import sys
+
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+
+if BASE_DIR not in sys.path:
+    sys.path.insert(0, BASE_DIR)
+
 import re
 import glob
 
@@ -8,8 +15,10 @@ from moviepy.video.io.VideoFileClip import VideoFileClip
 from moviepy.video.compositing.CompositeVideoClip import CompositeVideoClip
 import moviepy.video.fx as vfx
 
+# Import modules from D:\AI\Automate-Video-Generator\modules
 from modules.caption_generator import (
-    CONFIG_STYLE_2, CONFIG_STYLE_1, generate_caption_overlay,
+    CONFIG_STYLE_2,
+    generate_caption_overlay
 )
 
 from modules.transitions import (
@@ -38,17 +47,14 @@ def find_audio_file(audio_dir: str, target_title: str) -> str:
 
 
 def normalize_media_dimensions(clip, target_w=1080, target_h=1920):
-    """Resizes and center-crops media to exact 1080x1920 dimensions."""
     clip = clip.resized(height=target_h)
 
-    # Normalize Width
     if clip.w > target_w:
         crop_x = (clip.w - target_w) / 2
         clip = clip.cropped(x1=crop_x, width=target_w)
     elif clip.w < target_w:
         clip = clip.resized(width=target_w)
 
-    # Normalize Height
     if clip.h > target_h:
         crop_y = (clip.h - target_h) / 2
         clip = clip.cropped(y1=crop_y, height=target_h)
@@ -80,17 +86,11 @@ def process_script_item(
 
     os.makedirs(output_dir, exist_ok=True)
 
-    # ========================================================
-    # 1. AUDIO
-    # ========================================================
     audio_path = find_audio_file(audio_dir, script_title)
     audio_clip = AudioFileClip(audio_path)
     audio_duration = audio_clip.duration
     print(f"[+] Audio loaded: {os.path.basename(audio_path)} ({audio_duration:.2f}s)")
 
-    # ========================================================
-    # 2. LOAD & NORMALIZE TIMELINE MEDIA
-    # ========================================================
     media_clips = []
 
     try:
@@ -104,7 +104,6 @@ def process_script_item(
             if not os.path.exists(segment_folder_path):
                 raise FileNotFoundError(f"Asset folder missing: {os.path.abspath(segment_folder_path)}")
 
-            # Find images or videos in segment folder
             valid_extensions = ("*.jpg", "*.jpeg", "*.mp4", "*.png", "*.webp")
             media_files = []
             for ext in valid_extensions:
@@ -134,15 +133,11 @@ def process_script_item(
             else:
                 media_clip = ImageClip(file_path).with_duration(clip_duration)
 
-            # Apply exact aspect ratio & dimension normalization from test pipeline
             media_clip = normalize_media_dimensions(media_clip, target_w=1080, target_h=1920)
             media_clip = media_clip.with_duration(clip_duration)
 
             media_clips.append(media_clip)
 
-        # ========================================================
-        # 3. BUILD TRANSITION TIMELINE
-        # ========================================================
         print("\n[+] Building transition timeline...")
         background = build_transitioned_timeline(
             media_clips,
@@ -152,18 +147,12 @@ def process_script_item(
             final_duration=audio_duration
         )
 
-        # ========================================================
-        # 4. CAPTIONS (WHISPER OVERLAY)
-        # ========================================================
         print("[+] Generating Whisper caption overlay...")
         caption_overlay = generate_caption_overlay(
             audio_path,
             config=caption_config
         )
 
-        # ========================================================
-        # 5. FINAL COMPOSITION
-        # ========================================================
         print("[+] Compositing background + captions...")
         final_video = (
             CompositeVideoClip(
@@ -174,9 +163,6 @@ def process_script_item(
             .with_duration(audio_duration)
         )
 
-        # ========================================================
-        # 6. EXPORT
-        # ========================================================
         clean_output_name = sanitize_filename(script_title)
         output_filepath = os.path.abspath(os.path.join(output_dir, f"{clean_output_name}.mp4"))
 
@@ -203,7 +189,6 @@ def process_script_item(
             caption_overlay.close()
         for m in media_clips:
             m.close()
-
 if __name__ == "__main__":
     sample_script ={
         "id": 2,
