@@ -9,19 +9,19 @@ if BASE_DIR not in sys.path:
 import re
 import glob
 import math
-
+import random
 from moviepy.audio.io.AudioFileClip import AudioFileClip
 from moviepy.video.VideoClip import ImageClip
 from moviepy.video.io.VideoFileClip import VideoFileClip
-from moviepy.video import fx as vfx
 from moviepy.video.compositing.CompositeVideoClip import CompositeVideoClip
+import moviepy.video.fx as vfx
 from moviepy import concatenate_videoclips
 
 # Import modules from D:\AI\Automate-Video-Generator\modules
 from modules.caption_generator import (
     CONFIG_STYLE_2,
     generate_caption_overlay,
-    align_timeline_with_audio  # Dynamically aligns timestamps
+    align_timeline_with_audio
 )
 
 from modules.transitions import (
@@ -64,19 +64,17 @@ def normalize_media_dimensions(clip, target_w=1080, target_h=1920):
 
     return clip
 
+
 def loop_video_to_duration(source_clip, target_duration, crossfade_duration=0.5):
     """
-    Safely loops a video clip with a crossfade transition between loops
-    to cover target_duration seamlessly.
+    Loops video with a smooth crossfade transition between loop iterations.
     """
     if source_clip.duration >= target_duration:
         return source_clip.subclipped(0, target_duration)
 
-    # Determine crossfade length (ensure it doesn't exceed half the clip's length)
     cf_dur = min(crossfade_duration, source_clip.duration / 2.0)
     effective_unit_duration = source_clip.duration - cf_dur
 
-    # Calculate exact repetitions needed including overlap loss
     repeats = math.ceil((target_duration - cf_dur) / effective_unit_duration) + 1
 
     looped_clips = []
@@ -85,16 +83,47 @@ def loop_video_to_duration(source_clip, target_duration, crossfade_duration=0.5)
     for i in range(repeats):
         clip = source_clip.copy()
         if i > 0 and cf_dur > 0:
-            # Fade in each looped iteration over the tail of the previous iteration
             clip = clip.with_effects([vfx.CrossFadeIn(cf_dur)])
         
         clip = clip.with_start(current_start)
         looped_clips.append(clip)
         current_start += effective_unit_duration
 
-    # Composite overlapping looped clips together into a single continuous track
     composite = CompositeVideoClip(looped_clips)
     return composite.subclipped(0, target_duration)
+import random
+
+def get_random_outro_video() -> str:
+    """
+    Dynamically resolves the ending video path relative to the project root 
+    so it works on both local Windows paths and Linux GitHub Actions runners.
+    """
+    # BASE_DIR points to D:\AI\Automate-Video-Generator\mindscribble_podcaster (or repo root)
+    # Reaching parent directory to find 'ending/mindscribble'
+    ending_dir = os.path.abspath(
+        os.path.join(BASE_DIR, "..", "ending", "mindscribble")
+    )
+
+    # Fallback check if path is directly inside BASE_DIR
+    if not os.path.exists(ending_dir):
+        ending_dir = os.path.abspath(os.path.join(BASE_DIR, "ending", "mindscribble"))
+
+    if not os.path.exists(ending_dir):
+        print(f"[!] Warning: Ending directory not found at: {ending_dir}")
+        return None
+
+    valid_extensions = ("*.mp4", "*.mov", "*.mkv", "*.avi", "*.webm")
+    outro_files = []
+    for ext in valid_extensions:
+        outro_files.extend(glob.glob(os.path.join(ending_dir, ext)))
+
+    if not outro_files:
+        print(f"[!] Warning: No video files found in: {ending_dir}")
+        return None
+
+    selected_outro = random.choice(outro_files)
+    print(f"[+] Selected Outro Video: {os.path.basename(selected_outro)}")
+    return selected_outro
 
 def process_script_item(
     script_data: dict,
@@ -125,13 +154,13 @@ def process_script_item(
     audio_duration = audio_clip.duration
     print(f"[+] Audio loaded: {os.path.basename(audio_path)} ({audio_duration:.2f}s)")
 
-    # Dynamically align timeline timestamps using Whisper word transcription
     print("[+] Calculating timeline timestamps directly from audio...")
     timeline = align_timeline_with_audio(audio_path, timeline)
 
     media_clips = []
     background = None
     caption_overlay = None
+    credit_clip = None
 
     try:
         num_segments = len(timeline)
@@ -140,15 +169,12 @@ def process_script_item(
             folder_name = segment.get("folder")
             start_time = segment.get("start", 0.0)
             
-            # Calculate next segment start to absorb voiceover silence gaps
             if idx < num_segments - 1:
                 next_start = timeline[idx + 1].get("start", audio_duration)
                 base_duration = next_start - start_time
             else:
                 base_duration = audio_duration - start_time
 
-            # Add transition padding to absorb crossfade overlap time loss
-            # Every clip except the first loses transition_duration during build_transitioned_timeline
             clip_duration = base_duration + transition_duration
 
             segment_folder_path = os.path.join(assets_dir, folder_name)
@@ -166,7 +192,7 @@ def process_script_item(
             file_path = sorted(media_files)[0]
             ext = os.path.splitext(file_path)[1].lower()
 
-            print(f"\nProcessing Segment {idx + 1}/{num_segments}: {folder_name} (Calculated Target Dur: {clip_duration:.2f}s)")
+            print(f"\nProcessing Segment {idx + 1}/{num_segments}: {folder_name} (Target Dur: {clip_duration:.2f}s)")
 
             if ext == ".mp4":
                 try:
@@ -176,7 +202,7 @@ def process_script_item(
                     continue
 
                 source_video = source_video.with_fps(30)
-                media_clip = loop_video_to_duration(source_video, clip_duration)
+                media_clip = loop_video_to_duration(source_video, clip_duration, crossfade_duration=0.4)
             else:
                 media_clip = ImageClip(file_path).with_duration(clip_duration)
 
@@ -193,8 +219,6 @@ def process_script_item(
             size=(1080, 1920),
             final_duration=audio_duration
         )
-
-        # Ensure background matches exact audio duration cleanly
         background = background.with_duration(audio_duration)
 
         print("[+] Generating Whisper caption overlay...")
@@ -203,7 +227,7 @@ def process_script_item(
             config=caption_config
         )
 
-        print("[+] Compositing background + captions...")
+        print("[+] Compositing main video + captions...")
         final_video = (
             CompositeVideoClip(
                 [background, caption_overlay],
@@ -212,6 +236,20 @@ def process_script_item(
             .with_audio(audio_clip)
             .with_duration(audio_duration)
         )
+
+        credit_video_path = get_random_outro_video()
+        if credit_video_path and os.path.exists(credit_video_path):
+            try:
+                print(f"[+] Appending Outro Video: {os.path.basename(credit_video_path)}")
+                credit_clip = VideoFileClip(credit_video_path)
+                credit_clip = normalize_media_dimensions(credit_clip, target_w=1080, target_h=1920)
+                
+                final_video = concatenate_videoclips(
+                    [final_video, credit_clip],
+                    method="compose"
+                )
+            except Exception as e:
+                print(f"[!] Warning: Could not append credit video ({e})")
 
         clean_output_name = sanitize_filename(script_title)
         output_filepath = os.path.abspath(os.path.join(output_dir, f"{clean_output_name}.mp4"))
@@ -237,6 +275,8 @@ def process_script_item(
             background.close()
         if caption_overlay is not None:
             caption_overlay.close()
+        if credit_clip is not None:
+            credit_clip.close()
         for m in media_clips:
             if m is not None:
                 m.close()
