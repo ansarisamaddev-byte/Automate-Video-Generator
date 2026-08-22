@@ -227,13 +227,14 @@ def process_script_item(
             config=caption_config
         )
 
-        print("[+] Compositing main video + captions...")
+        
         final_video = (
-            CompositeVideoClip(
-                [background, caption_overlay],
-                size=(1080, 1920)
-            )
-            .with_audio(audio_clip)
+             CompositeVideoClip(
+        [background, caption_overlay],
+        size=(1080, 1920),
+        bg_color=(0, 0, 0)  # Explicit black background ensures clips render properly
+        )
+           .with_audio(audio_clip)
             .with_duration(audio_duration)
         )
 
