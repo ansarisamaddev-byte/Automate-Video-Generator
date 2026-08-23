@@ -71,7 +71,7 @@
         "id": 2,
         "script_title": "Why You Procrastinate on Things You Want",
         "total_segments": 11,
-        "posted": true,
+        "posted": false,
         "timeline": [
             {
                 "segment_id": 1,
@@ -156,7 +156,7 @@
         "id": 3,
         "script_title": "The Spotlight Effect Trap",
         "total_segments": 10,
-        "posted": true,
+        "posted": false,
         "timeline": [
             {
                 "segment_id": 1,
