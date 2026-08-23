@@ -71,7 +71,7 @@
         "id": 2,
         "script_title": "Why You Procrastinate on Things You Want",
         "total_segments": 11,
-        "posted": false,
+        "posted": true,
         "timeline": [
             {
                 "segment_id": 1,
@@ -85,14 +85,14 @@
                 "folder": "04_anxiety_overwhelm",
                 "text": "When you avoid starting a project, your brain isn't rejecting the work; it\u2019s rejecting the fear of failure attached to it.",
                 "start": 5.76,
-                "end": 12.64
+                "end": 12.66
             },
             {
                 "segment_id": 3,
                 "folder": "01_brain_anatomy",
                 "text": "Your amygdala perceives creative uncertainty as an immediate physical threat,",
-                "start": 13.0,
-                "end": 17.22
+                "start": 13.02,
+                "end": 17.24
             },
             {
                 "segment_id": 4,
@@ -105,7 +105,7 @@
                 "segment_id": 5,
                 "folder": "16_podcaster_hoody",
                 "text": "This creates an instant relief loop that tricks your brain into thinking avoidance is safety.",
-                "start": 23.44,
+                "start": 23.46,
                 "end": 28.42
             },
             {
@@ -113,7 +113,7 @@
                 "folder": "05_internal_conflict",
                 "text": "Every time you walk away, the task feels larger, heavier, and more impossible.",
                 "start": 28.42,
-                "end": 33.82
+                "end": 33.8
             },
             {
                 "segment_id": 7,
@@ -126,7 +126,7 @@
                 "segment_id": 8,
                 "folder": "16_podcaster_hoody",
                 "text": "Commit to working on it for just one hundred and twenty seconds\u2014no expectations, no perfection.",
-                "start": 38.72,
+                "start": 38.7,
                 "end": 44.12
             },
             {
@@ -134,21 +134,21 @@
                 "folder": "02_neural_networks",
                 "text": "Once momentum kicks in, neurological friction drops and focus takes over automatically.",
                 "start": 44.86,
-                "end": 50.1
+                "end": 50.12
             },
             {
                 "segment_id": 10,
                 "folder": "11_building_action",
                 "text": "Stop waiting for motivation. Action creates clarity; waiting creates paralysis.",
                 "start": 50.76,
-                "end": 55.8
+                "end": 55.82
             },
             {
                 "segment_id": 11,
                 "folder": "16_podcaster_hoody",
                 "text": "Save this video for the next time you feel stuck.",
-                "start": 55.8,
-                "end": 59.0
+                "start": 55.82,
+                "end": 58.98
             }
         ]
     },
