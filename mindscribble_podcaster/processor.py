@@ -1,8 +1,8 @@
 import os
 import sys
+from pathlib import Path
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-
 if BASE_DIR not in sys.path:
     sys.path.insert(0, BASE_DIR)
 
@@ -10,23 +10,37 @@ import re
 import glob
 import math
 import random
+import cv2
+import numpy as np
+
 from moviepy.audio.io.AudioFileClip import AudioFileClip
-from moviepy.video.VideoClip import ImageClip
+from moviepy.audio.AudioClip import CompositeAudioClip
+from moviepy.video.VideoClip import ImageClip, VideoClip
 from moviepy.video.io.VideoFileClip import VideoFileClip
 from moviepy.video.compositing.CompositeVideoClip import CompositeVideoClip
 import moviepy.video.fx as vfx
 from moviepy import concatenate_videoclips
 
-# Import modules from D:\AI\Automate-Video-Generator\modules
 from modules.caption_generator import (
     CONFIG_STYLE_2,
     generate_caption_overlay,
     align_timeline_with_audio
 )
+from modules.transitions import build_transitioned_timeline
 
-from modules.transitions import (
-    build_transitioned_timeline
-)
+
+def resolve_project_path(*path_parts: str) -> str:
+    path_inside = os.path.abspath(os.path.join(BASE_DIR, *path_parts))
+    if os.path.exists(path_inside):
+        return path_inside
+
+    path_parent = os.path.abspath(os.path.join(BASE_DIR, "..", *path_parts))
+    return path_parent
+
+
+DEFAULT_POP_SFX = resolve_project_path("audio", "sound_effect", "dragon-pop.mp3")
+DEFAULT_STICKERS_DIR = resolve_project_path("stickers")
+DEFAULT_ASSETS_DIR = resolve_project_path("asset_library")
 
 
 def sanitize_filename(name: str) -> str:
@@ -40,7 +54,7 @@ def find_audio_file(audio_dir: str, target_title: str) -> str:
         raise FileNotFoundError(f"Audio directory does not exist: {os.path.abspath(audio_dir)}")
 
     for file in os.listdir(audio_dir):
-        if file.lower().endswith(".mp3"):
+        if file.lower().endswith((".mp3", ".wav", ".m4a")):
             file_stem = os.path.splitext(file)[0]
             clean_file_stem = re.sub(r'\s+', ' ', file_stem).strip().lower()
             if clean_file_stem == clean_target:
@@ -66,9 +80,6 @@ def normalize_media_dimensions(clip, target_w=1080, target_h=1920):
 
 
 def loop_video_to_duration(source_clip, target_duration, crossfade_duration=0.5):
-    """
-    Loops video with a smooth crossfade transition between loop iterations.
-    """
     if source_clip.duration >= target_duration:
         return source_clip.subclipped(0, target_duration)
 
@@ -84,29 +95,195 @@ def loop_video_to_duration(source_clip, target_duration, crossfade_duration=0.5)
         clip = source_clip.copy()
         if i > 0 and cf_dur > 0:
             clip = clip.with_effects([vfx.CrossFadeIn(cf_dur)])
-        
+
         clip = clip.with_start(current_start)
         looped_clips.append(clip)
         current_start += effective_unit_duration
 
     composite = CompositeVideoClip(looped_clips)
     return composite.subclipped(0, target_duration)
-import random
 
-def get_random_outro_video() -> str:
-    """
-    Dynamically resolves the ending video path relative to the project root 
-    so it works on both local Windows paths and Linux GitHub Actions runners.
-    """
-    # BASE_DIR points to D:\AI\Automate-Video-Generator\mindscribble_podcaster (or repo root)
-    # Reaching parent directory to find 'ending/mindscribble'
-    ending_dir = os.path.abspath(
-        os.path.join(BASE_DIR, "..", "ending", "mindscribble")
+
+def create_feathered_rotated_sticker(
+    image_path: str,
+    target_width: int = 420,
+    rotation_angle: float = 0.0,
+    feather_radius: int = 15
+) -> np.ndarray:
+    img = cv2.imread(image_path, cv2.IMREAD_UNCHANGED)
+    if img is None:
+        raise FileNotFoundError(f"Could not load image at path: {image_path}")
+
+    if len(img.shape) == 2:
+        img = cv2.cvtColor(img, cv2.COLOR_GRAY2BGRA)
+    elif img.shape[2] == 3:
+        img = cv2.cvtColor(img, cv2.COLOR_BGR2BGRA)
+
+    h, w = img.shape[:2]
+    aspect_ratio = target_width / float(w)
+    target_height = max(1, int(h * aspect_ratio))
+    img = cv2.resize(img, (target_width, target_height), interpolation=cv2.INTER_LANCZOS4)
+
+    h, w = img.shape[:2]
+    mask = np.zeros((h, w), dtype=np.uint8)
+
+    f = max(1, feather_radius)
+    if f < min(h, w) // 2:
+        cv2.rectangle(mask, (f, f), (w - f, h - f), 255, -1)
+        mask = cv2.GaussianBlur(mask, (f * 2 + 1, f * 2 + 1), 0)
+    else:
+        mask.fill(255)
+
+    img[:, :, 3] = (img[:, :, 3].astype(float) * (mask.astype(float) / 255.0)).astype(np.uint8)
+
+    if rotation_angle != 0:
+        center = (w // 2, h // 2)
+        M = cv2.getRotationMatrix2D(center, rotation_angle, 1.0)
+
+        cos = np.abs(M[0, 0])
+        sin = np.abs(M[0, 1])
+        new_w = int((h * sin) + (w * cos))
+        new_h = int((h * cos) + (w * sin))
+
+        M[0, 2] += (new_w / 2) - center[0]
+        M[1, 2] += (new_h / 2) - center[1]
+
+        img = cv2.warpAffine(
+            img, M, (new_w, new_h),
+            flags=cv2.INTER_CUBIC,
+            borderMode=cv2.BORDER_CONSTANT,
+            borderValue=(0, 0, 0, 0)
+        )
+
+    return cv2.cvtColor(img, cv2.COLOR_BGRA2RGBA)
+def load_floating_sticker_clip(
+    sticker_path: str,
+    duration: float,
+    start_time: float,
+    target_width: int = 420,
+    position: tuple = (580, 350),
+    rotation_angle: float = 0.0,
+    feather_radius: int = 15
+):
+    # 1. Load feathered, rotated RGBA image matrix
+    rgba_matrix = create_feathered_rotated_sticker(
+        image_path=sticker_path,
+        target_width=target_width,
+        rotation_angle=rotation_angle,
+        feather_radius=feather_radius
     )
 
-    # Fallback check if path is directly inside BASE_DIR
-    if not os.path.exists(ending_dir):
-        ending_dir = os.path.abspath(os.path.join(BASE_DIR, "ending", "mindscribble"))
+    base_x, base_y = float(position[0]), float(position[1])
+
+    # 2. Dynamic Zoom-In & Zoom-Out on the full RGBA array together
+    def make_frame(t):
+        # Oscillates smoothly between 1.0 (100%) and 1.08 (108%)
+        scale = 1.0 + 0.01 * (1.0 + math.sin(t * 1.5))
+
+        h, w = rgba_matrix.shape[:2]
+        new_w = max(1, int(w * scale))
+        new_h = max(1, int(h * scale))
+
+        # Scale RGB and Alpha simultaneously to prevent boundary clipping/shadows
+        return cv2.resize(rgba_matrix, (new_w, new_h), interpolation=cv2.INTER_LANCZOS4)
+
+    # 3. Construct VideoClip directly from animated RGBA frames
+    full_rgba_clip = VideoClip(make_frame, is_mask=False, duration=duration)
+
+    rgb_clip = full_rgba_clip.image_transform(lambda frame: frame[:, :, :3])
+    alpha_clip = full_rgba_clip.image_transform(
+        lambda frame: (frame[:, :, 3] / 255.0).astype(np.float32)
+    )
+
+    # 4. Attach dynamically animated mask to dynamically animated RGB clip
+    final_sticker_clip = (
+        rgb_clip
+        .with_mask(alpha_clip)
+        .with_position((base_x, base_y))
+        .with_start(start_time)
+        .with_duration(duration)
+    )
+
+    return final_sticker_clip
+
+def generate_segment_sticker_overlays(
+    stickers_list: list,
+    segment_start_time: float,
+    segment_duration: float,
+    stickers_dir: str = DEFAULT_STICKERS_DIR,
+    sound_effects_list: list = None,
+    pop_sound_path: str = DEFAULT_POP_SFX
+) -> list:
+    """Generates independent sticker overlay clips for a given timeline segment."""
+    if not stickers_list:
+        return []
+
+    generated_stickers = []
+    total_stickers = len(stickers_list)
+
+    STICKER_WIDTH_SINGLE = 650
+    STICKER_WIDTH_MULTI = 500
+    TOP_Y_POS = 300
+
+    for idx, item in enumerate(stickers_list):
+        filename = item.get("file")
+        delay = float(item.get("delay", 0.0))
+        abs_start_time = segment_start_time + delay
+
+        if total_stickers == 1:
+            scale = STICKER_WIDTH_SINGLE
+            side = random.choice(["left", "right"])
+            pos_x = 50 if side == "left" else (1080 - scale - 50)
+            assigned_angle = 15.0 if side == "left" else -15.0
+            pos_y = TOP_Y_POS
+        elif total_stickers == 2:
+            scale = STICKER_WIDTH_MULTI
+            margin = 130  
+            pos_x = margin if idx == 0 else (1080 - scale - margin)
+            assigned_angle = 8.0 if idx == 0 else -8.0
+            pos_y = TOP_Y_POS
+        else:
+            scale = STICKER_WIDTH_MULTI
+            spacing = (1080 - (scale * total_stickers)) // (total_stickers + 1)
+            pos_x = max(20, spacing + idx * (scale + spacing))
+            pos_y = TOP_Y_POS
+            assigned_angle = 8.0 if idx == 0 else (-8.0 if idx == 1 else 0.0)
+
+        position = (pos_x, pos_y)
+        sticker_path = os.path.join(stickers_dir, filename)
+
+        if not os.path.exists(sticker_path) or delay >= segment_duration:
+            print(f"[!] Sticker missing or offset beyond segment duration: {sticker_path}")
+            continue
+
+        sticker_duration = max(0.1, segment_duration - delay)
+
+        try:
+            sticker_clip = load_floating_sticker_clip(
+                sticker_path=sticker_path,
+                target_width=scale,
+                duration=sticker_duration,
+                start_time=abs_start_time,
+                position=position,
+                rotation_angle=assigned_angle,
+                feather_radius=15
+            )
+
+            generated_stickers.append(sticker_clip)
+
+            if sound_effects_list is not None and pop_sound_path and os.path.exists(pop_sound_path):
+                sfx_clip = AudioFileClip(pop_sound_path).with_start(abs_start_time)
+                sound_effects_list.append(sfx_clip)
+
+            print(f"    [+] Top-Level Sticker Prepared: {filename} | Global Start: {abs_start_time:.2f}s | Dur: {sticker_duration:.2f}s")
+        except Exception as e:
+            print(f"[!] Failed to prepare sticker {filename}: {e}")
+
+    return generated_stickers
+
+
+def get_random_outro_video() -> str:
+    ending_dir = resolve_project_path("ending", "mindscribble")
 
     if not os.path.exists(ending_dir):
         print(f"[!] Warning: Ending directory not found at: {ending_dir}")
@@ -125,10 +302,13 @@ def get_random_outro_video() -> str:
     print(f"[+] Selected Outro Video: {os.path.basename(selected_outro)}")
     return selected_outro
 
+
 def process_script_item(
     script_data: dict,
-    assets_dir: str,
-    audio_dir: str,
+    assets_dir: str = DEFAULT_ASSETS_DIR,
+    audio_dir: str = None,
+    stickers_dir: str = DEFAULT_STICKERS_DIR,
+    pop_sound_path: str = DEFAULT_POP_SFX,
     output_dir: str = "output",
     transition_type: str = "zoom_dissolve",
     transition_duration: float = 0.6,
@@ -147,28 +327,34 @@ def process_script_item(
     if not script_title or not timeline:
         raise ValueError("Script object must contain 'script_title' and 'timeline'.")
 
+    if audio_dir is None:
+        audio_dir = resolve_project_path("mindscribble_podcaster", "voiceovers")
+
     os.makedirs(output_dir, exist_ok=True)
 
     audio_path = find_audio_file(audio_dir, script_title)
-    audio_clip = AudioFileClip(audio_path)
-    audio_duration = audio_clip.duration
+    main_audio = AudioFileClip(audio_path)
+    audio_duration = main_audio.duration
     print(f"[+] Audio loaded: {os.path.basename(audio_path)} ({audio_duration:.2f}s)")
 
     print("[+] Calculating timeline timestamps directly from audio...")
     timeline = align_timeline_with_audio(audio_path, timeline)
 
     media_clips = []
+    all_sticker_clips = []
+    sound_effects = [main_audio]
     background = None
     caption_overlay = None
     credit_clip = None
 
     try:
         num_segments = len(timeline)
-        
+
         for idx, segment in enumerate(timeline):
             folder_name = segment.get("folder")
             start_time = segment.get("start", 0.0)
-            
+            stickers_list = segment.get("stickers", [])
+
             if idx < num_segments - 1:
                 next_start = timeline[idx + 1].get("start", audio_duration)
                 base_duration = next_start - start_time
@@ -192,8 +378,9 @@ def process_script_item(
             file_path = sorted(media_files)[0]
             ext = os.path.splitext(file_path)[1].lower()
 
-            print(f"\nProcessing Segment {idx + 1}/{num_segments}: {folder_name} (Target Dur: {clip_duration:.2f}s)")
+            print(f"\nProcessing Segment {idx + 1}/{num_segments}: {folder_name} (Base Dur: {base_duration:.2f}s)")
 
+            # 1. Prepare Base Video/Image (NO STICKERS ATTACHED YET)
             if ext == ".mp4":
                 try:
                     source_video = VideoFileClip(file_path, audio=False)
@@ -208,10 +395,22 @@ def process_script_item(
 
             media_clip = normalize_media_dimensions(media_clip, target_w=1080, target_h=1920)
             media_clip = media_clip.with_duration(clip_duration)
-
             media_clips.append(media_clip)
 
-        print("\n[+] Building transition timeline...")
+            # 2. Extract Top-Level Sticker Overlays
+            if stickers_list:
+                stickers_for_segment = generate_segment_sticker_overlays(
+                    stickers_list=stickers_list,
+                    segment_start_time=start_time,
+                    segment_duration=base_duration,
+                    stickers_dir=stickers_dir,
+                    sound_effects_list=sound_effects,
+                    pop_sound_path=pop_sound_path
+                )
+                all_sticker_clips.extend(stickers_for_segment)
+
+        # 3. Render Background Transitions
+        print("\n[+] Building background transition timeline...")
         background = build_transitioned_timeline(
             media_clips,
             transition_type=transition_type,
@@ -221,30 +420,37 @@ def process_script_item(
         )
         background = background.with_duration(audio_duration)
 
+        # 4. Generate Caption Overlay
         print("[+] Generating Whisper caption overlay...")
         caption_overlay = generate_caption_overlay(
             audio_path,
             config=caption_config
         )
 
-        
+        # 5. Composite Final Layer Stack: Background -> Stickers -> Captions
+        print(f"[+] Compositing Final Stack: Background + {len(all_sticker_clips)} Top-Level Sticker(s) + Caption Overlay")
+        final_video_layers = [background] + all_sticker_clips + [caption_overlay]
+
+        final_audio = CompositeAudioClip(sound_effects)
+
         final_video = (
-             CompositeVideoClip(
-        [background, caption_overlay],
-        size=(1080, 1920),
-        bg_color=(0, 0, 0)  # Explicit black background ensures clips render properly
-        )
-           .with_audio(audio_clip)
+            CompositeVideoClip(
+                final_video_layers,
+                size=(1080, 1920),
+                bg_color=(0, 0, 0)
+            )
+            .with_audio(final_audio)
             .with_duration(audio_duration)
         )
 
+        # 6. Append Credit / Outro Video
         credit_video_path = get_random_outro_video()
         if credit_video_path and os.path.exists(credit_video_path):
             try:
                 print(f"[+] Appending Outro Video: {os.path.basename(credit_video_path)}")
                 credit_clip = VideoFileClip(credit_video_path)
                 credit_clip = normalize_media_dimensions(credit_clip, target_w=1080, target_h=1920)
-                
+
                 final_video = concatenate_videoclips(
                     [final_video, credit_clip],
                     method="compose"
@@ -270,8 +476,8 @@ def process_script_item(
         return output_filepath
 
     finally:
-        if 'audio_clip' in locals() and audio_clip is not None:
-            audio_clip.close()
+        if 'main_audio' in locals() and main_audio is not None:
+            main_audio.close()
         if background is not None:
             background.close()
         if caption_overlay is not None:
@@ -281,29 +487,40 @@ def process_script_item(
         for m in media_clips:
             if m is not None:
                 m.close()
+        for s in all_sticker_clips:
+            if s is not None:
+                s.close()
 
 
 if __name__ == "__main__":
     sample_script = {
-        "id": 1,
-        "script_title": "Testing File",
-        "total_segments": 3,
+        "id": 4,
+        "script_title": "Testing Decoy",
+        "total_segments": 10,
         "posted": False,
         "timeline": [
             {
                 "segment_id": 1,
                 "folder": "16_podcaster_hoody",
-                "text": "Procrastination is almost never about laziness—it is an emotional regulation problem."
+                "text": "Companies use an asymmetric choice model to manipulate your brain into spending more money.",
+                "stickers": [
+                    { "file": "money_trap.png", "delay": 0.2 }
+                ]
             },
             {
                 "segment_id": 2,
-                "folder": "04_anxiety_overwhelm",
-                "text": "When you avoid starting a project, your brain isn't rejecting the work; it’s rejecting the fear of failure attached to it."
+                "folder": "09_traps_and_mazes",
+                "text": "It’s called the Decoy Effect, and it triggers an automatic flaw in human value judgment.",
+                "stickers": []
             },
             {
                 "segment_id": 3,
-                "folder": "01_brain_anatomy",
-                "text": "Your amygdala perceives creative uncertainty as an immediate physical threat,"
+                "folder": "08_time_mechanisms",
+                "text": "When offered a small option for three dollars and a large for seven, most people choose the small.",
+                "stickers": [
+                    { "file": "popcorn_small.png", "delay": 0.3 },
+                    { "file": "popcorn_large.png", "delay": 1.5 }
+                ]
             }
         ]
     }
@@ -312,6 +529,7 @@ if __name__ == "__main__":
         script_data=sample_script,
         assets_dir=r"D:\AI\Automate-Video-Generator\asset_library",
         audio_dir=r"D:\AI\Automate-Video-Generator\mindscribble_podcaster\voiceovers",
+        stickers_dir=r"D:\AI\Automate-Video-Generator\stickers",
         output_dir=r"D:\AI\Automate-Video-Generator\mindscribble_podcaster",
         transition_type="zoom_dissolve",
         transition_duration=0.6,
