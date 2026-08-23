@@ -156,8 +156,6 @@ def create_feathered_rotated_sticker(
         )
 
     return cv2.cvtColor(img, cv2.COLOR_BGRA2RGBA)
-
-
 def load_floating_sticker_clip(
     sticker_path: str,
     duration: float,
@@ -167,6 +165,7 @@ def load_floating_sticker_clip(
     rotation_angle: float = 0.0,
     feather_radius: int = 15
 ):
+    # 1. Load feathered, rotated RGBA image matrix
     rgba_matrix = create_feathered_rotated_sticker(
         image_path=sticker_path,
         target_width=target_width,
@@ -174,49 +173,21 @@ def load_floating_sticker_clip(
         feather_radius=feather_radius
     )
 
-    h_img, w_img, _ = rgba_matrix.shape
+    base_x, base_y = float(position[0]), float(position[1])
 
-    filename = Path(sticker_path).stem.lower()
-    is_left = "left" in filename
-    is_right = "right" in filename
-
-    if is_left:
-        start_x = -w_img * 0.10
-        end_x = 20.0
-    elif is_right:
-        start_x = 1080.0 - w_img * 0.90
-        end_x = 1080.0 - w_img - 20.0
-    else:
-        start_x = float(position[0])
-        end_x = float(position[0])
-
-    pos_y = float(position[1])
-
+    # 2. Dynamic Zoom-In & Zoom-Out on the full RGBA array together
     def make_frame(t):
-        progress = min(1.0, t / duration) if duration > 0 else 1.0
-        smooth = 1.0 - (1.0 - progress) ** 2
+        # Oscillates smoothly between 1.0 (100%) and 1.08 (108%)
+        scale = 1.0 + 0.01 * (1.0 + math.sin(t * 1.5))
 
-        scale = 1.0 + 0.05 * progress
-        cur_w = max(1, int(w_img * scale))
-        cur_h = max(1, int(h_img * scale))
+        h, w = rgba_matrix.shape[:2]
+        new_w = max(1, int(w * scale))
+        new_h = max(1, int(h * scale))
 
-        resized_rgba = cv2.resize(rgba_matrix, (cur_w, cur_h), interpolation=cv2.INTER_LANCZOS4)
-        canvas = np.zeros((1920, 1080, 4), dtype=np.uint8)
+        # Scale RGB and Alpha simultaneously to prevent boundary clipping/shadows
+        return cv2.resize(rgba_matrix, (new_w, new_h), interpolation=cv2.INTER_LANCZOS4)
 
-        x_pos = int(start_x + (end_x - start_x) * smooth)
-        y_pos = int(pos_y)
-
-        x1, x2 = max(0, x_pos), min(1080, x_pos + cur_w)
-        y1, y2 = max(0, y_pos), min(1920, y_pos + cur_h)
-
-        sx1, sx2 = max(0, -x_pos), max(0, -x_pos) + (x2 - x1)
-        sy1, sy2 = max(0, -y_pos), max(0, -y_pos) + (y2 - y1)
-
-        if x2 > x1 and y2 > y1:
-            canvas[y1:y2, x1:x2] = resized_rgba[sy1:sy2, sx1:sx2]
-
-        return canvas
-
+    # 3. Construct VideoClip directly from animated RGBA frames
     full_rgba_clip = VideoClip(make_frame, is_mask=False, duration=duration)
 
     rgb_clip = full_rgba_clip.image_transform(lambda frame: frame[:, :, :3])
@@ -224,16 +195,16 @@ def load_floating_sticker_clip(
         lambda frame: (frame[:, :, 3] / 255.0).astype(np.float32)
     )
 
+    # 4. Attach dynamically animated mask to dynamically animated RGB clip
     final_sticker_clip = (
         rgb_clip
-        .with_mask(ImageClip(alpha_clip.get_frame(0), is_mask=True))
+        .with_mask(alpha_clip)
+        .with_position((base_x, base_y))
         .with_start(start_time)
         .with_duration(duration)
-        .with_position((0, 0))
     )
 
     return final_sticker_clip
-
 
 def generate_segment_sticker_overlays(
     stickers_list: list,
@@ -253,7 +224,7 @@ def generate_segment_sticker_overlays(
     STICKER_WIDTH_SINGLE = 650
     STICKER_WIDTH_MULTI = 500
     TOP_Y_POS = 300
-    
+
     for idx, item in enumerate(stickers_list):
         filename = item.get("file")
         delay = float(item.get("delay", 0.0))
@@ -262,21 +233,21 @@ def generate_segment_sticker_overlays(
         if total_stickers == 1:
             scale = STICKER_WIDTH_SINGLE
             side = random.choice(["left", "right"])
-            pos_x = 80 if side == "left" else (1080 - scale - 80)
-            assigned_angle = -4.0 if side == "left" else 4.0
+            pos_x = 50 if side == "left" else (1080 - scale - 50)
+            assigned_angle = 15.0 if side == "left" else -15.0
             pos_y = TOP_Y_POS
-
         elif total_stickers == 2:
             scale = STICKER_WIDTH_MULTI
-            pos_x = 60 if idx == 0 else (1080 - scale - 60)
-            assigned_angle = -4.0 if idx == 0 else 4.0
+            margin = 130  
+            pos_x = margin if idx == 0 else (1080 - scale - margin)
+            assigned_angle = 8.0 if idx == 0 else -8.0
             pos_y = TOP_Y_POS
         else:
             scale = STICKER_WIDTH_MULTI
             spacing = (1080 - (scale * total_stickers)) // (total_stickers + 1)
             pos_x = max(20, spacing + idx * (scale + spacing))
             pos_y = TOP_Y_POS
-            assigned_angle = -4.0 if idx == 0 else (4.0 if idx == 1 else 0.0)
+            assigned_angle = 8.0 if idx == 0 else (-8.0 if idx == 1 else 0.0)
 
         position = (pos_x, pos_y)
         sticker_path = os.path.join(stickers_dir, filename)
@@ -533,7 +504,7 @@ if __name__ == "__main__":
                 "folder": "16_podcaster_hoody",
                 "text": "Companies use an asymmetric choice model to manipulate your brain into spending more money.",
                 "stickers": [
-                    { "file": "money_trap__transparent.png", "delay": 0.9 }
+                    { "file": "money_trap.png", "delay": 0.2 }
                 ]
             },
             {

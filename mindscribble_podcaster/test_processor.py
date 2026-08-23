@@ -504,7 +504,7 @@ if __name__ == "__main__":
                 "folder": "16_podcaster_hoody",
                 "text": "Companies use an asymmetric choice model to manipulate your brain into spending more money.",
                 "stickers": [
-                    { "file": "money_trap__transparent.png", "delay": 0.2 }
+                    { "file": "money_trap.png", "delay": 0.2 }
                 ]
             },
             {
