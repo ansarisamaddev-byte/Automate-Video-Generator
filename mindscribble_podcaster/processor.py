@@ -14,7 +14,7 @@ import cv2
 import numpy as np
 
 from moviepy.audio.io.AudioFileClip import AudioFileClip
-from moviepy.audio.AudioClip import CompositeAudioClip
+from moviepy.audio.AudioClip import CompositeAudioClip, concatenate_audioclips
 from moviepy.video.VideoClip import ImageClip, VideoClip
 from moviepy.video.io.VideoFileClip import VideoFileClip
 from moviepy.video.compositing.CompositeVideoClip import CompositeVideoClip
@@ -41,6 +41,7 @@ def resolve_project_path(*path_parts: str) -> str:
 DEFAULT_POP_SFX = resolve_project_path("audio", "sound_effect", "dragon-pop.mp3")
 DEFAULT_STICKERS_DIR = resolve_project_path("stickers")
 DEFAULT_ASSETS_DIR = resolve_project_path("asset_library")
+DEFAULT_BGM_DIR = resolve_project_path("background_music", "mindscribble")
 
 
 def sanitize_filename(name: str) -> str:
@@ -61,6 +62,28 @@ def find_audio_file(audio_dir: str, target_title: str) -> str:
                 return os.path.join(audio_dir, file)
 
     raise FileNotFoundError(f"Audio file matching '{target_title}' not found in '{audio_dir}'.")
+
+
+def get_random_bgm_file(bgm_dir: str) -> str:
+    if not os.path.exists(bgm_dir):
+        print(f"[!] Warning: BGM directory not found at: {bgm_dir}")
+        return None
+
+    if os.path.isfile(bgm_dir):
+        return bgm_dir
+
+    valid_extensions = ("*.mp3", "*.wav", "*.m4a", "*.aac", "*.ogg", "*.flac")
+    bgm_files = []
+    for ext in valid_extensions:
+        bgm_files.extend(glob.glob(os.path.join(bgm_dir, ext)))
+
+    if not bgm_files:
+        print(f"[!] Warning: No BGM audio files found in: {bgm_dir}")
+        return None
+
+    selected_bgm = random.choice(bgm_files)
+    print(f"[+] Selected Background Music: {os.path.basename(selected_bgm)}")
+    return selected_bgm
 
 
 def normalize_media_dimensions(clip, target_w=1080, target_h=1920):
@@ -156,6 +179,8 @@ def create_feathered_rotated_sticker(
         )
 
     return cv2.cvtColor(img, cv2.COLOR_BGRA2RGBA)
+
+
 def load_floating_sticker_clip(
     sticker_path: str,
     duration: float,
@@ -165,7 +190,6 @@ def load_floating_sticker_clip(
     rotation_angle: float = 0.0,
     feather_radius: int = 15
 ):
-    # 1. Load feathered, rotated RGBA image matrix
     rgba_matrix = create_feathered_rotated_sticker(
         image_path=sticker_path,
         target_width=target_width,
@@ -175,19 +199,15 @@ def load_floating_sticker_clip(
 
     base_x, base_y = float(position[0]), float(position[1])
 
-    # 2. Dynamic Zoom-In & Zoom-Out on the full RGBA array together
     def make_frame(t):
-        # Oscillates smoothly between 1.0 (100%) and 1.08 (108%)
         scale = 1.0 + 0.01 * (1.0 + math.sin(t * 1.5))
 
         h, w = rgba_matrix.shape[:2]
         new_w = max(1, int(w * scale))
         new_h = max(1, int(h * scale))
 
-        # Scale RGB and Alpha simultaneously to prevent boundary clipping/shadows
         return cv2.resize(rgba_matrix, (new_w, new_h), interpolation=cv2.INTER_LANCZOS4)
 
-    # 3. Construct VideoClip directly from animated RGBA frames
     full_rgba_clip = VideoClip(make_frame, is_mask=False, duration=duration)
 
     rgb_clip = full_rgba_clip.image_transform(lambda frame: frame[:, :, :3])
@@ -195,7 +215,6 @@ def load_floating_sticker_clip(
         lambda frame: (frame[:, :, 3] / 255.0).astype(np.float32)
     )
 
-    # 4. Attach dynamically animated mask to dynamically animated RGB clip
     final_sticker_clip = (
         rgb_clip
         .with_mask(alpha_clip)
@@ -206,6 +225,7 @@ def load_floating_sticker_clip(
 
     return final_sticker_clip
 
+
 def generate_segment_sticker_overlays(
     stickers_list: list,
     segment_start_time: float,
@@ -214,7 +234,6 @@ def generate_segment_sticker_overlays(
     sound_effects_list: list = None,
     pop_sound_path: str = DEFAULT_POP_SFX
 ) -> list:
-    """Generates independent sticker overlay clips for a given timeline segment."""
     if not stickers_list:
         return []
 
@@ -309,6 +328,8 @@ def process_script_item(
     audio_dir: str = None,
     stickers_dir: str = DEFAULT_STICKERS_DIR,
     pop_sound_path: str = DEFAULT_POP_SFX,
+    bgm_dir: str = DEFAULT_BGM_DIR,
+    bgm_volume: float = 0.12,
     output_dir: str = "output",
     transition_type: str = "zoom_dissolve",
     transition_duration: float = 0.6,
@@ -343,11 +364,36 @@ def process_script_item(
     media_clips = []
     all_sticker_clips = []
     sound_effects = [main_audio]
+    bgm_clip = None
     background = None
     caption_overlay = None
     credit_clip = None
 
     try:
+        # Load and process background music randomly
+        bgm_file_path = get_random_bgm_file(bgm_dir)
+        if bgm_file_path and os.path.exists(bgm_file_path):
+            try:
+                raw_bgm = AudioFileClip(bgm_file_path)
+                if raw_bgm.duration < audio_duration:
+                    repeats = math.ceil(audio_duration / raw_bgm.duration)
+                    bgm_clip = concatenate_audioclips([raw_bgm] * repeats).subclipped(0, audio_duration)
+                else:
+                    bgm_clip = raw_bgm.subclipped(0, audio_duration)
+
+                # Lower volume so voiceover is prominent
+                try:
+                    bgm_clip = bgm_clip.with_effects([vfx.MultiplyVolume(bgm_volume)])
+                except AttributeError:
+                    bgm_clip = bgm_clip.volumex(bgm_volume)
+
+                sound_effects.append(bgm_clip)
+                print(f"[+] Added Background Music to audio stack (Vol: {bgm_volume})")
+            except Exception as e:
+                print(f"[!] Could not process background music file: {e}")
+        else:
+            print("[!] Warning: No background music added.")
+
         num_segments = len(timeline)
 
         for idx, segment in enumerate(timeline):
@@ -380,7 +426,7 @@ def process_script_item(
 
             print(f"\nProcessing Segment {idx + 1}/{num_segments}: {folder_name} (Base Dur: {base_duration:.2f}s)")
 
-            # 1. Prepare Base Video/Image (NO STICKERS ATTACHED YET)
+            # 1. Prepare Base Video/Image
             if ext == ".mp4":
                 try:
                     source_video = VideoFileClip(file_path, audio=False)
@@ -478,6 +524,8 @@ def process_script_item(
     finally:
         if 'main_audio' in locals() and main_audio is not None:
             main_audio.close()
+        if bgm_clip is not None:
+            bgm_clip.close()
         if background is not None:
             background.close()
         if caption_overlay is not None:
@@ -530,6 +578,8 @@ if __name__ == "__main__":
         assets_dir=r"D:\AI\Automate-Video-Generator\asset_library",
         audio_dir=r"D:\AI\Automate-Video-Generator\mindscribble_podcaster\voiceovers",
         stickers_dir=r"D:\AI\Automate-Video-Generator\stickers",
+        bgm_dir=r"D:\AI\Automate-Video-Generator\background_music\mindscribble",
+        bgm_volume=0.12,
         output_dir=r"D:\AI\Automate-Video-Generator\mindscribble_podcaster",
         transition_type="zoom_dissolve",
         transition_duration=0.6,
