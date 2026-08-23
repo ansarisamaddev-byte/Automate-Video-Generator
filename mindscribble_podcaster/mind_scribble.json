@@ -1,447 +1,601 @@
 [
-  {
-    "id": 1,
-    "script_title": "The Psychology of Silent Rejection",
-    "total_segments": 12,
-    "posted": true,
-    "timeline": [
-      {
-        "segment_id": 1,
-        "folder": "16_podcaster_hoody",
-        "text": "There is a dark psychological reason why waiting for a response hurts more than being told no.",
-        "stickers": [
-          { "file": "unread_notification.png", "delay": 0.8 }
+    {
+        "id": 1,
+        "script_title": "The Psychology of Silent Rejection",
+        "total_segments": 12,
+        "posted": true,
+        "timeline": [
+            {
+                "segment_id": 1,
+                "folder": "16_podcaster_hoody",
+                "text": "There is a dark psychological reason why waiting for a response hurts more than being told no.",
+                "stickers": [
+                    {
+                        "file": "unread_notification.png",
+                        "delay": 0.8
+                    }
+                ]
+            },
+            {
+                "segment_id": 2,
+                "folder": "03_isolation_shadows",
+                "text": "When someone leaves you on read, your brain enters a state called intermittent reinforcement\u2014",
+                "stickers": [
+                    {
+                        "file": "left_on_read.png",
+                        "delay": 0.5
+                    }
+                ]
+            },
+            {
+                "segment_id": 3,
+                "folder": "13_addiction_dopamine",
+                "text": "the exact same mechanism that makes gambling addicting.",
+                "stickers": [
+                    {
+                        "file": "slot_machine.png",
+                        "delay": 0.4
+                    }
+                ]
+            },
+            {
+                "segment_id": 4,
+                "folder": "16_podcaster_hoody",
+                "text": "Without explicit feedback, your mind defaults to threat assessment,",
+                "stickers": []
+            },
+            {
+                "segment_id": 5,
+                "folder": "04_anxiety_overwhelm",
+                "text": "filling the silence with your worst insecurities.",
+                "stickers": [
+                    {
+                        "file": "thought_cloud.png",
+                        "delay": 0.6
+                    }
+                ]
+            },
+            {
+                "segment_id": 6,
+                "folder": "05_internal_conflict",
+                "text": "You start reviewing past conversations, searching for errors that don't exist.",
+                "stickers": [
+                    {
+                        "file": "chat_magnifier.png",
+                        "delay": 0.5
+                    }
+                ]
+            },
+            {
+                "segment_id": 7,
+                "folder": "01_brain_anatomy",
+                "text": "But neurobiology shows that unpredictable responses trigger a massive surge of dopamine followed by an immediate crash,",
+                "stickers": [
+                    {
+                        "file": "dopamine_spike.png",
+                        "delay": 0.7
+                    }
+                ]
+            },
+            {
+                "segment_id": 8,
+                "folder": "02_neural_networks",
+                "text": "forcing your focus into an obsessive loop.",
+                "stickers": [
+                    {
+                        "file": "infinite_loop.png",
+                        "delay": 0.3
+                    }
+                ]
+            },
+            {
+                "segment_id": 9,
+                "folder": "16_podcaster_hoody",
+                "text": "The person ignoring you isn't controlling your thoughts\u2014your brain's fear of uncertainty is.",
+                "stickers": []
+            },
+            {
+                "segment_id": 10,
+                "folder": "07_masks_identity",
+                "text": "The moment you realize that silence isn't a reflection of your worth, but a test of your tolerance for ambiguity,",
+                "stickers": [
+                    {
+                        "file": "mirror_mask.png",
+                        "delay": 0.6
+                    }
+                ]
+            },
+            {
+                "segment_id": 11,
+                "folder": "10_clarity_light",
+                "text": "the loop breaks.",
+                "stickers": [
+                    {
+                        "file": "broken_chain.png",
+                        "delay": 0.2
+                    }
+                ]
+            },
+            {
+                "segment_id": 12,
+                "folder": "16_podcaster_hoody",
+                "text": "Save this for the next time silence starts controlling your mood.",
+                "stickers": [
+                    {
+                        "file": "save_bookmark.png",
+                        "delay": 0.4
+                    }
+                ]
+            }
         ]
-      },
-      {
-        "segment_id": 2,
-        "folder": "03_isolation_shadows",
-        "text": "When someone leaves you on read, your brain enters a state called intermittent reinforcement—",
-        "stickers": [
-          { "file": "left_on_read.png", "delay": 0.5 }
+    },
+    {
+        "id": 2,
+        "script_title": "Why You Procrastinate on Things You Want",
+        "total_segments": 11,
+        "posted": true,
+        "timeline": [
+            {
+                "segment_id": 1,
+                "folder": "16_podcaster_hoody",
+                "text": "Procrastination is almost never about laziness\u2014it is an emotional regulation problem.",
+                "stickers": [
+                    {
+                        "file": "brain_clock.png",
+                        "delay": 0.7
+                    }
+                ],
+                "start": 0.0,
+                "end": 5.46
+            },
+            {
+                "segment_id": 2,
+                "folder": "04_anxiety_overwhelm",
+                "text": "When you avoid starting a project, your brain isn't rejecting the work; it\u2019s rejecting the fear of failure attached to it.",
+                "stickers": [
+                    {
+                        "file": "fear_shield.png",
+                        "delay": 0.6
+                    }
+                ],
+                "start": 5.76,
+                "end": 12.64
+            },
+            {
+                "segment_id": 3,
+                "folder": "01_brain_anatomy",
+                "text": "Your amygdala perceives creative uncertainty as an immediate physical threat,",
+                "stickers": [
+                    {
+                        "file": "amygdala_alert.png",
+                        "delay": 0.5
+                    }
+                ],
+                "start": 13.0,
+                "end": 17.22
+            },
+            {
+                "segment_id": 4,
+                "folder": "13_addiction_dopamine",
+                "text": "hijacking your logical prefrontal cortex and driving you toward cheap dopamine like social media.",
+                "stickers": [
+                    {
+                        "file": "phone_feed.png",
+                        "delay": 0.8
+                    }
+                ],
+                "start": 17.66,
+                "end": 23.06
+            },
+            {
+                "segment_id": 5,
+                "folder": "16_podcaster_hoody",
+                "text": "This creates an instant relief loop that tricks your brain into thinking avoidance is safety.",
+                "stickers": [],
+                "start": 23.44,
+                "end": 28.42
+            },
+            {
+                "segment_id": 6,
+                "folder": "05_internal_conflict",
+                "text": "Every time you walk away, the task feels larger, heavier, and more impossible.",
+                "stickers": [
+                    {
+                        "file": "heavy_stone.png",
+                        "delay": 0.4
+                    }
+                ],
+                "start": 28.42,
+                "end": 33.82
+            },
+            {
+                "segment_id": 7,
+                "folder": "08_time_mechanisms",
+                "text": "The antidote is lowering the activation energy using the two-minute rule.",
+                "stickers": [
+                    {
+                        "file": "timer_2min.png",
+                        "delay": 0.5
+                    }
+                ],
+                "start": 34.34,
+                "end": 38.16
+            },
+            {
+                "segment_id": 8,
+                "folder": "16_podcaster_hoody",
+                "text": "Commit to working on it for just one hundred and twenty seconds\u2014no expectations, no perfection.",
+                "stickers": [],
+                "start": 38.72,
+                "end": 44.12
+            },
+            {
+                "segment_id": 9,
+                "folder": "02_neural_networks",
+                "text": "Once momentum kicks in, neurological friction drops and focus takes over automatically.",
+                "stickers": [
+                    {
+                        "file": "synapse_spark.png",
+                        "delay": 0.6
+                    }
+                ],
+                "start": 44.86,
+                "end": 50.1
+            },
+            {
+                "segment_id": 10,
+                "folder": "11_building_action",
+                "text": "Stop waiting for motivation. Action creates clarity; waiting creates paralysis.",
+                "stickers": [
+                    {
+                        "file": "action_arrow.png",
+                        "delay": 0.3
+                    }
+                ],
+                "start": 50.76,
+                "end": 55.8
+            },
+            {
+                "segment_id": 11,
+                "folder": "16_podcaster_hoody",
+                "text": "Save this video for the next time you feel stuck.",
+                "stickers": [
+                    {
+                        "file": "save_bookmark.png",
+                        "delay": 0.4
+                    }
+                ],
+                "start": 55.8,
+                "end": 59.0
+            }
         ]
-      },
-      {
-        "segment_id": 3,
-        "folder": "13_addiction_dopamine",
-        "text": "the exact same mechanism that makes gambling addicting.",
-        "stickers": [
-          { "file": "slot_machine.png", "delay": 0.4 }
+    },
+    {
+        "id": 3,
+        "script_title": "The Spotlight Effect Trap",
+        "total_segments": 10,
+        "posted": false,
+        "timeline": [
+            {
+                "segment_id": 1,
+                "folder": "16_podcaster_hoody",
+                "text": "You are judging yourself ten times harsher than anyone else in the room ever will.",
+                "stickers": [
+                    {
+                        "file": "harsh_judgment.png",
+                        "delay": 0.8
+                    }
+                ]
+            },
+            {
+                "segment_id": 2,
+                "folder": "06_social_crowds",
+                "text": "Social psychologists call this the Spotlight Effect\u2014a cognitive bias where you overestimate how much people notice your appearance or mistakes.",
+                "stickers": [
+                    {
+                        "file": "stage_spotlight.png",
+                        "delay": 0.5
+                    }
+                ]
+            },
+            {
+                "segment_id": 3,
+                "folder": "14_memory_and_past",
+                "text": "You remember every awkward word you spoke today, assuming others are replaying it too.",
+                "stickers": [
+                    {
+                        "file": "tape_replay.png",
+                        "delay": 0.6
+                    }
+                ]
+            },
+            {
+                "segment_id": 4,
+                "folder": "16_podcaster_hoody",
+                "text": "In reality? Everyone around you is trapped in their own spotlight, worrying about how they come across to you.",
+                "stickers": []
+            },
+            {
+                "segment_id": 5,
+                "folder": "03_isolation_shadows",
+                "text": "Your brain treats social judgment like a survival threat, making minor blunders feel catastrophic.",
+                "stickers": [
+                    {
+                        "file": "danger_sign.png",
+                        "delay": 0.5
+                    }
+                ]
+            },
+            {
+                "segment_id": 6,
+                "folder": "07_masks_identity",
+                "text": "When you realize you are barely a background extra in someone else\u2019s movie, the weight disappears.",
+                "stickers": [
+                    {
+                        "file": "movie_clapper.png",
+                        "delay": 0.4
+                    }
+                ]
+            },
+            {
+                "segment_id": 7,
+                "folder": "16_podcaster_hoody",
+                "text": "People aren't watching your every move. They're too busy managing their own insecurities.",
+                "stickers": []
+            },
+            {
+                "segment_id": 8,
+                "folder": "10_clarity_light",
+                "text": "The moment you stop seeking external validation, social anxiety loses its power.",
+                "stickers": [
+                    {
+                        "file": "light_shield.png",
+                        "delay": 0.6
+                    }
+                ]
+            },
+            {
+                "segment_id": 9,
+                "folder": "15_ego_and_power",
+                "text": "Step into the room like you don't need anyone's approval, and watch the dynamic shift.",
+                "stickers": [
+                    {
+                        "file": "crown_icon.png",
+                        "delay": 0.4
+                    }
+                ]
+            },
+            {
+                "segment_id": 10,
+                "folder": "16_podcaster_hoody",
+                "text": "Share this with someone who overthinks every social situation.",
+                "stickers": [
+                    {
+                        "file": "share_arrow.png",
+                        "delay": 0.3
+                    }
+                ]
+            }
         ]
-      },
-      {
-        "segment_id": 4,
-        "folder": "16_podcaster_hoody",
-        "text": "Without explicit feedback, your mind defaults to threat assessment,",
-        "stickers": []
-      },
-      {
-        "segment_id": 5,
-        "folder": "04_anxiety_overwhelm",
-        "text": "filling the silence with your worst insecurities.",
-        "stickers": [
-          { "file": "thought_cloud.png", "delay": 0.6 }
+    },
+    {
+        "id": 4,
+        "script_title": "Dark Psychology of the Decoy Effect",
+        "total_segments": 10,
+        "posted": true,
+        "timeline": [
+            {
+                "segment_id": 1,
+                "folder": "16_podcaster_hoody",
+                "text": "Companies use an asymmetric choice model to manipulate your brain into spending more money.",
+                "stickers": [
+                    {
+                        "file": "money_trap__transparent.png",
+                        "delay": 0.9
+                    }
+                ]
+            },
+            {
+                "segment_id": 2,
+                "folder": "09_traps_and_mazes",
+                "text": "It\u2019s called the Decoy Effect, and it triggers an automatic flaw in human value judgment.",
+                "stickers": []
+            },
+            {
+                "segment_id": 3,
+                "folder": "08_time_mechanisms",
+                "text": "When offered a small option for three dollars and a large for seven, most people choose the small.",
+                "stickers": [
+                    {
+                        "file": "popcorn_small.png",
+                        "delay": 0.3
+                    },
+                    {
+                        "file": "popcorn_large.png",
+                        "delay": 1.5
+                    }
+                ]
+            },
+            {
+                "segment_id": 4,
+                "folder": "16_podcaster_hoody",
+                "text": "So marketers introduce a medium option for six dollars and fifty cents\u2014a decoy designed solely to make the large look like a steal.",
+                "stickers": [
+                    {
+                        "file": "popcorn_medium_decoy.png",
+                        "delay": 0.6
+                    }
+                ]
+            },
+            {
+                "segment_id": 5,
+                "folder": "01_brain_anatomy",
+                "text": "Your brain hates evaluating items in isolation, so it looks for shortcut comparisons.",
+                "stickers": [
+                    {
+                        "file": "brain_shortcut.png",
+                        "delay": 0.5
+                    }
+                ]
+            },
+            {
+                "segment_id": 6,
+                "folder": "02_neural_networks",
+                "text": "The decoy creates a cognitive illusion of high value, overriding rational calculation.",
+                "stickers": [
+                    {
+                        "file": "illusion_grid.png",
+                        "delay": 0.4
+                    }
+                ]
+            },
+            {
+                "segment_id": 7,
+                "folder": "16_podcaster_hoody",
+                "text": "You think you made a smart financial decision, but you were engineered to spend seven dollars all along.",
+                "stickers": []
+            },
+            {
+                "segment_id": 8,
+                "folder": "12_dark_textures",
+                "text": "This exact psychological vulnerability is exploited in subscriptions, pricing tiers, and political campaigns.",
+                "stickers": [
+                    {
+                        "file": "tier_list.png",
+                        "delay": 0.7
+                    }
+                ]
+            },
+            {
+                "segment_id": 9,
+                "folder": "10_clarity_light",
+                "text": "Recognizing the third option breaks the illusion immediately.",
+                "stickers": [
+                    {
+                        "file": "eye_open.png",
+                        "delay": 0.3
+                    }
+                ]
+            },
+            {
+                "segment_id": 10,
+                "folder": "16_podcaster_hoody",
+                "text": "Save this to protect yourself from cognitive marketing traps.",
+                "stickers": [
+                    {
+                        "file": "save_bookmark.png",
+                        "delay": 0.4
+                    }
+                ]
+            }
         ]
-      },
-      {
-        "segment_id": 6,
-        "folder": "05_internal_conflict",
-        "text": "You start reviewing past conversations, searching for errors that don't exist.",
-        "stickers": [
-          { "file": "chat_magnifier.png", "delay": 0.5 }
+    },
+    {
+        "id": 5,
+        "script_title": "The Power of the Zeigarnik Effect",
+        "total_segments": 10,
+        "posted": false,
+        "timeline": [
+            {
+                "segment_id": 1,
+                "folder": "16_podcaster_hoody",
+                "text": "Your brain is physically incapable of forgetting unfinished tasks.",
+                "stickers": [
+                    {
+                        "file": "unfinished_task.png",
+                        "delay": 0.8
+                    }
+                ]
+            },
+            {
+                "segment_id": 2,
+                "folder": "14_memory_and_past",
+                "text": "Discovered by Soviet psychologist Bluma Zeigarnik, this principle shows that incomplete actions create continuous mental tension.",
+                "stickers": [
+                    {
+                        "file": "open_notebook.png",
+                        "delay": 0.6
+                    }
+                ]
+            },
+            {
+                "segment_id": 3,
+                "folder": "04_anxiety_overwhelm",
+                "text": "When you leave a goal open, your mind keeps loop sequences open in working memory, draining cognitive energy.",
+                "stickers": [
+                    {
+                        "file": "battery_drain.png",
+                        "delay": 0.7
+                    }
+                ]
+            },
+            {
+                "segment_id": 4,
+                "folder": "16_podcaster_hoody",
+                "text": "This is why cliffhangers in television shows keep you hooked, and unwritten emails keep you up at night.",
+                "stickers": []
+            },
+            {
+                "segment_id": 5,
+                "folder": "09_traps_and_mazes",
+                "text": "Your brain treats an open loop as an unresolved problem that requires constant focus.",
+                "stickers": [
+                    {
+                        "file": "puzzle_piece.png",
+                        "delay": 0.5
+                    }
+                ]
+            },
+            {
+                "segment_id": 6,
+                "folder": "16_podcaster_hoody",
+                "text": "You can use this hack to overcome extreme procrastination.",
+                "stickers": []
+            },
+            {
+                "segment_id": 7,
+                "folder": "11_building_action",
+                "text": "Start a daunting task for just five minutes and stop mid-sentence or mid-action.",
+                "stickers": [
+                    {
+                        "file": "pause_button.png",
+                        "delay": 0.4
+                    }
+                ]
+            },
+            {
+                "segment_id": 8,
+                "folder": "08_time_mechanisms",
+                "text": "The Zeigarnik Effect will force an uncomfortable urge in your mind to return and finish it.",
+                "stickers": [
+                    {
+                        "file": "turning_gears.png",
+                        "delay": 0.6
+                    }
+                ]
+            },
+            {
+                "segment_id": 9,
+                "folder": "10_clarity_light",
+                "text": "Force the open loop, and let your psychology handle the rest.",
+                "stickers": [
+                    {
+                        "file": "lightbulb_spark.png",
+                        "delay": 0.3
+                    }
+                ]
+            },
+            {
+                "segment_id": 10,
+                "folder": "16_podcaster_hoody",
+                "text": "Save this video to hack your focus whenever you need to lock in.",
+                "stickers": [
+                    {
+                        "file": "save_bookmark.png",
+                        "delay": 0.4
+                    }
+                ]
+            }
         ]
-      },
-      {
-        "segment_id": 7,
-        "folder": "01_brain_anatomy",
-        "text": "But neurobiology shows that unpredictable responses trigger a massive surge of dopamine followed by an immediate crash,",
-        "stickers": [
-          { "file": "dopamine_spike.png", "delay": 0.7 }
-        ]
-      },
-      {
-        "segment_id": 8,
-        "folder": "02_neural_networks",
-        "text": "forcing your focus into an obsessive loop.",
-        "stickers": [
-          { "file": "infinite_loop.png", "delay": 0.3 }
-        ]
-      },
-      {
-        "segment_id": 9,
-        "folder": "16_podcaster_hoody",
-        "text": "The person ignoring you isn't controlling your thoughts—your brain's fear of uncertainty is.",
-        "stickers": []
-      },
-      {
-        "segment_id": 10,
-        "folder": "07_masks_identity",
-        "text": "The moment you realize that silence isn't a reflection of your worth, but a test of your tolerance for ambiguity,",
-        "stickers": [
-          { "file": "mirror_mask.png", "delay": 0.6 }
-        ]
-      },
-      {
-        "segment_id": 11,
-        "folder": "10_clarity_light",
-        "text": "the loop breaks.",
-        "stickers": [
-          { "file": "broken_chain.png", "delay": 0.2 }
-        ]
-      },
-      {
-        "segment_id": 12,
-        "folder": "16_podcaster_hoody",
-        "text": "Save this for the next time silence starts controlling your mood.",
-        "stickers": [
-          { "file": "save_bookmark.png", "delay": 0.4 }
-        ]
-      }
-    ]
-  },
-  {
-    "id": 2,
-    "script_title": "Why You Procrastinate on Things You Want",
-    "total_segments": 11,
-    "posted": false,
-    "timeline": [
-      {
-        "segment_id": 1,
-        "folder": "16_podcaster_hoody",
-        "text": "Procrastination is almost never about laziness—it is an emotional regulation problem.",
-        "stickers": [
-          { "file": "brain_clock.png", "delay": 0.7 }
-        ]
-      },
-      {
-        "segment_id": 2,
-        "folder": "04_anxiety_overwhelm",
-        "text": "When you avoid starting a project, your brain isn't rejecting the work; it’s rejecting the fear of failure attached to it.",
-        "stickers": [
-          { "file": "fear_shield.png", "delay": 0.6 }
-        ]
-      },
-      {
-        "segment_id": 3,
-        "folder": "01_brain_anatomy",
-        "text": "Your amygdala perceives creative uncertainty as an immediate physical threat,",
-        "stickers": [
-          { "file": "amygdala_alert.png", "delay": 0.5 }
-        ]
-      },
-      {
-        "segment_id": 4,
-        "folder": "13_addiction_dopamine",
-        "text": "hijacking your logical prefrontal cortex and driving you toward cheap dopamine like social media.",
-        "stickers": [
-          { "file": "phone_feed.png", "delay": 0.8 }
-        ]
-      },
-      {
-        "segment_id": 5,
-        "folder": "16_podcaster_hoody",
-        "text": "This creates an instant relief loop that tricks your brain into thinking avoidance is safety.",
-        "stickers": []
-      },
-      {
-        "segment_id": 6,
-        "folder": "05_internal_conflict",
-        "text": "Every time you walk away, the task feels larger, heavier, and more impossible.",
-        "stickers": [
-          { "file": "heavy_stone.png", "delay": 0.4 }
-        ]
-      },
-      {
-        "segment_id": 7,
-        "folder": "08_time_mechanisms",
-        "text": "The antidote is lowering the activation energy using the two-minute rule.",
-        "stickers": [
-          { "file": "timer_2min.png", "delay": 0.5 }
-        ]
-      },
-      {
-        "segment_id": 8,
-        "folder": "16_podcaster_hoody",
-        "text": "Commit to working on it for just one hundred and twenty seconds—no expectations, no perfection.",
-        "stickers": []
-      },
-      {
-        "segment_id": 9,
-        "folder": "02_neural_networks",
-        "text": "Once momentum kicks in, neurological friction drops and focus takes over automatically.",
-        "stickers": [
-          { "file": "synapse_spark.png", "delay": 0.6 }
-        ]
-      },
-      {
-        "segment_id": 10,
-        "folder": "11_building_action",
-        "text": "Stop waiting for motivation. Action creates clarity; waiting creates paralysis.",
-        "stickers": [
-          { "file": "action_arrow.png", "delay": 0.3 }
-        ]
-      },
-      {
-        "segment_id": 11,
-        "folder": "16_podcaster_hoody",
-        "text": "Save this video for the next time you feel stuck.",
-        "stickers": [
-          { "file": "save_bookmark.png", "delay": 0.4 }
-        ]
-      }
-    ]
-  },
-  {
-    "id": 3,
-    "script_title": "The Spotlight Effect Trap",
-    "total_segments": 10,
-    "posted": false,
-    "timeline": [
-      {
-        "segment_id": 1,
-        "folder": "16_podcaster_hoody",
-        "text": "You are judging yourself ten times harsher than anyone else in the room ever will.",
-        "stickers": [
-          { "file": "harsh_judgment.png", "delay": 0.8 }
-        ]
-      },
-      {
-        "segment_id": 2,
-        "folder": "06_social_crowds",
-        "text": "Social psychologists call this the Spotlight Effect—a cognitive bias where you overestimate how much people notice your appearance or mistakes.",
-        "stickers": [
-          { "file": "stage_spotlight.png", "delay": 0.5 }
-        ]
-      },
-      {
-        "segment_id": 3,
-        "folder": "14_memory_and_past",
-        "text": "You remember every awkward word you spoke today, assuming others are replaying it too.",
-        "stickers": [
-          { "file": "tape_replay.png", "delay": 0.6 }
-        ]
-      },
-      {
-        "segment_id": 4,
-        "folder": "16_podcaster_hoody",
-        "text": "In reality? Everyone around you is trapped in their own spotlight, worrying about how they come across to you.",
-        "stickers": []
-      },
-      {
-        "segment_id": 5,
-        "folder": "03_isolation_shadows",
-        "text": "Your brain treats social judgment like a survival threat, making minor blunders feel catastrophic.",
-        "stickers": [
-          { "file": "danger_sign.png", "delay": 0.5 }
-        ]
-      },
-      {
-        "segment_id": 6,
-        "folder": "07_masks_identity",
-        "text": "When you realize you are barely a background extra in someone else’s movie, the weight disappears.",
-        "stickers": [
-          { "file": "movie_clapper.png", "delay": 0.4 }
-        ]
-      },
-      {
-        "segment_id": 7,
-        "folder": "16_podcaster_hoody",
-        "text": "People aren't watching your every move. They're too busy managing their own insecurities.",
-        "stickers": []
-      },
-      {
-        "segment_id": 8,
-        "folder": "10_clarity_light",
-        "text": "The moment you stop seeking external validation, social anxiety loses its power.",
-        "stickers": [
-          { "file": "light_shield.png", "delay": 0.6 }
-        ]
-      },
-      {
-        "segment_id": 9,
-        "folder": "15_ego_and_power",
-        "text": "Step into the room like you don't need anyone's approval, and watch the dynamic shift.",
-        "stickers": [
-          { "file": "crown_icon.png", "delay": 0.4 }
-        ]
-      },
-      {
-        "segment_id": 10,
-        "folder": "16_podcaster_hoody",
-        "text": "Share this with someone who overthinks every social situation.",
-        "stickers": [
-          { "file": "share_arrow.png", "delay": 0.3 }
-        ]
-      }
-    ]
-  },
-  {
-    "id": 4,
-    "script_title": "Dark Psychology of the Decoy Effect",
-    "total_segments": 10,
-    "posted": true,
-    "timeline": [
-      {
-        "segment_id": 1,
-        "folder": "16_podcaster_hoody",
-        "text": "Companies use an asymmetric choice model to manipulate your brain into spending more money.",
-        "stickers": [
-          { "file": "money_trap__transparent.png", "delay": 0.9 }
-        ]
-      },
-      {
-        "segment_id": 2,
-        "folder": "09_traps_and_mazes",
-        "text": "It’s called the Decoy Effect, and it triggers an automatic flaw in human value judgment.",
-        "stickers": []
-      },
-      {
-        "segment_id": 3,
-        "folder": "08_time_mechanisms",
-        "text": "When offered a small option for three dollars and a large for seven, most people choose the small.",
-        "stickers": [
-          { "file": "popcorn_small.png", "delay": 0.3 },
-          { "file": "popcorn_large.png", "delay": 1.5 }
-        ]
-      },
-      {
-        "segment_id": 4,
-        "folder": "16_podcaster_hoody",
-        "text": "So marketers introduce a medium option for six dollars and fifty cents—a decoy designed solely to make the large look like a steal.",
-        "stickers": [
-          { "file": "popcorn_medium_decoy.png", "delay": 0.6 }
-        ]
-      },
-      {
-        "segment_id": 5,
-        "folder": "01_brain_anatomy",
-        "text": "Your brain hates evaluating items in isolation, so it looks for shortcut comparisons.",
-        "stickers": [
-          { "file": "brain_shortcut.png", "delay": 0.5 }
-        ]
-      },
-      {
-        "segment_id": 6,
-        "folder": "02_neural_networks",
-        "text": "The decoy creates a cognitive illusion of high value, overriding rational calculation.",
-        "stickers": [
-          { "file": "illusion_grid.png", "delay": 0.4 }
-        ]
-      },
-      {
-        "segment_id": 7,
-        "folder": "16_podcaster_hoody",
-        "text": "You think you made a smart financial decision, but you were engineered to spend seven dollars all along.",
-        "stickers": []
-      },
-      {
-        "segment_id": 8,
-        "folder": "12_dark_textures",
-        "text": "This exact psychological vulnerability is exploited in subscriptions, pricing tiers, and political campaigns.",
-        "stickers": [
-          { "file": "tier_list.png", "delay": 0.7 }
-        ]
-      },
-      {
-        "segment_id": 9,
-        "folder": "10_clarity_light",
-        "text": "Recognizing the third option breaks the illusion immediately.",
-        "stickers": [
-          { "file": "eye_open.png", "delay": 0.3 }
-        ]
-      },
-      {
-        "segment_id": 10,
-        "folder": "16_podcaster_hoody",
-        "text": "Save this to protect yourself from cognitive marketing traps.",
-        "stickers": [
-          { "file": "save_bookmark.png", "delay": 0.4 }
-        ]
-      }
-    ]
-  },
-  {
-    "id": 5,
-    "script_title": "The Power of the Zeigarnik Effect",
-    "total_segments": 10,
-    "posted": false,
-    "timeline": [
-      {
-        "segment_id": 1,
-        "folder": "16_podcaster_hoody",
-        "text": "Your brain is physically incapable of forgetting unfinished tasks.",
-        "stickers": [
-          { "file": "unfinished_task.png", "delay": 0.8 }
-        ]
-      },
-      {
-        "segment_id": 2,
-        "folder": "14_memory_and_past",
-        "text": "Discovered by Soviet psychologist Bluma Zeigarnik, this principle shows that incomplete actions create continuous mental tension.",
-        "stickers": [
-          { "file": "open_notebook.png", "delay": 0.6 }
-        ]
-      },
-      {
-        "segment_id": 3,
-        "folder": "04_anxiety_overwhelm",
-        "text": "When you leave a goal open, your mind keeps loop sequences open in working memory, draining cognitive energy.",
-        "stickers": [
-          { "file": "battery_drain.png", "delay": 0.7 }
-        ]
-      },
-      {
-        "segment_id": 4,
-        "folder": "16_podcaster_hoody",
-        "text": "This is why cliffhangers in television shows keep you hooked, and unwritten emails keep you up at night.",
-        "stickers": []
-      },
-      {
-        "segment_id": 5,
-        "folder": "09_traps_and_mazes",
-        "text": "Your brain treats an open loop as an unresolved problem that requires constant focus.",
-        "stickers": [
-          { "file": "puzzle_piece.png", "delay": 0.5 }
-        ]
-      },
-      {
-        "segment_id": 6,
-        "folder": "16_podcaster_hoody",
-        "text": "You can use this hack to overcome extreme procrastination.",
-        "stickers": []
-      },
-      {
-        "segment_id": 7,
-        "folder": "11_building_action",
-        "text": "Start a daunting task for just five minutes and stop mid-sentence or mid-action.",
-        "stickers": [
-          { "file": "pause_button.png", "delay": 0.4 }
-        ]
-      },
-      {
-        "segment_id": 8,
-        "folder": "08_time_mechanisms",
-        "text": "The Zeigarnik Effect will force an uncomfortable urge in your mind to return and finish it.",
-        "stickers": [
-          { "file": "turning_gears.png", "delay": 0.6 }
-        ]
-      },
-      {
-        "segment_id": 9,
-        "folder": "10_clarity_light",
-        "text": "Force the open loop, and let your psychology handle the rest.",
-        "stickers": [
-          { "file": "lightbulb_spark.png", "delay": 0.3 }
-        ]
-      },
-      {
-        "segment_id": 10,
-        "folder": "16_podcaster_hoody",
-        "text": "Save this video to hack your focus whenever you need to lock in.",
-        "stickers": [
-          { "file": "save_bookmark.png", "delay": 0.4 }
-        ]
-      }
-    ]
-  }
+    }
 ]
