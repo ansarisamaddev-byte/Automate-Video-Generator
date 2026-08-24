@@ -380,7 +380,7 @@
         "id": 5,
         "script_title": "The Power of the Zeigarnik Effect",
         "total_segments": 10,
-        "posted": false,
+        "posted": true,
         "timeline": [
             {
                 "segment_id": 1,
@@ -391,55 +391,73 @@
                         "file": "unfinished_task.png",
                         "delay": 0.8
                     }
-                ]
+                ],
+                "start": 0.0,
+                "end": 3.76
             },
             {
                 "segment_id": 2,
                 "folder": "14_memory_and_past",
                 "text": "Discovered by Soviet psychologist Bluma Zeigarnik, this principle shows that incomplete actions create continuous mental tension.",
-                "stickers": []
+                "stickers": [],
+                "start": 4.3,
+                "end": 11.44
             },
             {
                 "segment_id": 3,
                 "folder": "04_anxiety_overwhelm",
                 "text": "When you leave a goal open, your mind keeps loop sequences open in working memory, draining cognitive energy.",
-                "stickers": []
+                "stickers": [],
+                "start": 11.96,
+                "end": 17.76
             },
             {
                 "segment_id": 4,
                 "folder": "16_podcaster_hoody",
                 "text": "This is why cliffhangers in television shows keep you hooked, and unwritten emails keep you up at night.",
-                "stickers": []
+                "stickers": [],
+                "start": 18.28,
+                "end": 23.44
             },
             {
                 "segment_id": 5,
                 "folder": "09_traps_and_mazes",
                 "text": "Your brain treats an open loop as an unresolved problem that requires constant focus.",
-                "stickers": []
+                "stickers": [],
+                "start": 23.92,
+                "end": 28.58
             },
             {
                 "segment_id": 6,
                 "folder": "16_podcaster_hoody",
                 "text": "You can use this hack to overcome extreme procrastination.",
-                "stickers": []
+                "stickers": [],
+                "start": 28.58,
+                "end": 32.14
             },
             {
                 "segment_id": 7,
                 "folder": "11_building_action",
                 "text": "Start a daunting task for just five minutes and stop mid-sentence or mid-action.",
-                "stickers": []
+                "stickers": [],
+                "start": 32.68,
+                "end": 36.6
             },
             {
                 "segment_id": 8,
                 "folder": "08_time_mechanisms",
                 "text": "The Zeigarnik Effect will force an uncomfortable urge in your mind to return and finish it.",
-                "stickers": []
+                "stickers": [],
+                "start": 37.86,
+                "end": 42.6
             },
             {
                 "segment_id": 9,
                 "folder": "10_clarity_light",
                 "text": "Force the open loop, and let your psychology handle the rest.",
-                "stickers": []
+                "stickers": [],
+                "start": 43.16,
+                "end": 46.12
             },
             {
                 "segment_id": 10,
@@ -450,7 +468,9 @@
                         "file": "save_bookmark.png",
                         "delay": 0.4
                     }
-                ]
+                ],
+                "start": 46.74,
+                "end": 49.94
             }
         ]
     }
