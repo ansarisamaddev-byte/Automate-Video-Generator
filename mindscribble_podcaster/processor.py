@@ -101,31 +101,27 @@ def normalize_media_dimensions(clip, target_w=1080, target_h=1920):
 
     return clip
 
-
 def loop_video_to_duration(source_clip, target_duration, crossfade_duration=0.5):
     if source_clip.duration >= target_duration:
         return source_clip.subclipped(0, target_duration)
 
-    cf_dur = min(crossfade_duration, source_clip.duration / 2.0)
-    effective_unit_duration = source_clip.duration - cf_dur
+    # Alternate between forward and time-reversed versions
+    forward_clip = source_clip
+    reversed_clip = source_clip.with_effects([vfx.TimeMirror()])
 
-    repeats = math.ceil((target_duration - cf_dur) / effective_unit_duration) + 1
+    clips = []
+    accumulated_duration = 0.0
+    i = 0
 
-    looped_clips = []
-    current_start = 0.0
+    while accumulated_duration < target_duration + 1.0:
+        current = forward_clip if i % 2 == 0 else reversed_clip
+        clips.append(current)
+        accumulated_duration += current.duration
+        i += 1
 
-    for i in range(repeats):
-        clip = source_clip.copy()
-        if i > 0 and cf_dur > 0:
-            clip = clip.with_effects([vfx.CrossFadeIn(cf_dur)])
-
-        clip = clip.with_start(current_start)
-        looped_clips.append(clip)
-        current_start += effective_unit_duration
-
-    composite = CompositeVideoClip(looped_clips)
-    return composite.subclipped(0, target_duration)
-
+    # Concatenate seamlessly without harsh jump cuts
+    combined = concatenate_videoclips(clips)
+    return combined.subclipped(0, target_duration)
 
 def create_feathered_rotated_sticker(
     image_path: str,
@@ -421,7 +417,7 @@ def process_script_item(
             if not media_files:
                 raise FileNotFoundError(f"No media files found in: {segment_folder_path}")
 
-            file_path = sorted(media_files)[0]
+            file_path = random.choice(media_files)
             ext = os.path.splitext(file_path)[1].lower()
 
             print(f"\nProcessing Segment {idx + 1}/{num_segments}: {folder_name} (Base Dur: {base_duration:.2f}s)")
