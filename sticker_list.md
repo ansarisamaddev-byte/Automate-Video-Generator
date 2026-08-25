@@ -84,3 +84,30 @@ open_notebook.png: Open spiral notebook or journal vector with empty lined pages
 battery_drain.png: Smartphone battery indicator icon shown in red at 1% capacity.
 
 light_shield.png: Bright, glowing golden or white aura shield vector.
+
+
+
+
+
+
+Emotion & Social Dynamics
+
+social_comparison.png: Split screen of two people or a balancing scale showing one side weighed down.
+
+imposter_mask.png: A smiling face mask being held in front of a sad/stressed silhouette.
+
+rejection_heart.png: Cracking or shielded heart vector for social fear and vulnerability.
+
+Productivity & Habit Loops
+
+domino_effect.png: Row of dominoes falling in sequence to represent compounding habits.
+
+friction_wall.png: Character or arrow hitting a brick wall, symbolizing task initiation friction.
+
+cue_trigger.png: Bullseye or ringing alarm bell to signify habit triggers.
+
+Cognitive & Neurological
+
+focus_target.png: Crosshairs zeroing in on a single point amidst scattered noise.
+
+prefrontal_cortex.png: Highlighted front portion of a brain vector showing logic and executive function.

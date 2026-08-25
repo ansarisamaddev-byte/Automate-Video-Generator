@@ -453,5 +453,601 @@
                 ]
             }
         ]
-    }
+    },
+    {
+    "id": 1,
+    "script_title": "The Memory You Aren't Supposed to Have",
+    "total_segments": 6,
+    "posted": false,
+    "timeline": [
+      {
+        "segment_id": 1,
+        "folder": "16_podcaster_hoody",
+        "text": "Have you ever woken up with a memory that feels completely real, but never actually happened?",
+        "stickers": [
+          {
+            "file": "real_memory.png",
+            "delay": 0.8
+          }
+        ]
+      },
+      {
+        "segment_id": 2,
+        "folder": "03_isolation_shadows",
+        "text": "Around 3:00 AM, your brain performs a silent neural reset, locking away real events and clearing noise. But occasionally, a massive glitch occurs. A rogue fragment of a dream gets misfiled directly into your long-term memory bank, blurring the line between your real life and sleep.",
+        "stickers": []
+      },
+      {
+        "segment_id": 3,
+        "folder": "01_brain_anatomy",
+        "text": "That chilling sense of phantom nostalgia isn't random. It’s a leak from your subconscious. Scientists call this REM intrusion—your brain rewires a fabricated event to feel just as vivid as a true childhood memory, loaded with sensory details and emotion.",
+        "stickers": []
+      },
+      {
+        "segment_id": 4,
+        "folder": "04_anxiety_overwhelm",
+        "text": "When you wake up, your conscious mind accepts the lie because the neural pathway is already paved. You aren't just recalling a dream; you’re holding onto a manufactured reality.",
+        "stickers": []
+      },
+      {
+        "segment_id": 5,
+        "folder": "10_clarity_light",
+        "text": "What is one memory you have that feels terrifyingly real, even though you know it never happened?",
+        "stickers": []
+      },
+      {
+        "segment_id": 6,
+        "folder": "16_podcaster_hoody",
+        "text": "Drop it in the comments.",
+        "stickers": [
+          {
+            "file": "comment_bubble.png",
+            "delay": 0.3
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": 2,
+    "script_title": "The Observer Effect in Your Room",
+    "total_segments": 6,
+    "posted": false,
+    "timeline": [
+      {
+        "segment_id": 1,
+        "folder": "16_podcaster_hoody",
+        "text": "Have you ever felt the sudden, prickling sensation that you’re being watched, even when you’re completely alone?",
+        "stickers": [
+          {
+            "file": "watching_eye.png",
+            "delay": 0.8
+          }
+        ]
+      },
+      {
+        "segment_id": 2,
+        "folder": "09_traps_and_mazes",
+        "text": "It’s not just paranoia; it’s a deeply wired survival mechanism called gaze detection. Your visual cortex processes subtle cues in your environment faster than your conscious mind can catch up. But here’s the unsettling part: evolutionary biologists realized our brain’s threat network is purposely calibrated to trigger false alarms rather than miss a real predator.",
+        "stickers": []
+      },
+      {
+        "segment_id": 3,
+        "folder": "04_anxiety_overwhelm",
+        "text": "When you get that sudden chill in a dark room, your nervous system has detected a micro-change in light, motion, or acoustics that your conscious mind missed. Your brain intentionally creates the perception of a phantom observer to force you into high alert.",
+        "stickers": []
+      },
+      {
+        "segment_id": 4,
+        "folder": "05_internal_conflict",
+        "text": "Essentially, your body reacts to a threat before you even see it, convincing you someone is there long before your eyes confirm the room is empty.",
+        "stickers": []
+      },
+      {
+        "segment_id": 5,
+        "folder": "10_clarity_light",
+        "text": "Have you ever felt an unseen presence that made your hair stand up?",
+        "stickers": []
+      },
+      {
+        "segment_id": 6,
+        "folder": "16_podcaster_hoody",
+        "text": "Tell me what happened in the comments—did you ever figure out what triggered it?",
+        "stickers": [
+          {
+            "file": "comment_bubble.png",
+            "delay": 0.3
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": 3,
+    "script_title": "The Phantom Vibration Syndrome",
+    "total_segments": 6,
+    "posted": false,
+    "timeline": [
+      {
+        "segment_id": 1,
+        "folder": "16_podcaster_hoody",
+        "text": "Have you ever felt your phone vibrate in your pocket, reached down to check it, and realized there was no notification at all?",
+        "stickers": [
+          {
+            "file": "phone_vibrate.png",
+            "delay": 0.8
+          }
+        ]
+      },
+      {
+        "segment_id": 2,
+        "folder": "13_addiction_dopamine",
+        "text": "This isn't an issue with your phone; it’s a biological hack of your nervous system known as phantom vibration syndrome. Neuroscientists discovered that modern technology has literally rewired our brains. Because we constantly anticipate incoming alerts, our cerebral cortex mistakes minor muscle twitches, clothing friction, or skin movements for physical phone vibrations.",
+        "stickers": []
+      },
+      {
+        "segment_id": 3,
+        "folder": "01_brain_anatomy",
+        "text": "Your brain becomes so desperate for a dopamine hit from a message that it misinterprets basic biological noise as a digital signal. It creates a physical hallucination to force you to check your screen.",
+        "stickers": []
+      },
+      {
+        "segment_id": 4,
+        "folder": "08_time_mechanisms",
+        "text": "Your nervous system is effectively lying to you, manufacturing a physical sensation that never occurred just to satisfy a psychological craving.",
+        "stickers": []
+      },
+      {
+        "segment_id": 5,
+        "folder": "10_clarity_light",
+        "text": "How many times a day do you check your phone for a notification that wasn't there?",
+        "stickers": []
+      },
+      {
+        "segment_id": 6,
+        "folder": "16_podcaster_hoody",
+        "text": "Drop your honest number in the comments below.",
+        "stickers": [
+          {
+            "file": "comment_bubble.png",
+            "delay": 0.3
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": 4,
+    "script_title": "The Call of the Void",
+    "total_segments": 6,
+    "posted": false,
+    "timeline": [
+      {
+        "segment_id": 1,
+        "folder": "16_podcaster_hoody",
+        "text": "Have you ever stood on a high ledge or a bridge and had a sudden, terrifying urge to jump, even though you have no desire to die?",
+        "stickers": [
+          {
+            "file": "high_ledge.png",
+            "delay": 0.8
+          }
+        ]
+      },
+      {
+        "segment_id": 2,
+        "folder": "09_traps_and_mazes",
+        "text": "Psychologists call this l’appel du vide, or the Call of the Void. For decades, it was mistaken for a dark subconscious urge, but cognitive studies reveal it is actually a massive signal processing error in your brain’s safety protocol.",
+        "stickers": []
+      },
+      {
+        "segment_id": 3,
+        "folder": "04_anxiety_overwhelm",
+        "text": "When you stand near a drop, your rapid survival instinct detects danger and screams at you to back up instantly. However, your slower, conscious mind processes that high-speed physical reflex half a second late. To make sense of why you panicked so violently, your brain accidentally misinterprets its own survival reflex as a secret desire to leap.",
+        "stickers": []
+      },
+      {
+        "segment_id": 4,
+        "folder": "01_brain_anatomy",
+        "text": "Your mind literally invents a suicidal impulse just to explain a sudden surge of self-preservation adrenaline.",
+        "stickers": []
+      },
+      {
+        "segment_id": 5,
+        "folder": "10_clarity_light",
+        "text": "Have you ever felt the Call of the Void on a cliff or high balcony?",
+        "stickers": []
+      },
+      {
+        "segment_id": 6,
+        "folder": "16_podcaster_hoody",
+        "text": "Describe the exact moment it hit you in the comments.",
+        "stickers": [
+          {
+            "file": "comment_bubble.png",
+            "delay": 0.3
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": 5,
+    "script_title": "The Capgras Delusion",
+    "total_segments": 6,
+    "posted": false,
+    "timeline": [
+      {
+        "segment_id": 1,
+        "folder": "16_podcaster_hoody",
+        "text": "What if one day you looked at your closest family member and became utterly convinced they had been replaced by a duplicate?",
+        "stickers": [
+          {
+            "file": "duplicate_glitch.png",
+            "delay": 0.8
+          }
+        ]
+      },
+      {
+        "segment_id": 2,
+        "folder": "03_isolation_shadows",
+        "text": "This isn't sci-fi; it’s a real neurological glitch known as the Capgras delusion. It occurs when the neural pathway connecting your visual recognition center to your emotional response system is severed. You can clearly see and recognize the person's face, but your brain fails to generate the warmth or familiarity you usually feel when looking at them.",
+        "stickers": []
+      },
+      {
+        "segment_id": 3,
+        "folder": "04_anxiety_overwhelm",
+        "text": "Because the emotional connection is missing, your logical brain panics and invents a terrifying explanation to bridge the gap: this person looks identical to your loved one, but they must be an imposter.",
+        "stickers": []
+      },
+      {
+        "segment_id": 4,
+        "folder": "12_dark_textures",
+        "text": "Your mind chooses to believe a massive conspiracy theory rather than accept that its internal emotional wiring failed for a split second.",
+        "stickers": []
+      },
+      {
+        "segment_id": 5,
+        "folder": "10_clarity_light",
+        "text": "If everyone in your life suddenly felt like an imposter, who is the first person you would suspect?",
+        "stickers": []
+      },
+      {
+        "segment_id": 6,
+        "folder": "16_podcaster_hoody",
+        "text": "Let me know in the comments.",
+        "stickers": [
+          {
+            "file": "comment_bubble.png",
+            "delay": 0.3
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": 6,
+    "script_title": "The Dead Time Phenomenon",
+    "total_segments": 6,
+    "posted": false,
+    "timeline": [
+      {
+        "segment_id": 1,
+        "folder": "16_podcaster_hoody",
+        "text": "Have you ever stared at a clock and noticed the second hand seems to freeze in place for way longer than a single second?",
+        "stickers": [
+          {
+            "file": "frozen_clock.png",
+            "delay": 0.8
+          }
+        ]
+      },
+      {
+        "segment_id": 2,
+        "folder": "08_time_mechanisms",
+        "text": "This eerie pause is an actual illusion created by your visual system, called chronostasis. Whenever you dart your eyes quickly from one object to another, your brain experiences a brief gap in visual input while your eyes are in motion. To prevent your vision from becoming a blurry mess, your brain does something unbelievable.",
+        "stickers": []
+      },
+      {
+        "segment_id": 3,
+        "folder": "01_brain_anatomy",
+        "text": "It retroactively erases the time your eyes spent moving and replaces that dead airtime with the image of whatever you looked at next—the clock face.",
+        "stickers": []
+      },
+      {
+        "segment_id": 4,
+        "folder": "02_neural_networks",
+        "text": "Your brain literally rewinds your perception of time, editing the immediate past so your reality feels continuous, making that first second feel impossibly stretched out.",
+        "stickers": []
+      },
+      {
+        "segment_id": 5,
+        "folder": "10_clarity_light",
+        "text": "Have you ever caught time standing still on a clock or watch?",
+        "stickers": []
+      },
+      {
+        "segment_id": 6,
+        "folder": "16_podcaster_hoody",
+        "text": "Share the weirdest moment where time felt broken for you in the comments.",
+        "stickers": [
+          {
+            "file": "comment_bubble.png",
+            "delay": 0.3
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": 7,
+    "script_title": "The Jamais Vu Glitch",
+    "total_segments": 6,
+    "posted": false,
+    "timeline": [
+      {
+        "segment_id": 1,
+        "folder": "16_podcaster_hoody",
+        "text": "Have you ever looked at a word you’ve written a thousand times, or walked into your own living room, and suddenly felt it was totally alien?",
+        "stickers": [
+          {
+            "file": "alien_word.png",
+            "delay": 0.8
+          }
+        ]
+      },
+      {
+        "segment_id": 2,
+        "folder": "14_memory_and_past",
+        "text": "You know déjà vu, but this is its terrifying counterpart: jamais vu. It happens when your brain successfully retrieves a piece of familiar information, but the neural network responsible for assigning the sensation of \"familiarity\" fails to fire.",
+        "stickers": []
+      },
+      {
+        "segment_id": 3,
+        "folder": "04_anxiety_overwhelm",
+        "text": "You recognize the object or location logically, but the emotional recognition tag is completely missing. For a brief, terrifying moment, your home feels like an elaborate set, or a simple word looks like ancient gibberish. Your brain loses the ability to recognize something you’ve known your entire life, treating your reality like a complete mystery.",
+        "stickers": []
+      },
+      {
+        "segment_id": 4,
+        "folder": "01_brain_anatomy",
+        "text": "It proves that your sense of home and comfort isn't based on facts, but on a delicate chemical signal.",
+        "stickers": []
+      },
+      {
+        "segment_id": 5,
+        "folder": "10_clarity_light",
+        "text": "Have you ever experienced jamais vu in your own home or with a common word?",
+        "stickers": []
+      },
+      {
+        "segment_id": 6,
+        "folder": "16_podcaster_hoody",
+        "text": "Tell us what triggered it in the comments.",
+        "stickers": [
+          {
+            "file": "comment_bubble.png",
+            "delay": 0.3
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": 8,
+    "script_title": "The Third Person Memory Bias",
+    "total_segments": 6,
+    "posted": false,
+    "timeline": [
+      {
+        "segment_id": 1,
+        "folder": "16_podcaster_hoody",
+        "text": "Think back to a vivid memory from your childhood. Are you seeing it through your own eyes, or are you watching yourself like a movie camera?",
+        "stickers": [
+          {
+            "file": "movie_camera.png",
+            "delay": 0.8
+          }
+        ]
+      },
+      {
+        "segment_id": 2,
+        "folder": "14_memory_and_past",
+        "text": "If you see yourself in the scene, that memory is partially fake. Neuroscientists have proven that human visual memory does not record like a video camera. Every single time you recall an event, your brain actively reconstructs it from scratch, pulling raw facts while filling in missing visual gaps with your current perspective.",
+        "stickers": []
+      },
+      {
+        "segment_id": 3,
+        "folder": "07_masks_identity",
+        "text": "When you remember an old memory from a third-person angle, your brain has edited the scene over years, literally fabricating a view of yourself that you could never have physically witnessed at the time.",
+        "stickers": []
+      },
+      {
+        "segment_id": 4,
+        "folder": "01_brain_anatomy",
+        "text": "You aren't actually remembering the past; you are remembering the last time you thought about it, slowly altering the truth until it becomes a movie.",
+        "stickers": []
+      },
+      {
+        "segment_id": 5,
+        "folder": "10_clarity_light",
+        "text": "Go test this right now: do you see your childhood memories in first person or third person?",
+        "stickers": []
+      },
+      {
+        "segment_id": 6,
+        "folder": "16_podcaster_hoody",
+        "text": "Drop your answer in the comments.",
+        "stickers": [
+          {
+            "file": "comment_bubble.png",
+            "delay": 0.3
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": 9,
+    "script_title": "The Satiation Erasure",
+    "total_segments": 6,
+    "posted": false,
+    "timeline": [
+      {
+        "segment_id": 1,
+        "folder": "16_podcaster_hoody",
+        "text": "If you repeat any single word out loud for thirty seconds straight, it suddenly loses all meaning and transforms into random, useless noise.",
+        "stickers": [
+          {
+            "file": "repeating_word.png",
+            "delay": 0.8
+          }
+        ]
+      },
+      {
+        "segment_id": 2,
+        "folder": "02_neural_networks",
+        "text": "This phenomenon is known as semantic satiation. It happens because your brain is an hyper-efficient machine designed to conserve energy. When a specific neural pathway is stimulated repeatedly by the same auditory signal, the neurons become temporarily fatigued and stop firing with full intensity.",
+        "stickers": []
+      },
+      {
+        "segment_id": 3,
+        "folder": "01_brain_anatomy",
+        "text": "Your brain literally mutes the meaning behind the word to save energy, reducing complex language to meaningless vocal vibrations.",
+        "stickers": []
+      },
+      {
+        "segment_id": 4,
+        "folder": "12_dark_textures",
+        "text": "It reveals how fragile our grasp on communication really is: the concepts that define your entire life are held together by tiny electrical impulses that wear out in seconds under repetitive stress.",
+        "stickers": []
+      },
+      {
+        "segment_id": 5,
+        "folder": "10_clarity_light",
+        "text": "Pick a word, repeat it continuously out loud right now,",
+        "stickers": []
+      },
+      {
+        "segment_id": 6,
+        "folder": "16_podcaster_hoody",
+        "text": "and tell me in the comments how many seconds it took before it turned into nonsense.",
+        "stickers": [
+          {
+            "file": "comment_bubble.png",
+            "delay": 0.3
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": 10,
+    "script_title": "The Phantom Limb of the Brain",
+    "total_segments": 6,
+    "posted": false,
+    "timeline": [
+      {
+        "segment_id": 1,
+        "folder": "16_podcaster_hoody",
+        "text": "Have you ever sworn you left an item in a specific spot, only to find it somewhere completely impossible, making you question your sanity?",
+        "stickers": [
+          {
+            "file": "lost_item.png",
+            "delay": 0.8
+          }
+        ]
+      },
+      {
+        "segment_id": 2,
+        "folder": "14_memory_and_past",
+        "text": "This isn't simple forgetfulness; it's a phenomenon linked to motor memory automation. When you perform routine daily actions, your brain runs automatic subroutines to save processing power. It guides your physical body through the movements without recording the event into your conscious short-term memory bank.",
+        "stickers": []
+      },
+      {
+        "segment_id": 3,
+        "folder": "04_anxiety_overwhelm",
+        "text": "When you go looking for the object later, your brain searches for a conscious memory that was never created. To resolve the logical conflict, your mind builds a plausible visual hallucination of where the item should be, convincing you that reality shifted.",
+        "stickers": []
+      },
+      {
+        "symbol_id": 4,
+        "segment_id": 4,
+        "folder": "01_brain_anatomy",
+        "text": "Your brain invents a false history of where you put something down just to cover up its own background automation errors.",
+        "stickers": []
+      },
+      {
+        "segment_id": 5,
+        "folder": "10_clarity_light",
+        "text": "What is the most impossible place you’ve ever found an item you lost?",
+        "stickers": []
+      },
+      {
+        "segment_id": 6,
+        "folder": "16_podcaster_hoody",
+        "text": "Share your glitch story in the comments below.",
+        "stickers": [
+          {
+            "file": "comment_bubble.png",
+            "delay": 0.3
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": 11,
+    "script_title": "The Time-Compression Paradox",
+    "total_segments": 6,
+    "posted": false,
+    "timeline": [
+      {
+        "segment_id": 1,
+        "folder": "16_podcaster_hoody",
+        "text": "Why did summer breaks feel like an eternity when you were ten years old, but now entire years seem to vanish in the blink of an eye?",
+        "stickers": [
+          {
+            "file": "hourglass.png",
+            "delay": 0.8
+          }
+        ]
+      },
+      {
+        "segment_id": 2,
+        "folder": "08_time_mechanisms",
+        "text": "This terrifying acceleration of time is called the time-compression paradox. Neuroscientists explain that our perception of time is directly measured by the amount of new sensory information our brain processes. As a child, almost every experience is novel, forcing your brain to create dense, detailed neural networks that stretch your perception of time.",
+        "stickers": []
+      },
+      {
+        "segment_id": 3,
+        "folder": "02_neural_networks",
+        "text": "As an adult, routine dominates. Your brain operates on autopilot, batching familiar experiences together and skipping the creation of detailed memory checkpoints.",
+        "stickers": []
+      },
+      {
+        "segment_id": 4,
+        "folder": "12_dark_textures",
+        "text": "When you look back, your brain has stripped away the repetitive days, compressing months into a single, terrifyingly brief memory blur that makes your life feel like it's speeding up.",
+        "stickers": []
+      },
+      {
+        "segment_id": 5,
+        "folder": "10_clarity_light",
+        "text": "When was the exact moment you realized time was moving way faster than it used to?",
+        "stickers": []
+      },
+      {
+        "segment_id": 6,
+        "folder": "16_podcaster_hoody",
+        "text": "Drop your age and experience in the comments.",
+        "stickers": [
+          {
+            "file": "comment_bubble.png",
+            "delay": 0.3
+          }
+        ]
+      }
+    ]
+  }
+    
 ]
