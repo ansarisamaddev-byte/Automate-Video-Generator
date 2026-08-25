@@ -111,3 +111,25 @@ Cognitive & Neurological
 focus_target.png: Crosshairs zeroing in on a single point amidst scattered noise.
 
 prefrontal_cortex.png: Highlighted front portion of a brain vector showing logic and executive function.
+
+-------------------
+
+real_memory.png (Script 1) - Visual icon representing a glitching or shadowy brain memory.
+
+phone_vibrate.png (Script 3) - Smartphone with motion lines/vibration waves.
+
+high_ledge.png (Script 4) - Silhouette of a person standing on a high precipice or cliff.
+
+duplicate_glitch.png (Script 5) - Distorted or split portrait overlay representing an imposter/Capgras effect.
+
+frozen_clock.png (Script 6) - Analog clock with a fractured or locked second hand.
+
+alien_word.png (Script 7) - Jumbled text or a glowing question mark over a written word (Jamais Vu).
+
+movie_camera.png (Script 8) - Vintage camera angle icon looking down on a scene (Third-Person Bias).
+
+repeating_word.png (Script 9) - Text loop icon representing semantic satiation.
+
+lost_item.png (Script 10) - Question mark or floating key/object symbol for misplaced items.
+
+hourglass.png (Script 11) - Melting or fast-moving hourglass representing time compression.
