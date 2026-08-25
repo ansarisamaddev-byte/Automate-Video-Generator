@@ -135,3 +135,11 @@ repeating_word.png (Script 9) - Text loop icon representing semantic satiation.
 lost_item.png (Script 10) - Question mark or floating key/object symbol for misplaced items.
 
 hourglass.png (Script 11) - Melting or fast-moving hourglass representing time compression.
+
+
+dead_sign.png
+sensation.png
+friends.png
+alien.png
+head_noise.png
+question_mark.png
