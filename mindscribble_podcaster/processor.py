@@ -176,7 +176,6 @@ def create_feathered_rotated_sticker(
 
     return cv2.cvtColor(img, cv2.COLOR_BGRA2RGBA)
 
-
 def load_floating_sticker_clip(
     sticker_path: str,
     duration: float,
@@ -194,15 +193,51 @@ def load_floating_sticker_clip(
     )
 
     base_x, base_y = float(position[0]), float(position[1])
+    orig_h, orig_w = rgba_matrix.shape[:2]
 
     def make_frame(t):
-        scale = 1.0 + 0.01 * (1.0 + math.sin(t * 1.5))
+        # Pop-in animation: grows from scale 0.0 to 1.0 within the first 0.25 seconds
+        pop_duration = 0.25
+        if t < pop_duration:
+            progress = t / pop_duration
+            pop_scale = 1.2 * progress - 0.2 * (progress ** 2)  # slight overshoot pop
+            pop_scale = max(0.0, min(1.0, pop_scale))
+        else:
+            pop_scale = 1.0
 
-        h, w = rgba_matrix.shape[:2]
-        new_w = max(1, int(w * scale))
-        new_h = max(1, int(h * scale))
+        # Subtle floating breathing effect after it pops in
+        breathing = 1.0 + 0.015 * (1.0 + math.sin(t * 2.0))
+        scale = pop_scale * breathing
 
-        return cv2.resize(rgba_matrix, (new_w, new_h), interpolation=cv2.INTER_LANCZOS4)
+        # Always maintain a consistent canvas layout size
+        canvas = np.zeros((orig_h, orig_w, 4), dtype=np.uint8)
+        if scale <= 0.02:
+            return canvas
+
+        new_w = max(2, int(orig_w * scale))
+        new_h = max(2, int(orig_h * scale))
+
+        resized = cv2.resize(rgba_matrix, (new_w, new_h), interpolation=cv2.INTER_LANCZOS4)
+
+        # Center alignment calculations
+        off_x = (orig_w - new_w) // 2
+        off_y = (orig_h - new_h) // 2
+
+        # Safe boundaries mapping to prevent any broadcasting or slicing out-of-bounds error
+        s_y1 = max(0, -off_y)
+        s_y2 = min(new_h, orig_h - off_y)
+        s_x1 = max(0, -off_x)
+        s_x2 = min(new_w, orig_w - off_x)
+
+        t_y1 = max(0, off_y)
+        t_y2 = min(orig_h, off_y + new_h)
+        t_x1 = max(0, off_x)
+        t_x2 = min(orig_w, off_x + new_w)
+
+        if t_y2 > t_y1 and t_x2 > t_x1:
+            canvas[t_y1:t_y2, t_x1:t_x2] = resized[s_y1:s_y2, s_x1:s_x2]
+
+        return canvas
 
     full_rgba_clip = VideoClip(make_frame, is_mask=False, duration=duration)
 
@@ -220,7 +255,6 @@ def load_floating_sticker_clip(
     )
 
     return final_sticker_clip
-
 
 def generate_segment_sticker_overlays(
     stickers_list: list,
@@ -247,9 +281,9 @@ def generate_segment_sticker_overlays(
 
         if total_stickers == 1:
             scale = STICKER_WIDTH_SINGLE
-            side = random.choice(["left", "right"])
-            pos_x = 50 if side == "left" else (1080 - scale - 50)
-            assigned_angle = 15.0 if side == "left" else -15.0
+            # Center the single sticker horizontally (Canvas width is 1080)
+            pos_x = (1080 - scale) // 2
+            assigned_angle = 0.0
             pos_y = TOP_Y_POS
         elif total_stickers == 2:
             scale = STICKER_WIDTH_MULTI
@@ -295,7 +329,6 @@ def generate_segment_sticker_overlays(
             print(f"[!] Failed to prepare sticker {filename}: {e}")
 
     return generated_stickers
-
 
 def get_random_outro_video() -> str:
     ending_dir = resolve_project_path("ending", "mindscribble")

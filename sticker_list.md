@@ -96,6 +96,8 @@ social_comparison.png: Split screen of two people or a balancing scale showing o
 
 imposter_mask.png: A smiling face mask being held in front of a sad/stressed silhouette.
 
+
+
 rejection_heart.png: Cracking or shielded heart vector for social fear and vulnerability.
 
 Productivity & Habit Loops
