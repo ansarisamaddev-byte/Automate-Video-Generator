@@ -594,7 +594,7 @@
         "id": 2,
         "script_title": "The Observer Effect in Your Room",
         "total_segments": 12,
-        "posted": false,
+        "posted": true,
         "timeline": [
             {
                 "segment_id": 1,
@@ -609,67 +609,89 @@
                         "file": "eye_open.png",
                         "delay": 1.1
                     }
-                ]
+                ],
+                "start": 0.0,
+                "end": 5.54
             },
             {
                 "segment_id": 2,
                 "folder": "09_traps_and_mazes",
                 "text": "It\u2019s not just paranoia; it\u2019s a deeply wired survival mechanism called gaze detection.",
-                "stickers": []
+                "stickers": [],
+                "start": 5.78,
+                "end": 10.26
             },
             {
                 "segment_id": 3,
                 "folder": "09_traps_and_mazes",
                 "text": "Your visual cortex processes subtle cues in your environment faster than your conscious mind can catch up.",
-                "stickers": []
+                "stickers": [],
+                "start": 10.6,
+                "end": 15.92
             },
             {
                 "segment_id": 4,
                 "folder": "09_traps_and_mazes",
                 "text": "But here\u2019s the unsettling part:",
-                "stickers": []
+                "stickers": [],
+                "start": 16.04,
+                "end": 17.46
             },
             {
                 "segment_id": 5,
                 "folder": "09_traps_and_mazes",
                 "text": "evolutionary biologists realized our brain\u2019s threat network is purposely calibrated to trigger false alarms rather than miss a real predator.",
-                "stickers": []
+                "stickers": [],
+                "start": 18.0,
+                "end": 25.12
             },
             {
                 "segment_id": 6,
                 "folder": "04_anxiety_overwhelm",
                 "text": "When you get that sudden chill in a dark room, your nervous system has detected a micro-change in light, motion,",
-                "stickers": []
+                "stickers": [],
+                "start": 25.44,
+                "end": 31.34
             },
             {
                 "segment_id": 7,
                 "folder": "04_anxiety_overwhelm",
                 "text": "or acoustics that your conscious mind missed.",
-                "stickers": []
+                "stickers": [],
+                "start": 31.58,
+                "end": 33.92
             },
             {
                 "segment_id": 8,
                 "folder": "04_anxiety_overwhelm",
                 "text": "Your brain intentionally creates the perception of a phantom observer to force you into high alert.",
-                "stickers": []
+                "stickers": [],
+                "start": 34.1,
+                "end": 39.34
             },
             {
                 "segment_id": 9,
                 "folder": "05_internal_conflict",
                 "text": "Essentially, your body reacts to a threat before you even see it,",
-                "stickers": []
+                "stickers": [],
+                "start": 39.62,
+                "end": 43.08
             },
             {
                 "segment_id": 10,
                 "folder": "05_internal_conflict",
                 "text": "convincing you someone is there long before your eyes confirm the room is empty.",
-                "stickers": []
+                "stickers": [],
+                "start": 43.18,
+                "end": 47.18
             },
             {
                 "segment_id": 11,
                 "folder": "10_clarity_light",
                 "text": "Have you ever felt an unseen presence that made your hair stand up?",
-                "stickers": []
+                "stickers": [],
+                "start": 47.42,
+                "end": 50.6
             },
             {
                 "segment_id": 12,
@@ -680,7 +702,9 @@
                         "file": "comment_bubble.png",
                         "delay": 0.3
                     }
-                ]
+                ],
+                "start": 50.76,
+                "end": 52.0
             }
         ]
     },
