@@ -8,16 +8,15 @@ from faster_whisper import WhisperModel
 
 # Dynamically set BASE_DIR relative to repository root
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+ROOT_DIR = os.path.dirname(BASE_DIR) 
+FONTS_DIR = os.path.join(ROOT_DIR, "fonts")
 
-# Define font paths dynamically
-# DEFAULT_FONT = os.path.join(BASE_DIR, "fonts", "dejavu-sans-bold.ttf")
-# HIGHLIGHT_FONT = os.path.join(BASE_DIR, "fonts", "MilkyCoffee-X3mWd.otf")
-
-
-# Bold Sample Font 
-DEFAULT_FONT = os.path.join(BASE_DIR, "fonts", "WorldstarRegular.ttf")
-HIGHLIGHT_FONT = os.path.join(BASE_DIR, "fonts", "LemonJellyPersonalUse-dEqR.ttf")
-
+# -------------------------------------------------------------------
+# FONT PATHS (Assigned to distinct files)
+# -------------------------------------------------------------------
+DEFAULT_FONT = os.path.join(FONTS_DIR, "dejavu-sans-bold.ttf")         # Normal body font
+SPECIAL_FONT = os.path.join(FONTS_DIR, "MilkyCoffee-X3mWd.otf")   
+HIGHLIGHT_FONT = os.path.join(FONTS_DIR, "dejavu-sans-bold.ttf")      # Highlighted word font
 
 # Fallback to system fonts if local font files are not found in repo
 if not os.path.exists(DEFAULT_FONT):
@@ -26,18 +25,23 @@ if not os.path.exists(DEFAULT_FONT):
 if not os.path.exists(HIGHLIGHT_FONT):
     HIGHLIGHT_FONT = DEFAULT_FONT
 
+if not os.path.exists(SPECIAL_FONT):
+    SPECIAL_FONT = DEFAULT_FONT
+
 # -------------------------------------------------------------------
 # CONFIGURATIONS
 # -------------------------------------------------------------------
 CONFIG_STYLE_1 = {
-    "style": "card_box",                        # Full line white background box
+    "style": "card_box",                       # Full line white background box
     "font_path": DEFAULT_FONT, 
     "highlight_font_path": HIGHLIGHT_FONT, 
-    "font_size": 52,                            
+    "special_font_path": SPECIAL_FONT,
+    "font_size": 52,                           
+    "special_font_size": 64,
     "text_transform": "uppercase",             # 'uppercase', 'lowercase', 'none'
-    "padding_x": 24,                            
-    "padding_y": 12,                            
-    "line_gap": 8,                              
+    "padding_x": 24,                           
+    "padding_y": 12,                           
+    "line_gap": 8,                             
     "max_words_per_batch": 5,                  
     "max_line_width": 850,                     
     "video_width": 1080,
@@ -54,12 +58,14 @@ CONFIG_STYLE_2 = {
     "style": "active_word_box",                # Floating text + active word orange box
     "font_path": DEFAULT_FONT, 
     "highlight_font_path": HIGHLIGHT_FONT, 
-    "font_size": 56,                            
+    "special_font_path": SPECIAL_FONT,
+    "font_size": 56,                           
+    "special_font_size": 68,
     "text_transform": "lowercase",             
-    "padding_x": 16,                            
-    "padding_y": 8,                             
+    "padding_x": 16,                           
+    "padding_y": 8,                            
     "box_corner_radius": 10,                   
-    "line_gap": 16,                             
+    "line_gap": 16,                            
     "max_words_per_batch": 5,                  
     "max_line_width": 800,                     
     "video_width": 1080,
@@ -72,21 +78,19 @@ CONFIG_STYLE_2 = {
     "special_color": (255, 215, 0, 255)        
 }
 
-# # Update font paths at the top of caption_generator.py
-# DEFAULT_FONT = os.path.join(BASE_DIR, "fonts", "WorldstarRegular.ttf")
-# HIGHLIGHT_FONT = os.path.join(BASE_DIR, "fonts", "WorldstarRegular.ttf")
-
 CONFIG_STYLE_PUNCHY = {
     "style": "active_word_box",                
     "font_path": DEFAULT_FONT, 
     "highlight_font_path": HIGHLIGHT_FONT, 
-    "font_size": 62,                            # Larger font size for the blocky look
-    "text_transform": "uppercase",              # Uppercase makes block fonts hit much harder
-    "padding_x": 18,                            
-    "padding_y": 10,                             
-    "box_corner_radius": 8,                   
-    "line_gap": 16,                             
-    "max_words_per_batch": 3,                   # 3 words max so it flips fast and keeps attention
+    "special_font_path": SPECIAL_FONT,
+    "font_size": 62,                           # Larger font size for the blocky look
+    "special_font_size": 74,
+    "text_transform": "uppercase",             # Uppercase makes block fonts hit much harder
+    "padding_x": 18,                           
+    "padding_y": 10,                            
+    "box_corner_radius": 8,                    
+    "line_gap": 16,                            
+    "max_words_per_batch": 3,                  # 3 words max so it flips fast and keeps attention
     "max_line_width": 850,                     
     "video_width": 1080,
     "video_height": 1920,
@@ -99,30 +103,35 @@ CONFIG_STYLE_PUNCHY = {
 }
 
 CONFIG_SAMPLE_STYLE = {
-    "style": "sample_highlight",                       # Clean outline + colored active word
+    "style": "sample_highlight",
     "font_path": DEFAULT_FONT,
     "highlight_font_path": HIGHLIGHT_FONT,
-    "font_size": 68,                            # Large, clean text size
-    "text_transform": "uppercase",              # Uppercase for high impact
-    "max_words_per_batch": 3,                   # 3 words per frame so it flips rapidly
-    "max_line_width": 900,                     
+    "special_font_path": SPECIAL_FONT,           # Dedicated path for special words
+    "font_size": 60,                           # Normal text size
+    "special_font_size": 90,                   # Larger size for special words
+    "text_transform": "uppercase",
+    "max_words_per_batch": 3,
+    "max_line_width": 620,
     "video_width": 1080,
     "video_height": 1920,
-    "vertical_pos": 0.68,                      
+    "vertical_pos": 0.68,
     
-    "text_color": (255, 255, 255, 255),        # White for normal words
-    "highlight_color": (255, 215, 0, 255),     # Bright gold/yellow for the active spoken word
-    "stroke_width": 5,                         # Thick black outline for readability
-    "stroke_color": (0, 0, 0, 255)             # Black outline color
+    "text_color": (255, 255, 255, 255),
+    "highlight_color": (255, 215, 0, 255),     # Color when active
+    "special_color": (255, 69, 0, 255),        # Color for special words
+    "stroke_width": 5,
+    "stroke_color": (0, 0, 0, 255)
 }
 
 CONFIG_STYLE_STACKED_GRADIENT = {
-    "style": "stacked_gradient",                          # Stacked gradient shadow style
+    "style": "stacked_gradient",                       # Stacked gradient shadow style
     "font_path": DEFAULT_FONT,
     "highlight_font_path": HIGHLIGHT_FONT,
-    "font_size": 72,                            # Large, bold display size
-    "text_transform": "uppercase",              
-    "max_words_per_batch": 4,                   # Keeps a couple of words active to form the stack
+    "special_font_path": SPECIAL_FONT,
+    "font_size": 72,                           # Large, bold display size
+    "special_font_size": 84,
+    "text_transform": "uppercase",             
+    "max_words_per_batch": 4,                  # Keeps a couple of words active to form the stack
     "max_line_width": 700,                     # Narrower width forces natural stacking
     "video_width": 1080,
     "video_height": 1920,
@@ -130,16 +139,55 @@ CONFIG_STYLE_STACKED_GRADIENT = {
     
     "text_color": (255, 255, 255, 255),        
     "highlight_color": (255, 216, 102, 255),   # Warm gold/yellow highlight
+    "special_color": (255, 69, 0, 255),
     "stroke_width": 7,                         # Heavy outline for the 3D pop effect
     "stroke_color": (15, 15, 15, 240)          # Deep dark shadow
 }
 
-SPECIAL_WORDS = {"COMPANIES", "MONEY", "DOLLAR","PROCRASTINATION", "HURTS", "MIND", "PAIN", "PROBLEM"}
+SPECIAL_WORDS = {"COMPANIES", "MONEY", "DOLLAR","PROCRASTINATION", "HURTS", "MIND", "PAIN", "PROBLEM" "MIND",
+    "BRAIN",
+    "MEMORY",
+    "PROCRASTINATION",
+    "DOPAMINE",
+    "ADDICTION",
+    "PAIN",
+    "HURT",
+    "HURTS",
+    "FEAR",
+    "ANXIETY",
+    "STRESS",
+    "SHAME",
+    "GUILT",
+    "REGRET",
+    "DECEPTION",
+    "DECOY",
+    "DISTRACTION",
+    "ATTENTION",
+    "FOCUS",
+    "LONELINESS",
+    "DESIRE",
+    "REWARD",
+    "POWER",
+    "DANGER",
+    "SECRET",
+    "HIDDEN",
+    "TRUTH",
+    "DESTROY"}
+
+def clean_word(word):
+    return re.sub(r'[^\w\s]', '', word).strip().upper()
+
+def format_text(word, transform_type):
+    if transform_type == "uppercase":
+        return word.upper()
+    elif transform_type == "lowercase":
+        return word.lower()
+    return word
 
 # -------------------------------------------------------------------
-# 3. RENDERER ENGINE 3: STROKE HIGHLIGHT (Clean Outline + Colored Active Word)
+# RENDERER ENGINES (Harmonized signatures accepting all 3 fonts)
 # -------------------------------------------------------------------
-def render_style_sample_highlight(lines, config, base_font, special_font, space_w, active_index):
+def render_style_sample_highlight(lines, config, base_font, highlight_font, special_font, space_w, active_index):
     TRANSFORM = config.get("text_transform", "uppercase")
     LINE_GAP = config.get("line_gap", 12)
 
@@ -155,15 +203,15 @@ def render_style_sample_highlight(lines, config, base_font, special_font, space_
             is_active = (item["global_idx"] == active_index)
             is_special = clean_word(raw_w) in SPECIAL_WORDS
             
-            chosen_font = special_font if is_special else base_font
-            
-            # Color selection: Active word gets the punchy highlight color, others are white
-            if is_active:
-                color = config.get("highlight_color", (255, 215, 0, 255)) # Yellow/Gold pop
-            elif is_special:
-                color = config.get("special_color", (255, 100, 0, 255))
+            if is_special:
+                chosen_font = special_font
+                color = config.get("special_color", (255, 69, 0, 255))
+            elif is_active:
+                chosen_font = highlight_font
+                color = config.get("highlight_color", (255, 215, 0, 255))
             else:
-                color = config.get("text_color", (255, 255, 255, 255)) # Clean white
+                chosen_font = base_font
+                color = config.get("text_color", (255, 255, 255, 255))
 
             w_w = chosen_font.getlength(formatted_w) if hasattr(chosen_font, "getlength") else (chosen_font.getbbox(formatted_w)[2] - chosen_font.getbbox(formatted_w)[0])
             bbox = chosen_font.getbbox(formatted_w)
@@ -184,38 +232,37 @@ def render_style_sample_highlight(lines, config, base_font, special_font, space_
     draw = ImageDraw.Draw(img)
 
     curr_y = int(config["video_height"] * config.get("vertical_pos", 0.70)) - (total_card_h // 2)
-
-    stroke_width = config.get("stroke_width", 4)
-    stroke_color = config.get("stroke_color", (0, 0, 0, 255)) # Solid black outline
+    
+    # GUARD: Safely cap stroke width to prevent PIL array allocation crashes on custom fonts
+    raw_stroke = config.get("stroke_width", 0)
+    current_stroke_width = min(raw_stroke, 2) if raw_stroke > 0 else 0
+    stroke_color = config.get("stroke_color", (0, 0, 0, 255))
 
     for ld in line_data:
         text_x = (config["video_width"] - ld["width"]) // 2
         for word, w_w, color, word_font, w_ascent in ld["words"]:
-            draw.text(
-                (text_x, curr_y - w_ascent), 
-                word, 
-                font=word_font, 
-                fill=color,
-                stroke_width=stroke_width,
-                stroke_fill=stroke_color
-            )
+            safe_draw_text(
+                    draw,
+                    (text_x, curr_y - w_ascent),
+                    word,
+                    font=word_font,
+                    fill=color,
+                    fallback_font=base_font,
+                    stroke_width=current_stroke_width,
+                    stroke_fill=stroke_color,
+                )
             text_x += w_w + space_w
 
         curr_y += ld["height"] + LINE_GAP
 
     return np.array(img)
 
-# -------------------------------------------------------------------
-# 3. RENDERER ENGINE 3: STACKED GRADIENT SHADOW (Matches Sample Style)
-# -------------------------------------------------------------------
-def render_style_stacked_gradient(lines, config, base_font, special_font, space_w, active_index):
+def render_style_stacked_gradient(lines, config, base_font, highlight_font, special_font, space_w, active_index):
     TRANSFORM = config.get("text_transform", "uppercase")
-    LINE_GAP = config.get("line_gap", 4) # Tight gap for stacked look
+    LINE_GAP = config.get("line_gap", 4)
 
-    # Restructure lines to force a stacked 1-2 words per line appearance (like the sample)
     stacked_lines = []
     for line_items in lines:
-        # Group words into chunks of max 2 words per line for that stacked reel look
         chunk_size = 2
         for i in range(0, len(line_items), chunk_size):
             stacked_lines.append(line_items[i:i + chunk_size])
@@ -232,12 +279,14 @@ def render_style_stacked_gradient(lines, config, base_font, special_font, space_
             is_active = (item["global_idx"] == active_index)
             is_special = clean_word(raw_w) in SPECIAL_WORDS
             
-            chosen_font = special_font if is_special else base_font
-            
-            # Active/Special words get bright yellow/gold, others get warm white/peach
-            if is_active or is_special:
-                color = config.get("highlight_color", (255, 215, 0, 255)) 
+            if is_special:
+                chosen_font = special_font
+                color = config.get("special_color", (255, 69, 0, 255))
+            elif is_active:
+                chosen_font = highlight_font
+                color = config.get("highlight_color", (255, 215, 0, 255))
             else:
+                chosen_font = base_font
                 color = config.get("text_color", (255, 255, 255, 255))
 
             w_w = chosen_font.getlength(formatted_w) if hasattr(chosen_font, "getlength") else (chosen_font.getbbox(formatted_w)[2] - chosen_font.getbbox(formatted_w)[0])
@@ -255,19 +304,15 @@ def render_style_stacked_gradient(lines, config, base_font, special_font, space_
         line_data.append({"words": words_in_line, "width": total_line_w, "height": max_height})
 
     total_card_h = sum(ld["height"] for ld in line_data) + ((len(line_data) - 1) * LINE_GAP)
-    
-    # Create transparent canvas
     img = Image.new("RGBA", (config["video_width"], config["video_height"]), (0, 0, 0, 0))
     
-    # Optional: Draw a subtle dark gradient box behind the caption area to mimic the darkened background look
     overlay_draw = ImageDraw.Draw(img)
     curr_y = int(config["video_height"] * config.get("vertical_pos", 0.70)) - (total_card_h // 2) - 20
     box_h = total_card_h + 40
     
-    # Draw soft semi-transparent backing gradient/shadow region for contrast
     overlay_draw.rectangle(
         [100, curr_y, config["video_width"] - 100, curr_y + box_h],
-        fill=(0, 0, 0, 90) # Soft dark vignette strip behind text
+        fill=(0, 0, 0, 90)
     )
 
     draw = ImageDraw.Draw(img)
@@ -277,7 +322,6 @@ def render_style_stacked_gradient(lines, config, base_font, special_font, space_
     for ld in line_data:
         text_x = (config["video_width"] - ld["width"]) // 2
         for word, w_w, color, word_font, w_ascent in ld["words"]:
-            # Draw with thick shadow/stroke for that extruded 3D look
             draw.text(
                 (text_x, curr_y - w_ascent), 
                 word, 
@@ -292,10 +336,8 @@ def render_style_stacked_gradient(lines, config, base_font, special_font, space_
 
     return np.array(img)
 
-# -------------------------------------------------------------------
-# 1. RENDERER ENGINE 1: CARD BOX (Full Line Box)
-# -------------------------------------------------------------------
-def render_style_card_box(lines, config, base_font, special_font, space_w, active_index):
+
+def render_style_card_box(lines, config, base_font, highlight_font, special_font, space_w, active_index):
     PAD_X = config.get("padding_x", 24)
     PAD_Y = config.get("padding_y", 12)
     LINE_GAP = config.get("line_gap", 8)
@@ -313,13 +355,14 @@ def render_style_card_box(lines, config, base_font, special_font, space_w, activ
             is_active = (item["global_idx"] == active_index)
             is_special = clean_word(raw_w) in SPECIAL_WORDS
             
-            chosen_font = special_font if is_special else base_font
-            
             if is_special:
+                chosen_font = special_font
                 color = config.get("special_color", (138, 43, 226, 255))
             elif is_active:
+                chosen_font = highlight_font
                 color = config.get("highlight_color", (217, 112, 118, 255))
             else:
+                chosen_font = base_font
                 color = config.get("text_color", (26, 26, 26, 255))
 
             w_w = chosen_font.getlength(formatted_w) if hasattr(chosen_font, "getlength") else (chosen_font.getbbox(formatted_w)[2] - chosen_font.getbbox(formatted_w)[0])
@@ -358,10 +401,8 @@ def render_style_card_box(lines, config, base_font, special_font, space_w, activ
 
     return np.array(img)
 
-# -------------------------------------------------------------------
-# 2. RENDERER ENGINE 2: ACTIVE WORD BOX (Floating text + orange box)
-# -------------------------------------------------------------------
-def render_style_active_word_box(lines, config, base_font, special_font, space_w, active_index):
+
+def render_style_active_word_box(lines, config, base_font, highlight_font, special_font, space_w, active_index):
     PAD_X = config.get("padding_x", 16)
     PAD_Y = config.get("padding_y", 8)
     RADIUS = config.get("box_corner_radius", 10)
@@ -380,20 +421,22 @@ def render_style_active_word_box(lines, config, base_font, special_font, space_w
             is_active = (item["global_idx"] == active_index)
             is_special = clean_word(raw_w) in SPECIAL_WORDS
             
-            chosen_font = special_font if is_special else base_font
+            if is_special:
+                chosen_font = special_font
+                text_color = config.get("special_color", (255, 215, 0, 255))
+            elif is_active:
+                chosen_font = highlight_font
+                text_color = config.get("active_text_color", (255, 255, 255, 255))
+            else:
+                chosen_font = base_font
+                text_color = config.get("text_color", (255, 255, 255, 255))
+
             w_w = chosen_font.getlength(formatted_w) if hasattr(chosen_font, "getlength") else (chosen_font.getbbox(formatted_w)[2] - chosen_font.getbbox(formatted_w)[0])
             bbox = chosen_font.getbbox(formatted_w)
             w_h = bbox[3] - bbox[1]
 
             if w_h > max_height:
                 max_height = w_h
-            
-            if is_active:
-                text_color = config.get("active_text_color", (255, 255, 255, 255))
-            elif is_special:
-                text_color = config.get("special_color", (255, 215, 0, 255))
-            else:
-                text_color = config.get("text_color", (255, 255, 255, 255))
 
             words_in_line.append({
                 "word": formatted_w,
@@ -421,7 +464,6 @@ def render_style_active_word_box(lines, config, base_font, special_font, space_w
         line_h = ld["height"]
         text_x = (config["video_width"] - line_w) // 2
 
-        # Pass 1: Draw Active Box Background (so line layout never twitches)
         temp_x = text_x
         for w_info in ld["words"]:
             w_w = w_info["width"]
@@ -433,7 +475,6 @@ def render_style_active_word_box(lines, config, base_font, special_font, space_w
                 )
             temp_x += w_w + space_w
 
-        # Pass 2: Draw Floating Text
         for w_info in ld["words"]:
             word = w_info["word"]
             w_w = w_info["width"]
@@ -444,18 +485,85 @@ def render_style_active_word_box(lines, config, base_font, special_font, space_w
 
     return np.array(img)
 
-def clean_word(word):
-    return re.sub(r'[^\w\s]', '', word).strip().upper()
+def safe_draw_text(
+    draw,
+    position,
+    text,
+    font,
+    fill,
+    fallback_font=None,
+    stroke_width=0,
+    stroke_fill=None,
+):
+    """
+    Safely render text with custom fonts.
 
-def format_text(word, transform_type):
-    if transform_type == "uppercase":
-        return word.upper()
-    elif transform_type == "lowercase":
-        return word.lower()
-    return word
+    Some custom OTF/TTF fonts contain problematic glyph metrics that
+    can cause Pillow/FreeType to attempt enormous memory allocations.
+    """
 
+    try:
+        draw.text(
+            position,
+            text,
+            font=font,
+            fill=fill,
+            stroke_width=stroke_width,
+            stroke_fill=stroke_fill,
+        )
+        return font
+
+    except (OSError, ValueError) as exc:
+        print(
+            f"[!] Font render failed for word={text!r} "
+            f"font={getattr(font, 'path', 'unknown')}: {exc}"
+        )
+
+        # First fallback: base font
+        if fallback_font is not None and fallback_font is not font:
+            try:
+                draw.text(
+                    position,
+                    text,
+                    font=fallback_font,
+                    fill=fill,
+                    stroke_width=stroke_width,
+                    stroke_fill=stroke_fill,
+                )
+
+                print(
+                    f"    [+] Fallback font used for {text!r}: "
+                    f"{getattr(fallback_font, 'path', 'unknown')}"
+                )
+
+                return fallback_font
+
+            except (OSError, ValueError):
+                pass
+
+        # Final fallback
+        try:
+            default_font = ImageFont.load_default()
+
+            draw.text(
+                position,
+                text,
+                font=default_font,
+                fill=fill,
+                stroke_width=0,
+            )
+
+            print(f"    [+] PIL default font used for {text!r}")
+            return default_font
+
+        except Exception as final_exc:
+            print(
+                f"    [X] Could not render word {text!r}: "
+                f"{final_exc}"
+            )
+            return None
 # -------------------------------------------------------------------
-# 3. REGISTRY ROUTER (ADD FUTURE RENDERERS HERE)
+# REGISTRY ROUTER
 # -------------------------------------------------------------------
 RENDER_REGISTRY = {
     "card_box": render_style_card_box,
@@ -467,7 +575,11 @@ RENDER_REGISTRY = {
 def render_caption_card(word_batch, active_index, config):
     font_path = config.get("font_path")
     highlight_font_path = config.get("highlight_font_path", font_path)
+    special_font_path = config.get("special_font_path", font_path)
+    print(f"Using fonts: base={font_path}, highlight={highlight_font_path}, special={special_font_path}")
     FONT_SIZE = config.get("font_size", 52)
+    HIGHLIGHT_FONT_SIZE = config.get("highlight_font_size", FONT_SIZE)
+    SPECIAL_FONT_SIZE = config.get("special_font_size", FONT_SIZE)
     MAX_LINE_WIDTH = config.get("max_line_width", 850)
 
     try:
@@ -476,13 +588,17 @@ def render_caption_card(word_batch, active_index, config):
         base_font = ImageFont.load_default()
 
     try:
-        special_font = ImageFont.truetype(highlight_font_path, FONT_SIZE)
+        highlight_font = ImageFont.truetype(highlight_font_path, HIGHLIGHT_FONT_SIZE)
+    except Exception:
+        highlight_font = base_font
+
+    try:
+        special_font = ImageFont.truetype(special_font_path, SPECIAL_FONT_SIZE)
     except Exception:
         special_font = base_font
 
     space_w = base_font.getlength(" ") if hasattr(base_font, "getlength") else (base_font.getbbox("a a")[2] - base_font.getbbox("aa")[2])
 
-    # Dynamic line calculation
     lines, current_line, current_line_width = [], [], 0
     for item in word_batch:
         w = item["word"]
@@ -502,14 +618,13 @@ def render_caption_card(word_batch, active_index, config):
     if current_line:
         lines.append(current_line)
 
-    # Dispatch strategy based on "style" key
     style_key = config.get("style", "card_box")
     render_fn = RENDER_REGISTRY.get(style_key, render_style_card_box)
     
-    return render_fn(lines, config, base_font, special_font, space_w, active_index)
+    return render_fn(lines, config, base_font, highlight_font, special_font, space_w, active_index)
 
 # -------------------------------------------------------------------
-# 4. TIMING & MOVIEPY PIPELINE COMPOSITOR
+# TIMING & MOVIEPY PIPELINE COMPOSITOR
 # -------------------------------------------------------------------
 def get_word_timestamps(audio_path, model_size="base"):
     model = WhisperModel(model_size, device="cpu", compute_type="int8")
@@ -529,12 +644,7 @@ def get_word_timestamps(audio_path, model_size="base"):
                     })
     return words_data
 
-
 def align_timeline_with_audio(audio_path: str, timeline: list, model_size: str = "base") -> list:
-    """
-    Compares the first and last word of each timeline segment against 
-    Faster-Whisper word timestamps to determine exact start_time and end_time.
-    """
     words_data = get_word_timestamps(audio_path, model_size=model_size)
     if not words_data:
         return timeline
@@ -553,7 +663,6 @@ def align_timeline_with_audio(audio_path: str, timeline: list, model_size: str =
         start_time = None
         end_time = None
 
-        # 1. Match First Word
         match_first_idx = None
         for i in range(search_cursor, total_words):
             if words_data[i]["clean_word"] == first_word_clean:
@@ -561,12 +670,10 @@ def align_timeline_with_audio(audio_path: str, timeline: list, model_size: str =
                 start_time = words_data[i]["start"]
                 break
 
-        # Fallback if first word wasn't found linearly
         if start_time is None and search_cursor < total_words:
             start_time = words_data[search_cursor]["start"]
             match_first_idx = search_cursor
 
-        # 2. Match Last Word starting from the matched first word
         scan_from = match_first_idx if match_first_idx is not None else search_cursor
         for j in range(scan_from, total_words):
             if words_data[j]["clean_word"] == last_word_clean:
@@ -574,7 +681,6 @@ def align_timeline_with_audio(audio_path: str, timeline: list, model_size: str =
                 search_cursor = j + 1
                 break
 
-        # Fallback if last word couldn't be matched
         if end_time is None:
             expected_word_count = len(raw_words)
             fallback_idx = min(scan_from + expected_word_count - 1, total_words - 1)
@@ -585,7 +691,6 @@ def align_timeline_with_audio(audio_path: str, timeline: list, model_size: str =
         seg["end"] = round(end_time, 2)
 
     return timeline
-
 
 def generate_caption_overlay(audio_path, config=CONFIG_STYLE_1):
     words_data = get_word_timestamps(audio_path)
