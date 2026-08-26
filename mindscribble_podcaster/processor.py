@@ -22,7 +22,10 @@ import moviepy.video.fx as vfx
 from moviepy import concatenate_videoclips
 
 from modules.caption_generator import (
+    CONFIG_SAMPLE_STYLE,
     CONFIG_STYLE_2,
+    CONFIG_STYLE_PUNCHY,
+    CONFIG_STYLE_STACKED_GRADIENT,
     generate_caption_overlay,
     align_timeline_with_audio
 )
@@ -362,7 +365,7 @@ def process_script_item(
     output_dir: str = "output",
     transition_type: str = "zoom_dissolve",
     transition_duration: float = 0.6,
-    caption_config: dict = CONFIG_STYLE_2
+    caption_config: dict = CONFIG_SAMPLE_STYLE
 ) -> str:
     print("==========================================")
     print(" STARTING PRODUCTION PIPELINE")
@@ -612,5 +615,5 @@ if __name__ == "__main__":
         output_dir=r"D:\AI\Automate-Video-Generator\mindscribble_podcaster",
         transition_type="zoom_dissolve",
         transition_duration=0.6,
-        caption_config=CONFIG_STYLE_2
+        caption_config=CONFIG_SAMPLE_STYLE
     )

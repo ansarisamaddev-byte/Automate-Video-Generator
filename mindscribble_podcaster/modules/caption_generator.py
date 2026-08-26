@@ -10,8 +10,14 @@ from faster_whisper import WhisperModel
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 # Define font paths dynamically
-DEFAULT_FONT = os.path.join(BASE_DIR, "fonts", "dejavu-sans-bold.ttf")
-HIGHLIGHT_FONT = os.path.join(BASE_DIR, "fonts", "MilkyCoffee-X3mWd.otf")
+# DEFAULT_FONT = os.path.join(BASE_DIR, "fonts", "dejavu-sans-bold.ttf")
+# HIGHLIGHT_FONT = os.path.join(BASE_DIR, "fonts", "MilkyCoffee-X3mWd.otf")
+
+
+# Bold Sample Font 
+DEFAULT_FONT = os.path.join(BASE_DIR, "fonts", "WorldstarRegular.ttf")
+HIGHLIGHT_FONT = os.path.join(BASE_DIR, "fonts", "LemonJellyPersonalUse-dEqR.ttf")
+
 
 # Fallback to system fonts if local font files are not found in repo
 if not os.path.exists(DEFAULT_FONT):
@@ -66,17 +72,225 @@ CONFIG_STYLE_2 = {
     "special_color": (255, 215, 0, 255)        
 }
 
-SPECIAL_WORDS = {"PROCRASTINATION", "HURTS", "MIND", "PAIN", "PROBLEM"}
+# # Update font paths at the top of caption_generator.py
+# DEFAULT_FONT = os.path.join(BASE_DIR, "fonts", "WorldstarRegular.ttf")
+# HIGHLIGHT_FONT = os.path.join(BASE_DIR, "fonts", "WorldstarRegular.ttf")
 
-def clean_word(word):
-    return re.sub(r'[^\w\s]', '', word).strip().upper()
+CONFIG_STYLE_PUNCHY = {
+    "style": "active_word_box",                
+    "font_path": DEFAULT_FONT, 
+    "highlight_font_path": HIGHLIGHT_FONT, 
+    "font_size": 62,                            # Larger font size for the blocky look
+    "text_transform": "uppercase",              # Uppercase makes block fonts hit much harder
+    "padding_x": 18,                            
+    "padding_y": 10,                             
+    "box_corner_radius": 8,                   
+    "line_gap": 16,                             
+    "max_words_per_batch": 3,                   # 3 words max so it flips fast and keeps attention
+    "max_line_width": 850,                     
+    "video_width": 1080,
+    "video_height": 1920,
+    "vertical_pos": 0.65,                      
+    
+    "text_color": (255, 255, 255, 255),        
+    "active_text_color": (0, 0, 0, 255),       # Dark text inside the active highlight box
+    "active_box_color": (255, 230, 0, 255),    # Vibrant yellow box backdrop for the spoken word
+    "special_color": (255, 69, 0, 255)         # Orange-red pop for special keywords
+}
 
-def format_text(word, transform_type):
-    if transform_type == "uppercase":
-        return word.upper()
-    elif transform_type == "lowercase":
-        return word.lower()
-    return word
+CONFIG_SAMPLE_STYLE = {
+    "style": "sample_highlight",                       # Clean outline + colored active word
+    "font_path": DEFAULT_FONT,
+    "highlight_font_path": HIGHLIGHT_FONT,
+    "font_size": 68,                            # Large, clean text size
+    "text_transform": "uppercase",              # Uppercase for high impact
+    "max_words_per_batch": 3,                   # 3 words per frame so it flips rapidly
+    "max_line_width": 900,                     
+    "video_width": 1080,
+    "video_height": 1920,
+    "vertical_pos": 0.68,                      
+    
+    "text_color": (255, 255, 255, 255),        # White for normal words
+    "highlight_color": (255, 215, 0, 255),     # Bright gold/yellow for the active spoken word
+    "stroke_width": 5,                         # Thick black outline for readability
+    "stroke_color": (0, 0, 0, 255)             # Black outline color
+}
+
+CONFIG_STYLE_STACKED_GRADIENT = {
+    "style": "stacked_gradient",                          # Stacked gradient shadow style
+    "font_path": DEFAULT_FONT,
+    "highlight_font_path": HIGHLIGHT_FONT,
+    "font_size": 72,                            # Large, bold display size
+    "text_transform": "uppercase",              
+    "max_words_per_batch": 4,                   # Keeps a couple of words active to form the stack
+    "max_line_width": 700,                     # Narrower width forces natural stacking
+    "video_width": 1080,
+    "video_height": 1920,
+    "vertical_pos": 0.68,                      
+    
+    "text_color": (255, 255, 255, 255),        
+    "highlight_color": (255, 216, 102, 255),   # Warm gold/yellow highlight
+    "stroke_width": 7,                         # Heavy outline for the 3D pop effect
+    "stroke_color": (15, 15, 15, 240)          # Deep dark shadow
+}
+
+SPECIAL_WORDS = {"COMPANIES", "MONEY", "DOLLAR","PROCRASTINATION", "HURTS", "MIND", "PAIN", "PROBLEM"}
+
+# -------------------------------------------------------------------
+# 3. RENDERER ENGINE 3: STROKE HIGHLIGHT (Clean Outline + Colored Active Word)
+# -------------------------------------------------------------------
+def render_style_sample_highlight(lines, config, base_font, special_font, space_w, active_index):
+    TRANSFORM = config.get("text_transform", "uppercase")
+    LINE_GAP = config.get("line_gap", 12)
+
+    line_data = []
+    for line_items in lines:
+        words_in_line = []
+        total_line_w = 0
+        max_height = 0
+
+        for idx, item in enumerate(line_items):
+            raw_w = item["word"]
+            formatted_w = format_text(raw_w, TRANSFORM)
+            is_active = (item["global_idx"] == active_index)
+            is_special = clean_word(raw_w) in SPECIAL_WORDS
+            
+            chosen_font = special_font if is_special else base_font
+            
+            # Color selection: Active word gets the punchy highlight color, others are white
+            if is_active:
+                color = config.get("highlight_color", (255, 215, 0, 255)) # Yellow/Gold pop
+            elif is_special:
+                color = config.get("special_color", (255, 100, 0, 255))
+            else:
+                color = config.get("text_color", (255, 255, 255, 255)) # Clean white
+
+            w_w = chosen_font.getlength(formatted_w) if hasattr(chosen_font, "getlength") else (chosen_font.getbbox(formatted_w)[2] - chosen_font.getbbox(formatted_w)[0])
+            bbox = chosen_font.getbbox(formatted_w)
+            w_h = bbox[3] - bbox[1]
+
+            if w_h > max_height:
+                max_height = w_h
+            
+            words_in_line.append((formatted_w, w_w, color, chosen_font, bbox[1]))
+            total_line_w += w_w
+            if idx < len(line_items) - 1:
+                total_line_w += space_w
+
+        line_data.append({"words": words_in_line, "width": total_line_w, "height": max_height})
+
+    total_card_h = sum(ld["height"] for ld in line_data) + ((len(line_data) - 1) * LINE_GAP)
+    img = Image.new("RGBA", (config["video_width"], config["video_height"]), (0, 0, 0, 0))
+    draw = ImageDraw.Draw(img)
+
+    curr_y = int(config["video_height"] * config.get("vertical_pos", 0.70)) - (total_card_h // 2)
+
+    stroke_width = config.get("stroke_width", 4)
+    stroke_color = config.get("stroke_color", (0, 0, 0, 255)) # Solid black outline
+
+    for ld in line_data:
+        text_x = (config["video_width"] - ld["width"]) // 2
+        for word, w_w, color, word_font, w_ascent in ld["words"]:
+            draw.text(
+                (text_x, curr_y - w_ascent), 
+                word, 
+                font=word_font, 
+                fill=color,
+                stroke_width=stroke_width,
+                stroke_fill=stroke_color
+            )
+            text_x += w_w + space_w
+
+        curr_y += ld["height"] + LINE_GAP
+
+    return np.array(img)
+
+# -------------------------------------------------------------------
+# 3. RENDERER ENGINE 3: STACKED GRADIENT SHADOW (Matches Sample Style)
+# -------------------------------------------------------------------
+def render_style_stacked_gradient(lines, config, base_font, special_font, space_w, active_index):
+    TRANSFORM = config.get("text_transform", "uppercase")
+    LINE_GAP = config.get("line_gap", 4) # Tight gap for stacked look
+
+    # Restructure lines to force a stacked 1-2 words per line appearance (like the sample)
+    stacked_lines = []
+    for line_items in lines:
+        # Group words into chunks of max 2 words per line for that stacked reel look
+        chunk_size = 2
+        for i in range(0, len(line_items), chunk_size):
+            stacked_lines.append(line_items[i:i + chunk_size])
+
+    line_data = []
+    for line_items in stacked_lines:
+        words_in_line = []
+        total_line_w = 0
+        max_height = 0
+
+        for idx, item in enumerate(line_items):
+            raw_w = item["word"]
+            formatted_w = format_text(raw_w, TRANSFORM)
+            is_active = (item["global_idx"] == active_index)
+            is_special = clean_word(raw_w) in SPECIAL_WORDS
+            
+            chosen_font = special_font if is_special else base_font
+            
+            # Active/Special words get bright yellow/gold, others get warm white/peach
+            if is_active or is_special:
+                color = config.get("highlight_color", (255, 215, 0, 255)) 
+            else:
+                color = config.get("text_color", (255, 255, 255, 255))
+
+            w_w = chosen_font.getlength(formatted_w) if hasattr(chosen_font, "getlength") else (chosen_font.getbbox(formatted_w)[2] - chosen_font.getbbox(formatted_w)[0])
+            bbox = chosen_font.getbbox(formatted_w)
+            w_h = bbox[3] - bbox[1]
+
+            if w_h > max_height:
+                max_height = w_h
+            
+            words_in_line.append((formatted_w, w_w, color, chosen_font, bbox[1]))
+            total_line_w += w_w
+            if idx < len(line_items) - 1:
+                total_line_w += space_w
+
+        line_data.append({"words": words_in_line, "width": total_line_w, "height": max_height})
+
+    total_card_h = sum(ld["height"] for ld in line_data) + ((len(line_data) - 1) * LINE_GAP)
+    
+    # Create transparent canvas
+    img = Image.new("RGBA", (config["video_width"], config["video_height"]), (0, 0, 0, 0))
+    
+    # Optional: Draw a subtle dark gradient box behind the caption area to mimic the darkened background look
+    overlay_draw = ImageDraw.Draw(img)
+    curr_y = int(config["video_height"] * config.get("vertical_pos", 0.70)) - (total_card_h // 2) - 20
+    box_h = total_card_h + 40
+    
+    # Draw soft semi-transparent backing gradient/shadow region for contrast
+    overlay_draw.rectangle(
+        [100, curr_y, config["video_width"] - 100, curr_y + box_h],
+        fill=(0, 0, 0, 90) # Soft dark vignette strip behind text
+    )
+
+    draw = ImageDraw.Draw(img)
+    stroke_width = config.get("stroke_width", 6)
+    stroke_color = config.get("stroke_color", (0, 0, 0, 255))
+
+    for ld in line_data:
+        text_x = (config["video_width"] - ld["width"]) // 2
+        for word, w_w, color, word_font, w_ascent in ld["words"]:
+            # Draw with thick shadow/stroke for that extruded 3D look
+            draw.text(
+                (text_x, curr_y - w_ascent), 
+                word, 
+                font=word_font, 
+                fill=color,
+                stroke_width=stroke_width,
+                stroke_fill=stroke_color
+            )
+            text_x += w_w + space_w
+
+        curr_y += ld["height"] + LINE_GAP
+
+    return np.array(img)
 
 # -------------------------------------------------------------------
 # 1. RENDERER ENGINE 1: CARD BOX (Full Line Box)
@@ -230,12 +444,24 @@ def render_style_active_word_box(lines, config, base_font, special_font, space_w
 
     return np.array(img)
 
+def clean_word(word):
+    return re.sub(r'[^\w\s]', '', word).strip().upper()
+
+def format_text(word, transform_type):
+    if transform_type == "uppercase":
+        return word.upper()
+    elif transform_type == "lowercase":
+        return word.lower()
+    return word
+
 # -------------------------------------------------------------------
 # 3. REGISTRY ROUTER (ADD FUTURE RENDERERS HERE)
 # -------------------------------------------------------------------
 RENDER_REGISTRY = {
     "card_box": render_style_card_box,
     "active_word_box": render_style_active_word_box,
+    "sample_highlight": render_style_sample_highlight,
+    "stacked_gradient": render_style_stacked_gradient
 }
 
 def render_caption_card(word_batch, active_index, config):
