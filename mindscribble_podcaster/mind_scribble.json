@@ -1514,5 +1514,647 @@
                 ]
             }
         ]
-    }
+    },
+  {
+    "id": 12,
+    "script_title": "The Illusion of Multitasking",
+    "total_segments": 8,
+    "posted": false,
+    "timeline": [
+      {
+        "segment_id": 1,
+        "folder": "16_podcaster_hoody",
+        "text": "You think you are a master of multitasking, but neuroscience proves your brain is pulling off a massive illusion.",
+        "stickers": [
+          {
+            "file": "illusion_grid.png"
+          }
+        ]
+      },
+      {
+        "segment_id": 2,
+        "folder": "01_brain_anatomy",
+        "text": "Humans are physically incapable of processing two high-level cognitive tasks at the exact same time.",
+        "stickers": []
+      },
+      {
+        "segment_id": 3,
+        "folder": "02_neural_networks",
+        "text": "What you are actually doing is called micro context-switching.",
+        "stickers": []
+      },
+      {
+        "segment_id": 4,
+        "folder": "01_brain_anatomy",
+        "text": "Your prefrontal cortex is frantically shutting down one thought pattern, reloading another, and jumping back and forth hundreds of times an hour.",
+        "stickers": []
+      },
+      {
+        "segment_id": 5,
+        "folder": "04_anxiety_overwhelm",
+        "text": "This rapid toggling creates cognitive friction that drains your mental energy reserves at double the speed.",
+        "stickers": []
+      },
+      {
+        "segment_id": 6,
+        "folder": "01_brain_anatomy",
+        "text": "Studies reveal that constant multitasking lowers your functional IQ temporarily by up to fifteen points—the equivalent of missing an entire night of sleep.",
+        "stickers": []
+      },
+      {
+        "segment_id": 7,
+        "folder": "04_anxiety_overwhelm",
+        "text": "Even worse, your error rate spikes by fifty percent because your brain never stays locked into one task long enough to catch mistakes.",
+        "stickers": []
+      },
+      {
+        "segment_id": 8,
+        "folder": "16_podcaster_hoody",
+        "text": "Are you listening to this while trying to do something else right now? Be honest and tell me in the comments, then save this to remind yourself to focus.",
+        "stickers": [
+          {
+            "file": "question_mark.png"
+          },
+          {
+            "file": "comment_bubble.png"
+          },
+          {
+            "file": "save_bookmark.png"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": 13,
+    "script_title": "The Pygmalion Effect",
+    "total_segments": 8,
+    "posted": false,
+    "timeline": [
+      {
+        "segment_id": 1,
+        "folder": "06_social_crowds",
+        "text": "The subtle expectations that people hold for you can completely alter your actual intelligence and performance.",
+        "stickers": []
+      },
+      {
+        "segment_id": 2,
+        "folder": "16_podcaster_hoody",
+        "text": "Psychologists call this the Pygmalion Effect.",
+        "stickers": [
+          {
+            "file": "brain_shortcut.png"
+          }
+        ]
+      },
+      {
+        "segment_id": 3,
+        "folder": "06_social_crowds",
+        "text": "In a famous study, teachers were falsely told that a random group of average students were intellectual prodigies destined to bloom.",
+        "stickers": []
+      },
+      {
+        "segment_id": 4,
+        "folder": "06_social_crowds",
+        "text": "Without realizing it, the teachers began offering those specific students warmer feedback, more time to speak, and tougher challenges.",
+        "stickers": []
+      },
+      {
+        "segment_id": 5,
+        "folder": "02_neural_networks",
+        "text": "By the end of the year, those random children actually showed a massive, measurable spike in their real IQ scores.",
+        "stickers": []
+      },
+      {
+        "segment_id": 6,
+        "folder": "02_neural_networks",
+        "text": "High expectations created a self-fulfilling cycle where subconscious encouragement directly forced growth.",
+        "stickers": []
+      },
+      {
+        "segment_id": 7,
+        "folder": "15_ego_and_power",
+        "text": "Conversely, the Golem Effect proves that when authority figures treat you like you are incompetent, your performance will inevitably tank.",
+        "stickers": []
+      },
+      {
+        "segment_id": 8,
+        "folder": "16_podcaster_hoody",
+        "text": "Has someone’s belief in you ever changed your life? Drop your story below and subscribe for more mind-bending psychology.",
+        "stickers": [
+          {
+            "file": "comment_bubble.png"
+          },
+          {
+            "file": "subscribe_button.png"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": 14,
+    "script_title": "The Baader-Meinhof Phenomenon",
+    "total_segments": 7,
+    "posted": false,
+    "timeline": [
+      {
+        "segment_id": 1,
+        "folder": "16_podcaster_hoody",
+        "text": "Have you ever learned a complex new word or bought a specific model of car, and suddenly started seeing it literally everywhere you go?",
+        "stickers": [
+          {
+            "file": "eye_open.png"
+          }
+        ]
+      },
+      {
+        "segment_id": 2,
+        "folder": "03_isolation_shadows",
+        "text": "It feels like a glitch in the matrix, but it’s actually the Baader-Meinhof Phenomenon.",
+        "stickers": []
+      },
+      {
+        "segment_id": 3,
+        "folder": "02_neural_networks",
+        "text": "Your environment hasn't changed at all; your brain’s data filtering system just got reconfigured.",
+        "stickers": []
+      },
+      {
+        "segment_id": 4,
+        "folder": "01_brain_anatomy",
+        "text": "Every single second, your sensory organs take in millions of bits of raw information.",
+        "stickers": []
+      },
+      {
+        "segment_id": 5,
+        "folder": "04_anxiety_overwhelm",
+        "text": "To keep you sane, your reticular activating system ruthlessly discards ninety-nine percent of it as background noise.",
+        "stickers": []
+      },
+      {
+        "segment_id": 6,
+        "folder": "02_neural_networks",
+        "text": "But the instant you place conscious value on a new concept, your brain labels it as vital for survival. Suddenly, your subconscious radar starts hunting for matches in real time.",
+        "stickers": []
+      },
+      {
+        "segment_id": 7,
+        "folder": "16_podcaster_hoody",
+        "text": "What is one object or phrase you keep seeing everywhere lately? Let me know in the comments below, and send this video to a friend who is overthinking the exact same thing.",
+        "stickers": [
+          {
+            "file": "question_mark.png"
+          },
+          {
+            "file": "comment_bubble.png"
+          },
+          {
+            "file": "share_arrow.png"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": 15,
+    "script_title": "The Paradox of Choice",
+    "total_segments": 7,
+    "posted": false,
+    "timeline": [
+      {
+        "segment_id": 1,
+        "folder": "05_internal_conflict",
+        "text": "We are conditioned to believe that having absolute freedom and unlimited choices makes us happier, but cognitive science proves the exact opposite.",
+        "stickers": []
+      },
+      {
+        "segment_id": 2,
+        "folder": "16_podcaster_hoody",
+        "text": "Welcome to the Paradox of Choice.",
+        "stickers": [
+          {
+            "file": "question_mark.png"
+          }
+        ]
+      },
+      {
+        "segment_id": 3,
+        "folder": "05_internal_conflict",
+        "text": "When you are confronted with dozens of options—whether choosing a streaming movie, a restaurant menu item, or a career path—your brain enters severe decision paralysis.",
+        "stickers": []
+      },
+      {
+        "segment_id": 4,
+        "folder": "04_anxiety_overwhelm",
+        "text": "The sheer volume of options creates an overwhelming cognitive load.",
+        "stickers": []
+      },
+      {
+        "segment_id": 5,
+        "folder": "05_internal_conflict",
+        "text": "Even when you finally force yourself to pick one, your post-choice satisfaction plummets.",
+        "stickers": []
+      },
+      {
+        "segment_id": 6,
+        "folder": "09_traps_and_mazes",
+        "text": "Why? Because your mind endlessly loops through the alternatives you rejected, tormenting you with buyer's remorse and the fear of missing out. Having too many options makes you constantly suspect a better choice existed.",
+        "stickers": []
+      },
+      {
+        "segment_id": 7,
+        "folder": "16_podcaster_hoody",
+        "text": "What is something you waste way too much time choosing every day? Type it in the comments, and subscribe so you never miss another MindScribble deep dive.",
+        "stickers": [
+          {
+            "file": "question_mark.png"
+          },
+          {
+            "file": "comment_bubble.png"
+          },
+          {
+            "file": "subscribe_button.png"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": 16,
+    "script_title": "The Halo Effect",
+    "total_segments": 7,
+    "posted": false,
+    "timeline": [
+      {
+        "segment_id": 1,
+        "folder": "07_masks_identity",
+        "text": "Your judgment of human character is heavily manipulated by a single cognitive shortcut known as the Halo Effect.",
+        "stickers": []
+      },
+      {
+        "segment_id": 2,
+        "folder": "15_ego_and_power",
+        "text": "When you meet someone who possesses one noticeably positive trait—like high physical attractiveness, immense charisma, or confidence—your brain automatically projects other positive qualities onto them without proof.",
+        "stickers": []
+      },
+      {
+        "segment_id": 3,
+        "folder": "07_masks_identity",
+        "text": "You subconsciously assume they are also intelligent, honest, kind, and capable.",
+        "stickers": []
+      },
+      {
+        "segment_id": 4,
+        "folder": "06_social_crowds",
+        "text": "This visual bias influences everything from job hiring decisions to criminal courtroom verdicts.",
+        "stickers": []
+      },
+      {
+        "segment_id": 5,
+        "folder": "06_social_crowds",
+        "text": "Studies show attractive defendants consistently receive lighter prison sentences for identical crimes compared to average-looking peers.",
+        "stickers": []
+      },
+      {
+        "segment_id": 6,
+        "folder": "07_masks_identity",
+        "text": "Your brain hates taking the time to evaluate people deeply, so it lets one bright trait blind you to their entire true character.",
+        "stickers": []
+      },
+      {
+        "segment_id": 7,
+        "folder": "16_podcaster_hoody",
+        "text": "Have you ever been fooled by someone’s charm? Share your experience in the comments, and save this so you remember next time.",
+        "stickers": [
+          {
+            "file": "question_mark.png"
+          },
+          {
+            "file": "comment_bubble.png"
+          },
+          {
+            "file": "save_bookmark.png"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": 17,
+    "script_title": "The Pratfall Effect",
+    "total_segments": 7,
+    "posted": false,
+    "timeline": [
+      {
+        "segment_id": 1,
+        "folder": "15_ego_and_power",
+        "text": "If you want people to like and trust you instantly, stop trying to portray yourself as flawless.",
+        "stickers": []
+      },
+      {
+        "segment_id": 2,
+        "folder": "16_podcaster_hoody",
+        "text": "Social psychology highlights a fascinating mechanism called the Pratfall Effect.",
+        "stickers": [
+          {
+            "file": "brain_shortcut.png"
+          }
+        ]
+      },
+      {
+        "segment_id": 3,
+        "folder": "06_social_crowds",
+        "text": "Highly competent individuals who make a small, clumsy blunder—like spilling coffee, tripping slightly, or stumbling over a word—are perceived as significantly more likable than those who perform flawlessly.",
+        "stickers": []
+      },
+      {
+        "segment_id": 4,
+        "folder": "15_ego_and_power",
+        "text": "Perfection creates an invisible wall of intimidation and jealousy.",
+        "stickers": []
+      },
+      {
+        "segment_id": 5,
+        "folder": "07_masks_identity",
+        "text": "It makes people feel insecure around you and suspicious of what you are hiding.",
+        "stickers": []
+      },
+      {
+        "segment_id": 6,
+        "folder": "06_social_crowds",
+        "text": "But when a capable person shows a moment of vulnerability, it shatters that icy distance. It signals humanity and makes you relatable.",
+        "stickers": []
+      },
+      {
+        "segment_id": 7,
+        "folder": "16_podcaster_hoody",
+        "text": "What is the most embarrassing clumsy moment you’ve had recently? Drop it in the comments below, and hit subscribe to join the MindScribble community.",
+        "stickers": [
+          {
+            "file": "question_mark.png"
+          },
+          {
+            "file": "comment_bubble.png"
+          },
+          {
+            "file": "subscribe_button.png"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": 18,
+    "script_title": "The Reciprocity Norm",
+    "total_segments": 7,
+    "posted": false,
+    "timeline": [
+      {
+        "segment_id": 1,
+        "folder": "01_brain_anatomy",
+        "text": "There is an evolutionary rule hardcoded into human psychology that makes it nearly impossible to say no to certain requests.",
+        "stickers": []
+      },
+      {
+        "segment_id": 2,
+        "folder": "16_podcaster_hoody",
+        "text": "It’s called the Reciprocity Norm.",
+        "stickers": [
+          {
+            "file": "brain_shortcut.png"
+          }
+        ]
+      },
+      {
+        "segment_id": 3,
+        "folder": "06_social_crowds",
+        "text": "For thousands of years, human survival depended on mutual sharing; if a tribe member shared food, refusing to return the favor meant isolation and death.",
+        "stickers": []
+      },
+      {
+        "segment_id": 4,
+        "folder": "09_traps_and_mazes",
+        "text": "Today, this evolutionary trigger is weaponized by master manipulators.",
+        "stickers": []
+      },
+      {
+        "segment_id": 5,
+        "folder": "09_traps_and_mazes",
+        "text": "When someone gives you a small, unexpected gift or does you a minor favor, an immediate psychological pressure builds up inside your chest.",
+        "stickers": []
+      },
+      {
+        "segment_id": 6,
+        "folder": "09_traps_and_mazes",
+        "text": "You feel a deep, uncomfortable obligation to clear the debt. Marketing agencies give out free samples and salespeople buy you coffee precisely to activate this guilt trip.",
+        "stickers": []
+      },
+      {
+        "segment_id": 7,
+        "folder": "16_podcaster_hoody",
+        "text": "Have you ever bought something just because you felt bad saying no? Let’s talk about it in the comments, and share this with someone who needs to hear it.",
+        "stickers": [
+          {
+            "file": "question_mark.png"
+          },
+          {
+            "file": "comment_bubble.png"
+          },
+          {
+            "file": "share_arrow.png"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": 19,
+    "script_title": "The Dunning-Kruger Trap",
+    "total_segments": 7,
+    "posted": false,
+    "timeline": [
+      {
+        "segment_id": 1,
+        "folder": "15_ego_and_power",
+        "text": "The less you know about a complex subject, the more confident you are that you’ve mastered it.",
+        "stickers": []
+      },
+      {
+        "segment_id": 2,
+        "folder": "16_podcaster_hoody",
+        "text": "This dangerous cognitive bias is known as the Dunning-Kruger Effect.",
+        "stickers": [
+          {
+            "file": "brain_shortcut.png"
+          }
+        ]
+      },
+      {
+        "segment_id": 3,
+        "folder": "02_neural_networks",
+        "text": "When you first begin learning a new skill or topic, your brain experiences a rapid surge of basic knowledge.",
+        "stickers": []
+      },
+      {
+        "segment_id": 4,
+        "folder": "15_ego_and_power",
+        "text": "Because you don't yet understand how deep the topic actually goes, you stand atop what psychologists call \"Mount Stupid\"—a peak of maximum confidence backed by zero real expertise.",
+        "stickers": []
+      },
+      {
+        "segment_id": 5,
+        "folder": "07_masks_identity",
+        "text": "True experts, on the other hand, sit in constant self-doubt because they realize how vast the unknown territory really is.",
+        "stickers": []
+      },
+      {
+        "segment_id": 6,
+        "folder": "07_masks_identity",
+        "text": "Incompetence inherently blinds you to your own shortcomings, making ignorance sound completely certain while real wisdom sounds cautious and hesitant.",
+        "stickers": []
+      },
+      {
+        "segment_id": 7,
+        "folder": "16_podcaster_hoody",
+        "text": "Who is someone in your life who acts like an expert on everything? Tag them or drop your stories in the comments, and subscribe for more.",
+        "stickers": [
+          {
+            "file": "question_mark.png"
+          },
+          {
+            "file": "comment_bubble.png"
+          },
+          {
+            "file": "subscribe_button.png"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": 20,
+    "script_title": "The Nostalgia Loop",
+    "total_segments": 7,
+    "posted": false,
+    "timeline": [
+      {
+        "segment_id": 1,
+        "folder": "14_memory_and_past",
+        "text": "Why does the music you listened to during your teenage years hit your soul harder than anything released today?",
+        "stickers": []
+      },
+      {
+        "segment_id": 2,
+        "folder": "14_memory_and_past",
+        "text": "It isn't just because older music was better—it’s due to a biological event called the Reminiscence Bump.",
+        "stickers": []
+      },
+      {
+        "segment_id": 3,
+        "folder": "01_brain_anatomy",
+        "text": "Between the ages of twelve and twenty-two, your brain is flooded with developmental hormones that crank your emotional sensitivity to maximum levels.",
+        "stickers": []
+      },
+      {
+        "segment_id": 4,
+        "folder": "14_memory_and_past",
+        "text": "Every heartbreak, friendship, and victory during this window is recorded with incredible neural detail.",
+        "stickers": []
+      },
+      {
+        "segment_id": 5,
+        "folder": "07_masks_identity",
+        "text": "The songs you play during these years become neurochemically linked to your emerging sense of identity.",
+        "stickers": []
+      },
+      {
+        "segment_id": 6,
+        "folder": "13_addiction_dopamine",
+        "text": "Listening to those tracks years later triggers a massive release of dopamine and oxytocin, instantly transporting you back to how intensely you felt life back then.",
+        "stickers": []
+      },
+      {
+        "segment_id": 7,
+        "folder": "16_podcaster_hoody",
+        "text": "What is the one song that immediately takes you back to high school? Drop the track name in the comments, and save this video for later.",
+        "stickers": [
+          {
+            "file": "question_mark.png"
+          },
+          {
+            "file": "comment_bubble.png"
+          },
+          {
+            "file": "save_bookmark.png"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": 21,
+    "script_title": "The Hedonic Treadmill",
+    "total_segments": 7,
+    "posted": false,
+    "timeline": [
+      {
+        "segment_id": 1,
+        "folder": "13_addiction_dopamine",
+        "text": "Whether you win a hundred million dollars in the lottery or lose everything you own, your overall happiness will eventually return to the exact same baseline.",
+        "stickers": []
+      },
+      {
+        "segment_id": 2,
+        "folder": "16_podcaster_hoody",
+        "text": "This relentless psychological mechanism is called the Hedonic Treadmill.",
+        "stickers": [
+          {
+            "file": "brain_shortcut.png"
+          }
+        ]
+      },
+      {
+        "segment_id": 3,
+        "folder": "01_brain_anatomy",
+        "text": "Human beings are wired with incredible emotional adaptation.",
+        "stickers": []
+      },
+      {
+        "segment_id": 4,
+        "folder": "13_addiction_dopamine",
+        "text": "When you achieve a dream—getting a major promotion, buying your dream car, or finding a partner—your brain releases a temporary spike of happiness.",
+        "stickers": []
+      },
+      {
+        "segment_id": 5,
+        "folder": "08_time_mechanisms",
+        "text": "But within months, that new reality becomes your new normal.",
+        "stickers": []
+      },
+      {
+        "segment_id": 6,
+        "folder": "13_addiction_dopamine",
+        "text": "The excitement fades, dopamine resets, and you find yourself right back on the treadmill, sprinting toward the next goal just to feel that temporary high again.",
+        "stickers": []
+      },
+      {
+        "segment_id": 7,
+        "folder": "16_podcaster_hoody",
+        "text": "What is one goal you thought would fix everything, but didn't? Tell me your experience in the comments below, and hit subscribe for your daily dose of MindScribble.",
+        "stickers": [
+          {
+            "file": "question_mark.png"
+          },
+          {
+            "file": "comment_bubble.png"
+          },
+          {
+            "file": "subscribe_button.png"
+          }
+        ]
+      }
+    ]
+  }
+
 ]
