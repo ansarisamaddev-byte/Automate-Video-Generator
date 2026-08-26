@@ -19,7 +19,7 @@
             {
                 "segment_id": 2,
                 "folder": "03_isolation_shadows",
-                "text": "When someone leaves you on read, your brain enters a state called intermittent reinforcement—",
+                "text": "When someone leaves you on read, your brain enters a state called intermittent reinforcement\u2014",
                 "stickers": []
             },
             {
@@ -61,7 +61,7 @@
             {
                 "segment_id": 9,
                 "folder": "16_podcaster_hoody",
-                "text": "The person ignoring you isn't controlling your thoughts—your brain's fear of uncertainty is.",
+                "text": "The person ignoring you isn't controlling your thoughts\u2014your brain's fear of uncertainty is.",
                 "stickers": []
             },
             {
@@ -92,7 +92,7 @@
             {
                 "segment_id": 1,
                 "folder": "16_podcaster_hoody",
-                "text": "Procrastination is almost never about laziness—it is an emotional regulation problem.",
+                "text": "Procrastination is almost never about laziness\u2014it is an emotional regulation problem.",
                 "stickers": [
                     {
                         "file": "brain_clock.png",
@@ -113,7 +113,7 @@
             {
                 "segment_id": 3,
                 "folder": "04_anxiety_overwhelm",
-                "text": "it’s rejecting the fear of failure attached to it.",
+                "text": "it\u2019s rejecting the fear of failure attached to it.",
                 "stickers": [],
                 "start": 9.69,
                 "end": 12.64
@@ -161,7 +161,7 @@
             {
                 "segment_id": 9,
                 "folder": "16_podcaster_hoody",
-                "text": "Commit to working on it for just one hundred and twenty seconds—no expectations, no perfection.",
+                "text": "Commit to working on it for just one hundred and twenty seconds\u2014no expectations, no perfection.",
                 "stickers": [],
                 "start": 38.72,
                 "end": 44.12
@@ -219,7 +219,7 @@
             {
                 "segment_id": 2,
                 "folder": "06_social_crowds",
-                "text": "Social psychologists call this the Spotlight Effect—a cognitive bias where you overestimate how much people notice your appearance or mistakes.",
+                "text": "Social psychologists call this the Spotlight Effect\u2014a cognitive bias where you overestimate how much people notice your appearance or mistakes.",
                 "stickers": [],
                 "start": 4.8,
                 "end": 12.1
@@ -251,7 +251,7 @@
             {
                 "segment_id": 6,
                 "folder": "07_masks_identity",
-                "text": "When you realize you are barely a background extra in someone else’s movie, the weight disappears.",
+                "text": "When you realize you are barely a background extra in someone else\u2019s movie, the weight disappears.",
                 "stickers": [],
                 "start": 28.2,
                 "end": 33.04
@@ -315,7 +315,7 @@
             {
                 "segment_id": 2,
                 "folder": "09_traps_and_mazes",
-                "text": "It’s called the Decoy Effect, and it triggers an automatic flaw in human value judgment.",
+                "text": "It\u2019s called the Decoy Effect, and it triggers an automatic flaw in human value judgment.",
                 "stickers": []
             },
             {
@@ -327,7 +327,7 @@
             {
                 "segment_id": 4,
                 "folder": "16_podcaster_hoody",
-                "text": "So marketers introduce a medium option for six dollars and fifty cents—a decoy designed solely to make the large look",
+                "text": "So marketers introduce a medium option for six dollars and fifty cents\u2014a decoy designed solely to make the large look",
                 "stickers": [
                     {
                         "file": "popcorn_medium_decoy.png",
@@ -480,7 +480,7 @@
         "id": 1,
         "script_title": "The Memory You Aren't Supposed to Have",
         "total_segments": 12,
-        "posted": false,
+        "posted": true,
         "timeline": [
             {
                 "segment_id": 1,
@@ -501,54 +501,54 @@
                 "text": "Around 3:00 AM, your brain performs a silent neural reset, locking away real events and clearing noise.",
                 "stickers": [],
                 "start": 5.4,
-                "end": 11.48
+                "end": 11.46
             },
             {
                 "segment_id": 3,
                 "folder": "03_isolation_shadows",
                 "text": "But occasionally, a massive glitch occurs.",
                 "stickers": [],
-                "start": 11.48,
-                "end": 13.62
+                "start": 11.76,
+                "end": 13.98
             },
             {
                 "segment_id": 4,
                 "folder": "03_isolation_shadows",
                 "text": "A rogue fragment of a dream gets misfiled directly into your long-term memory bank,",
                 "stickers": [],
-                "start": 13.62,
-                "end": 18.62
+                "start": 14.34,
+                "end": 19.12
             },
             {
                 "segment_id": 5,
                 "folder": "03_isolation_shadows",
                 "text": "blurring the line between your real life and sleep.",
                 "stickers": [],
-                "start": 18.62,
+                "start": 19.26,
                 "end": 21.84
             },
             {
                 "segment_id": 6,
                 "folder": "01_brain_anatomy",
-                "text": "That chilling sense of phantom nostalgia isn't random. It’s a leak from your subconscious.",
+                "text": "That chilling sense of phantom nostalgia isn't random. It\u2019s a leak from your subconscious.",
                 "stickers": [],
                 "start": 22.08,
-                "end": 27.11
+                "end": 26.58
             },
             {
                 "segment_id": 7,
                 "folder": "01_brain_anatomy",
-                "text": "Scientists call this REM intrusion—your brain rewires a fabricated event to feel just as vivid as a true childhood memory,",
+                "text": "Scientists call this REM intrusion\u2014your brain rewires a fabricated event to feel just as vivid as a true childhood memory,",
                 "stickers": [],
-                "start": 27.11,
-                "end": 34.3
+                "start": 26.58,
+                "end": 34.16
             },
             {
                 "segment_id": 8,
                 "folder": "01_brain_anatomy",
                 "text": "loaded with sensory details and emotion.",
                 "stickers": [],
-                "start": 34.3,
+                "start": 34.4,
                 "end": 36.46
             },
             {
@@ -557,14 +557,14 @@
                 "text": "When you wake up, your conscious mind accepts the lie because the neural pathway is already paved.",
                 "stickers": [],
                 "start": 36.74,
-                "end": 41.97
+                "end": 41.58
             },
             {
                 "segment_id": 10,
                 "folder": "04_anxiety_overwhelm",
-                "text": "You aren't just recalling a dream; you’re holding onto a manufactured reality.",
+                "text": "You aren't just recalling a dream; you\u2019re holding onto a manufactured reality.",
                 "stickers": [],
-                "start": 41.97,
+                "start": 41.86,
                 "end": 45.66
             },
             {
@@ -594,12 +594,12 @@
         "id": 2,
         "script_title": "The Observer Effect in Your Room",
         "total_segments": 12,
-        "posted": false,
+        "posted": true,
         "timeline": [
             {
                 "segment_id": 1,
                 "folder": "16_podcaster_hoody",
-                "text": "Have you ever felt the sudden, prickling sensation that you’re being watched, even when you’re completely alone?",
+                "text": "Have you ever felt the sudden, prickling sensation that you\u2019re being watched, even when you\u2019re completely alone?",
                 "stickers": [
                     {
                         "file": "sensation.png",
@@ -609,78 +609,102 @@
                         "file": "eye_open.png",
                         "delay": 1.1
                     }
-                ]
+                ],
+                "start": 0.0,
+                "end": 5.54
             },
             {
                 "segment_id": 2,
                 "folder": "09_traps_and_mazes",
-                "text": "It’s not just paranoia; it’s a deeply wired survival mechanism called gaze detection.",
-                "stickers": []
+                "text": "It\u2019s not just paranoia; it\u2019s a deeply wired survival mechanism called gaze detection.",
+                "stickers": [],
+                "start": 5.78,
+                "end": 10.26
             },
             {
                 "segment_id": 3,
                 "folder": "09_traps_and_mazes",
                 "text": "Your visual cortex processes subtle cues in your environment faster than your conscious mind can catch up.",
-                "stickers": []
+                "stickers": [],
+                "start": 10.6,
+                "end": 15.92
             },
             {
                 "segment_id": 4,
                 "folder": "09_traps_and_mazes",
-                "text": "But here’s the unsettling part:",
-                "stickers": []
+                "text": "But here\u2019s the unsettling part:",
+                "stickers": [],
+                "start": 16.04,
+                "end": 17.46
             },
             {
                 "segment_id": 5,
                 "folder": "09_traps_and_mazes",
-                "text": "evolutionary biologists realized our brain’s threat network is purposely calibrated to trigger false alarms rather than miss a real predator.",
-                "stickers": []
+                "text": "evolutionary biologists realized our brain\u2019s threat network is purposely calibrated to trigger false alarms rather than miss a real predator.",
+                "stickers": [],
+                "start": 18.0,
+                "end": 25.12
             },
             {
                 "segment_id": 6,
                 "folder": "04_anxiety_overwhelm",
                 "text": "When you get that sudden chill in a dark room, your nervous system has detected a micro-change in light, motion,",
-                "stickers": []
+                "stickers": [],
+                "start": 25.44,
+                "end": 31.34
             },
             {
                 "segment_id": 7,
                 "folder": "04_anxiety_overwhelm",
                 "text": "or acoustics that your conscious mind missed.",
-                "stickers": []
+                "stickers": [],
+                "start": 31.58,
+                "end": 33.92
             },
             {
                 "segment_id": 8,
                 "folder": "04_anxiety_overwhelm",
                 "text": "Your brain intentionally creates the perception of a phantom observer to force you into high alert.",
-                "stickers": []
+                "stickers": [],
+                "start": 34.1,
+                "end": 39.34
             },
             {
                 "segment_id": 9,
                 "folder": "05_internal_conflict",
                 "text": "Essentially, your body reacts to a threat before you even see it,",
-                "stickers": []
+                "stickers": [],
+                "start": 39.62,
+                "end": 43.08
             },
             {
                 "segment_id": 10,
                 "folder": "05_internal_conflict",
                 "text": "convincing you someone is there long before your eyes confirm the room is empty.",
-                "stickers": []
+                "stickers": [],
+                "start": 43.18,
+                "end": 47.18
             },
             {
                 "segment_id": 11,
                 "folder": "10_clarity_light",
                 "text": "Have you ever felt an unseen presence that made your hair stand up?",
-                "stickers": []
+                "stickers": [],
+                "start": 47.42,
+                "end": 50.6
             },
             {
                 "segment_id": 12,
                 "folder": "16_podcaster_hoody",
-                "text": "Tell me what happened in the comments—did you ever figure out what triggered it?",
+                "text": "Tell me what happened in the comments\u2014did you ever figure out what triggered it?",
                 "stickers": [
                     {
                         "file": "comment_bubble.png",
                         "delay": 0.3
                     }
-                ]
+                ],
+                "start": 50.76,
+                "end": 52.0
             }
         ]
     },
@@ -710,7 +734,7 @@
             {
                 "segment_id": 3,
                 "folder": "13_addiction_dopamine",
-                "text": "This isn't an issue with your phone; it’s a biological hack of your nervous system known as phantom vibration syndrome.",
+                "text": "This isn't an issue with your phone; it\u2019s a biological hack of your nervous system known as phantom vibration syndrome.",
                 "stickers": []
             },
             {
@@ -805,7 +829,7 @@
             {
                 "segment_id": 3,
                 "folder": "09_traps_and_mazes",
-                "text": "Psychologists call this l’appel du vide, or the Call of the Void.",
+                "text": "Psychologists call this l\u2019appel du vide, or the Call of the Void.",
                 "stickers": []
             },
             {
@@ -817,7 +841,7 @@
             {
                 "segment_id": 5,
                 "folder": "09_traps_and_mazes",
-                "text": "but cognitive studies reveal it is actually a massive signal processing error in your brain’s safety protocol.",
+                "text": "but cognitive studies reveal it is actually a massive signal processing error in your brain\u2019s safety protocol.",
                 "stickers": []
             },
             {
@@ -893,7 +917,7 @@
             {
                 "segment_id": 2,
                 "folder": "03_isolation_shadows",
-                "text": "a duplicate? This isn't sci-fi; it’s a real neurological glitch known as the Capgras delusion.",
+                "text": "a duplicate? This isn't sci-fi; it\u2019s a real neurological glitch known as the Capgras delusion.",
                 "stickers": []
             },
             {
@@ -1001,7 +1025,7 @@
             {
                 "segment_id": 7,
                 "folder": "01_brain_anatomy",
-                "text": "looked at next—the clock face.",
+                "text": "looked at next\u2014the clock face.",
                 "stickers": []
             },
             {
@@ -1044,7 +1068,7 @@
             {
                 "segment_id": 1,
                 "folder": "16_podcaster_hoody",
-                "text": "Have you ever looked at a word you’ve written a thousand times, or walked into your own living room,",
+                "text": "Have you ever looked at a word you\u2019ve written a thousand times, or walked into your own living room,",
                 "stickers": [
                     {
                         "file": "alien_word.png",
@@ -1056,15 +1080,17 @@
                 "segment_id": 2,
                 "folder": "16_podcaster_hoody",
                 "text": "and suddenly felt it was totally alien?",
-                "stickers": [ {
+                "stickers": [
+                    {
                         "file": "alien.png",
                         "delay": 0.8
-                    }]
+                    }
+                ]
             },
             {
                 "segment_id": 3,
                 "folder": "14_memory_and_past",
-                "text": "You know déjà vu, but this is its terrifying counterpart: jamais vu.",
+                "text": "You know d\u00e9j\u00e0 vu, but this is its terrifying counterpart: jamais vu.",
                 "stickers": []
             },
             {
@@ -1094,7 +1120,7 @@
             {
                 "segment_id": 8,
                 "folder": "04_anxiety_overwhelm",
-                "text": "Your brain loses the ability to recognize something you’ve known your entire life, treating your reality like a complete mystery.",
+                "text": "Your brain loses the ability to recognize something you\u2019ve known your entire life, treating your reality like a complete mystery.",
                 "stickers": []
             },
             {
@@ -1143,13 +1169,16 @@
                 "segment_id": 2,
                 "folder": "16_podcaster_hoody",
                 "text": "Are you seeing it through your own eyes, or are you watching yourself like a movie camera?",
-                "stickers": [ {
+                "stickers": [
+                    {
                         "file": "watching.png",
                         "delay": 0.8
-                    },  {
+                    },
+                    {
                         "file": "movie_camera.png",
                         "delay": 1.0
-                    }]
+                    }
+                ]
             },
             {
                 "segment_id": 3,
@@ -1239,10 +1268,12 @@
                 "segment_id": 2,
                 "folder": "16_podcaster_hoody",
                 "text": "it suddenly loses all meaning and transforms into random, useless noise.",
-                "stickers": [ {
+                "stickers": [
+                    {
                         "file": "head_noise.png",
                         "delay": 0.8
-                    }]
+                    }
+                ]
             },
             {
                 "segment_id": 3,
@@ -1320,10 +1351,12 @@
                 "segment_id": 2,
                 "folder": "16_podcaster_hoody",
                 "text": "making you question your sanity?",
-                "stickers": [{
+                "stickers": [
+                    {
                         "file": "question_mark.png",
                         "delay": 0.8
-                    }]
+                    }
+                ]
             },
             {
                 "segment_id": 3,
@@ -1371,7 +1404,7 @@
             {
                 "segment_id": 10,
                 "folder": "10_clarity_light",
-                "text": "errors. What is the most impossible place you’ve ever found an item you lost?",
+                "text": "errors. What is the most impossible place you\u2019ve ever found an item you lost?",
                 "stickers": []
             },
             {
@@ -1408,10 +1441,12 @@
                 "segment_id": 2,
                 "folder": "16_podcaster_hoody",
                 "text": "but now entire years seem to vanish in the blink of an eye?",
-                "stickers": [{
+                "stickers": [
+                    {
                         "file": "question_mark.png",
                         "delay": 0.8
-                    }]
+                    }
+                ]
             },
             {
                 "segment_id": 3,
