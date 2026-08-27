@@ -399,7 +399,6 @@
                         "delay": 0.8
                     }
                 ]
-
             },
             {
                 "segment_id": 2,
@@ -953,7 +952,7 @@
         "script_title": "The Capgras Delusion",
         "heading_text": "Capgras Delusion",
         "total_segments": 10,
-        "posted": false,
+        "posted": true,
         "timeline": [
             {
                 "segment_id": 1,
@@ -968,55 +967,73 @@
                         "file": "duplicate_glitch.png",
                         "delay": 1.0
                     }
-                ]
+                ],
+                "start": 0.0,
+                "end": 5.52
             },
             {
                 "segment_id": 2,
                 "folder": "03_isolation_shadows",
                 "text": "a duplicate? This isn't sci-fi; it\u2019s a real neurological glitch known as the Capgras delusion.",
-                "stickers": []
+                "stickers": [],
+                "start": 5.52,
+                "end": 10.6
             },
             {
                 "segment_id": 3,
                 "folder": "03_isolation_shadows",
                 "text": "It occurs when the neural pathway connecting your visual recognition center to your emotional response system is severed.",
-                "stickers": []
+                "stickers": [],
+                "start": 10.82,
+                "end": 16.68
             },
             {
                 "segment_id": 4,
                 "folder": "03_isolation_shadows",
                 "text": "You can clearly see and recognize the person's face,",
-                "stickers": []
+                "stickers": [],
+                "start": 16.76,
+                "end": 19.3
             },
             {
                 "segment_id": 5,
                 "folder": "03_isolation_shadows",
                 "text": "but your brain fails to generate the warmth or familiarity you usually feel when looking at them.",
-                "stickers": []
+                "stickers": [],
+                "start": 19.48,
+                "end": 24.5
             },
             {
                 "segment_id": 6,
                 "folder": "04_anxiety_overwhelm",
                 "text": "Because the emotional connection is missing, your logical brain panics and invents a terrifying explanation to bridge the gap:",
-                "stickers": []
+                "stickers": [],
+                "start": 24.64,
+                "end": 30.86
             },
             {
                 "segment_id": 7,
                 "folder": "04_anxiety_overwhelm",
                 "text": "this person looks identical to your loved one, but they must be an imposter.",
-                "stickers": []
+                "stickers": [],
+                "start": 31.12,
+                "end": 34.82
             },
             {
                 "segment_id": 8,
                 "folder": "12_dark_textures",
                 "text": "Your mind chooses to believe a massive conspiracy theory rather than accept that its internal emotional wiring failed for a",
-                "stickers": []
+                "stickers": [],
+                "start": 35.1,
+                "end": 36.42
             },
             {
                 "segment_id": 9,
                 "folder": "10_clarity_light",
                 "text": "split second. If everyone in your life suddenly felt like an imposter, who is the first person you would suspect?",
-                "stickers": []
+                "stickers": [],
+                "start": 41.58,
+                "end": 46.86
             },
             {
                 "segment_id": 10,
@@ -1027,7 +1044,9 @@
                         "file": "comment_bubble.png",
                         "delay": 0.3
                     }
-                ]
+                ],
+                "start": 47.22,
+                "end": 48.16
             }
         ]
     },
