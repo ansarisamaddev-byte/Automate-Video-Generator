@@ -1,10 +1,12 @@
 import os
 import re
 import numpy as np
-from PIL import Image, ImageDraw, ImageFont
-from moviepy.video.VideoClip import ImageClip
+import math
+from PIL import Image, ImageDraw, ImageFont, ImageFilter
+from moviepy.video.VideoClip import ImageClip, VideoClip
 from moviepy.video.compositing.CompositeVideoClip import CompositeVideoClip
 from faster_whisper import WhisperModel
+from moviepy.video.fx import FadeIn
 
 # Dynamically set BASE_DIR relative to repository root
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -104,21 +106,62 @@ CONFIG_STYLE_PUNCHY = {
 
 CONFIG_SAMPLE_STYLE = {
     "style": "sample_highlight",
+
     "font_path": DEFAULT_FONT,
     "highlight_font_path": HIGHLIGHT_FONT,
-    "special_font_path": SPECIAL_FONT,           # Dedicated path for special words
-    "font_size": 60,                           # Normal text size
-    "special_font_size": 90,                   # Larger size for special words
+    "special_font_path": SPECIAL_FONT,
+
+    "font_size": 60,
+    "special_font_size": 90,
+
     "text_transform": "uppercase",
+
     "max_words_per_batch": 3,
     "max_line_width": 620,
+
     "video_width": 1080,
     "video_height": 1920,
     "vertical_pos": 0.68,
-    
+
+    # ---------------------------------------------------------
+    # HEADING
+    # ---------------------------------------------------------
+
+    "heading_font_path": DEFAULT_FONT,
+    "heading_font_size": 92,
+    "heading_text_transform": "uppercase",
+
+    # Canva "pop text" look: orange fill, blue outline, drop shadow.
+    "heading_fill_color": (255, 159, 28, 255),
+    "heading_outline_color": (58, 128, 222, 255),
+    "heading_outline_width": 11,
+    "heading_inner_stroke_color": (30, 20, 60, 255),
+    "heading_inner_stroke_width": 3,
+    "heading_shadow_color": (0, 0, 0, 150),
+    "heading_shadow_offset": (0, 10),
+    "heading_shadow_blur": 3,
+
+    # No box — cleaner and closer to your caption visual style
+    "heading_bg_color": None,
+
+    "heading_padding_x": 30,
+    "heading_padding_y": 30,
+    "heading_y": 170,
+
+    # How far upward the heading travels
+    "heading_slide_distance": 288,
+
+    # Slow cinematic animation
+    "heading_animation_duration": 1.3,
+
+    "heading_lead_time": 0.0,
+
+    # ---------------------------------------------------------
+
     "text_color": (255, 255, 255, 255),
-    "highlight_color": (255, 215, 0, 255),     # Color when active
-    "special_color": (255, 69, 0, 255),        # Color for special words
+    "highlight_color": (255, 215, 0, 255),
+    "special_color": (255, 69, 0, 255),
+
     "stroke_width": 5,
     "stroke_color": (0, 0, 0, 255)
 }
@@ -144,35 +187,8 @@ CONFIG_STYLE_STACKED_GRADIENT = {
     "stroke_color": (15, 15, 15, 240)          # Deep dark shadow
 }
 
-SPECIAL_WORDS = {"COMPANIES", "MONEY", "DOLLAR","PROCRASTINATION", "HURTS", "MIND", "PAIN", "PROBLEM" "MIND",
-    "BRAIN",
-    "MEMORY",
-    "PROCRASTINATION",
-    "DOPAMINE",
-    "ADDICTION",
-    "PAIN",
-    "HURT",
-    "HURTS",
-    "FEAR",
-    "ANXIETY",
-    "STRESS",
-    "SHAME",
-    "GUILT",
-    "REGRET",
-    "DECEPTION",
-    "DECOY",
-    "DISTRACTION",
-    "ATTENTION",
-    "FOCUS",
-    "LONELINESS",
-    "DESIRE",
-    "REWARD",
-    "POWER",
-    "DANGER",
-    "SECRET",
-    "HIDDEN",
-    "TRUTH",
-    "DESTROY"}
+SPECIAL_WORDS = {"COMPANIES", "MONEY", "DOLLAR","PROCRASTINATION", "HURTS", "MIND", "PAIN", "PROBLEM",
+    "BRAIN", "MEMORY", "PROCRASTINATION", "DOPAMINE", "ADDICTION", "PAIN", "HURT", "HURTS", "FEAR", "ANXIETY", "STRESS", "SHAME", "GUILT", "REGRET", "DECEPTION", "DECOY", "DISTRACTION", "ATTENTION", "FOCUS", "LONELINESS", "DESIRE", "REWARD", "POWER", "DANGER", "SECRET", "HIDDEN", "TRUTH", "DESTROY"}
 
 def clean_word(word):
     return re.sub(r'[^\w\s]', '', word).strip().upper()
@@ -183,9 +199,463 @@ def format_text(word, transform_type):
     elif transform_type == "lowercase":
         return word.lower()
     return word
+def normalize_heading_tokens(text: str) -> list:
+    """
+    Convert heading text into clean comparable tokens.
+
+    Example:
+        "Decoy Effect!" -> ["DECOY", "EFFECT"]
+    """
+    return [
+        clean_word(token)
+        for token in text.split()
+        if clean_word(token)
+    ]
+
+
+def find_exact_heading_start(words_data: list, heading_text: str):
+    """
+    Find the EXACT consecutive phrase inside Whisper word timestamps.
+
+    Example:
+        heading_text = "Decoy Effect"
+
+    Will match:
+        ... the / Decoy / Effect / and ...
+
+    It will NOT match:
+        ... Decoy / something / Effect ...
+
+    Returns:
+        start timestamp of the first heading word
+        or None if not found.
+    """
+
+    heading_tokens = normalize_heading_tokens(heading_text)
+
+    if not heading_tokens or not words_data:
+        return None
+
+    total_words = len(words_data)
+    phrase_length = len(heading_tokens)
+
+    for i in range(total_words - phrase_length + 1):
+
+        matched = True
+
+        for j, expected_token in enumerate(heading_tokens):
+
+            actual_token = words_data[i + j].get(
+                "clean_word",
+                clean_word(words_data[i + j].get("word", ""))
+            )
+
+            if actual_token != expected_token:
+                matched = False
+                break
+
+        if matched:
+            start_time = float(words_data[i]["start"])
+
+            print(
+                f"[+] Exact heading phrase found: "
+                f"'{heading_text}' at {start_time:.2f}s"
+            )
+
+            return start_time
+
+    print(
+        f"[!] Exact heading phrase NOT found in transcript: "
+        f"'{heading_text}'"
+    )
+
+    return None
+
+
+def render_heading_image(text: str, config: dict) -> np.ndarray:
+    """
+    Render the heading in a bold "pop text" style (Canva-style):
+
+        - thick colored fill (default: orange)
+        - thick colored outline (default: blue)
+        - thin dark inner stroke to keep letterforms crisp
+        - soft drop shadow behind everything
+
+    Built from three stacked text layers (shadow -> outline -> fill),
+    composited with alpha_composite so the edges stay clean.
+    """
+
+    # ---------------------------------------------------------
+    # FONT
+    # ---------------------------------------------------------
+
+    font_path = config.get(
+        "heading_font_path",
+        config.get("font_path")
+    )
+
+    font_size = config.get("heading_font_size", 92)
+
+    try:
+        font = ImageFont.truetype(font_path, font_size)
+    except Exception as e:
+        print(f"[!] Heading font load error: {e}")
+        try:
+            font = ImageFont.truetype(DEFAULT_FONT, font_size)
+        except Exception:
+            font = ImageFont.load_default()
+
+    # ---------------------------------------------------------
+    # TEXT
+    # ---------------------------------------------------------
+
+    display_text = format_text(
+        text,
+        config.get("heading_text_transform", "uppercase")
+    )
+
+    # ---------------------------------------------------------
+    # STYLE
+    # ---------------------------------------------------------
+
+    fill_color = config.get("heading_fill_color", (255, 159, 28, 255))
+    outline_color = config.get("heading_outline_color", (58, 128, 222, 255))
+    outline_width = config.get("heading_outline_width", 11)
+
+    inner_stroke_color = config.get("heading_inner_stroke_color", (30, 20, 60, 255))
+    inner_stroke_width = config.get("heading_inner_stroke_width", 3)
+
+    shadow_color = config.get("heading_shadow_color", (0, 0, 0, 150))
+    shadow_offset = config.get("heading_shadow_offset", (0, 10))
+    shadow_blur = config.get("heading_shadow_blur", 3)
+
+    padding_x = config.get("heading_padding_x", 30)
+    padding_y = config.get("heading_padding_y", 30)
+
+    # ---------------------------------------------------------
+    # MEASURE (use the widest stroke — the outline — for bounds)
+    # ---------------------------------------------------------
+
+    dummy = Image.new("RGBA", (10, 10), (0, 0, 0, 0))
+    dummy_draw = ImageDraw.Draw(dummy)
+
+    bbox = dummy_draw.textbbox(
+        (0, 0),
+        display_text,
+        font=font,
+        stroke_width=outline_width
+    )
+
+    text_w = bbox[2] - bbox[0]
+    text_h = bbox[3] - bbox[1]
+
+    # Extra room so the blurred/offset shadow never clips at the edges.
+    extra = abs(shadow_offset[0]) + abs(shadow_offset[1]) + shadow_blur * 2
+
+    canvas_w = text_w + padding_x * 2 + extra
+    canvas_h = text_h + padding_y * 2 + extra
+
+    base_x = (canvas_w - text_w) // 2 - bbox[0]
+    base_y = (canvas_h - text_h) // 2 - bbox[1]
+
+    # ---------------------------------------------------------
+    # OPTIONAL BACKGROUND
+    # ---------------------------------------------------------
+
+    heading_bg = config.get("heading_bg_color", None)
+    bg_layer = Image.new("RGBA", (canvas_w, canvas_h), (0, 0, 0, 0))
+
+    if heading_bg is not None:
+        radius = config.get("heading_corner_radius", 12)
+        ImageDraw.Draw(bg_layer).rounded_rectangle(
+            [0, 0, canvas_w - 1, canvas_h - 1],
+            radius=radius,
+            fill=heading_bg
+        )
+
+    # ---------------------------------------------------------
+    # 1. DROP SHADOW LAYER
+    # ---------------------------------------------------------
+
+    shadow_layer = Image.new("RGBA", (canvas_w, canvas_h), (0, 0, 0, 0))
+    shadow_x = base_x + shadow_offset[0]
+    shadow_y = base_y + shadow_offset[1]
+    ImageDraw.Draw(shadow_layer).text(
+        (shadow_x, shadow_y),
+        display_text,
+        font=font,
+        fill=shadow_color,
+        stroke_width=outline_width,
+        stroke_fill=shadow_color
+    )
+    if shadow_blur > 0:
+        shadow_layer = shadow_layer.filter(ImageFilter.GaussianBlur(shadow_blur))
+
+    # ---------------------------------------------------------
+    # 2. THICK COLORED OUTLINE LAYER
+    # ---------------------------------------------------------
+
+    outline_layer = Image.new("RGBA", (canvas_w, canvas_h), (0, 0, 0, 0))
+    ImageDraw.Draw(outline_layer).text(
+        (base_x, base_y),
+        display_text,
+        font=font,
+        fill=outline_color,
+        stroke_width=outline_width,
+        stroke_fill=outline_color
+    )
+
+    # ---------------------------------------------------------
+    # 3. FILL LAYER (crisp fill + thin dark inner stroke)
+    # ---------------------------------------------------------
+
+    fill_layer = Image.new("RGBA", (canvas_w, canvas_h), (0, 0, 0, 0))
+    ImageDraw.Draw(fill_layer).text(
+        (base_x, base_y),
+        display_text,
+        font=font,
+        fill=fill_color,
+        stroke_width=inner_stroke_width,
+        stroke_fill=inner_stroke_color
+    )
+
+    # ---------------------------------------------------------
+    # COMPOSITE: bg -> shadow -> outline -> fill
+    # ---------------------------------------------------------
+
+    img = Image.alpha_composite(bg_layer, shadow_layer)
+    img = Image.alpha_composite(img, outline_layer)
+    img = Image.alpha_composite(img, fill_layer)
+
+    return np.array(img)
+
+def create_top_layer_heading(config: dict, audio_path: str, total_duration: float):
+    """
+    Heading animation:
+
+    - Starts completely invisible
+    - Slowly fades in
+    - Slowly moves upward
+    - Gradually settles into final position
+    - Remains visible for the rest of the video
+    - NEVER fades out
+    """
+
+    heading_text = config.get("heading_text")
+
+    if not heading_text:
+        return None
+
+    # ---------------------------------------------------------
+    # 1. FIND EXACT HEADING START
+    # ---------------------------------------------------------
+
+    words_data = get_word_timestamps(audio_path)
+
+    start_time = find_exact_heading_start(
+        words_data or [],
+        heading_text
+    )
+
+    if start_time is None:
+        print(
+            f"[!] Heading disabled: phrase "
+            f"'{heading_text}' not matched in transcript."
+        )
+        return None
+
+    heading_lead = config.get(
+        "heading_lead_time",
+        0.0
+    )
+
+    start_time = max(
+        0.0,
+        start_time - heading_lead
+    )
+
+    # ---------------------------------------------------------
+    # 2. DURATION
+    # ---------------------------------------------------------
+
+    clip_duration = max(
+        0.1,
+        total_duration - start_time
+    )
+
+    # ---------------------------------------------------------
+    # 3. POSITION
+    # ---------------------------------------------------------
+
+    video_h = config.get(
+        "video_height",
+        1920
+    )
+
+    start_y = int(
+        round(video_h * 0.30)
+    )
+
+    target_y = int(
+        round(video_h * 0.15)
+    )
+
+    slide_distance = start_y - target_y
+
+    # ---------------------------------------------------------
+    # 4. RENDER HEADING
+    # ---------------------------------------------------------
+
+    heading_rgba = render_heading_image(
+        heading_text,
+        config
+    )
+
+    # IMPORTANT:
+    # transparent=True tells MoviePy to create a mask
+    # from the PNG/RGBA alpha channel.
+    base_clip = ImageClip(
+        heading_rgba,
+        transparent=True
+    ).with_duration(clip_duration)
+
+    # ---------------------------------------------------------
+    # 5. ANIMATION DURATION
+    # ---------------------------------------------------------
+
+    animation_duration = config.get(
+        "heading_animation_duration",
+        2.2
+    )
+
+    animation_duration = min(
+        animation_duration,
+        clip_duration
+    )
+
+    # ---------------------------------------------------------
+    # 6. SMOOTH EASING
+    # ---------------------------------------------------------
+
+    def ease_out_slow(progress):
+
+        progress = max(
+            0.0,
+            min(1.0, progress)
+        )
+
+        return 1 - (1 - progress) ** 3
+
+    # ---------------------------------------------------------
+    # 7. ANIMATE OPACITY THROUGH MOVIEPY MASK
+    # ---------------------------------------------------------
+
+    if base_clip.mask is not None:
+
+        original_mask = base_clip.mask
+
+        def animated_mask(get_frame, t):
+
+            # t is LOCAL time inside the heading clip
+            rel_t = t
+
+            if rel_t <= 0:
+
+                opacity = 0.0
+
+            elif rel_t < animation_duration:
+
+                progress = (
+                    rel_t /
+                    animation_duration
+                )
+
+                # Smooth fade-in
+                opacity = (
+                    progress
+                    * progress
+                    * (3 - 2 * progress)
+                )
+
+            else:
+
+                # Stay fully visible
+                opacity = 1.0
+
+            frame = get_frame(t)
+
+            return (
+                frame.astype(np.float32)
+                * opacity
+            )
+
+        animated_mask_clip = original_mask.transform(
+            animated_mask
+        )
+
+        base_clip = base_clip.with_mask(
+            animated_mask_clip
+        )
+
+    # ---------------------------------------------------------
+    # 8. POSITION ANIMATION
+    # ---------------------------------------------------------
+
+    def dynamic_position(t):
+
+        rel_t = t
+
+        if rel_t <= 0:
+
+            current_y = start_y
+
+        elif rel_t < animation_duration:
+
+            progress = (
+                rel_t /
+                animation_duration
+            )
+
+            ease = ease_out_slow(progress)
+
+            current_y = (
+                start_y
+                -
+                slide_distance * ease
+            )
+
+        else:
+
+            current_y = target_y
+
+        return (
+            "center",
+            int(round(current_y))
+        )
+
+    # ---------------------------------------------------------
+    # 9. BUILD HEADING
+    # ---------------------------------------------------------
+
+    heading_clip = (
+        base_clip
+        .with_position(dynamic_position)
+        .with_start(start_time)
+        .with_duration(clip_duration)
+    )
+
+    print(
+        f"[+] Heading animation ready: "
+        f"'{heading_text}' | "
+        f"Start: {start_time:.2f}s | "
+        f"Fade/Slide: {animation_duration:.2f}s | "
+        f"Duration: {clip_duration:.2f}s"
+    )
+
+    return heading_clip
 
 # -------------------------------------------------------------------
-# RENDERER ENGINES (Harmonized signatures accepting all 3 fonts)
+# RENDERER ENGINES
 # -------------------------------------------------------------------
 def render_style_sample_highlight(lines, config, base_font, highlight_font, special_font, space_w, active_index):
     TRANSFORM = config.get("text_transform", "uppercase")
@@ -233,7 +703,6 @@ def render_style_sample_highlight(lines, config, base_font, highlight_font, spec
 
     curr_y = int(config["video_height"] * config.get("vertical_pos", 0.70)) - (total_card_h // 2)
     
-    # GUARD: Safely cap stroke width to prevent PIL array allocation crashes on custom fonts
     raw_stroke = config.get("stroke_width", 0)
     current_stroke_width = min(raw_stroke, 2) if raw_stroke > 0 else 0
     stroke_color = config.get("stroke_color", (0, 0, 0, 255))
@@ -242,15 +711,15 @@ def render_style_sample_highlight(lines, config, base_font, highlight_font, spec
         text_x = (config["video_width"] - ld["width"]) // 2
         for word, w_w, color, word_font, w_ascent in ld["words"]:
             safe_draw_text(
-                    draw,
-                    (text_x, curr_y - w_ascent),
-                    word,
-                    font=word_font,
-                    fill=color,
-                    fallback_font=base_font,
-                    stroke_width=current_stroke_width,
-                    stroke_fill=stroke_color,
-                )
+                draw,
+                (text_x, curr_y - w_ascent),
+                word,
+                font=word_font,
+                fill=color,
+                fallback_font=base_font,
+                stroke_width=current_stroke_width,
+                stroke_fill=stroke_color,
+            )
             text_x += w_w + space_w
 
         curr_y += ld["height"] + LINE_GAP
@@ -336,7 +805,6 @@ def render_style_stacked_gradient(lines, config, base_font, highlight_font, spec
 
     return np.array(img)
 
-
 def render_style_card_box(lines, config, base_font, highlight_font, special_font, space_w, active_index):
     PAD_X = config.get("padding_x", 24)
     PAD_Y = config.get("padding_y", 12)
@@ -400,7 +868,6 @@ def render_style_card_box(lines, config, base_font, highlight_font, special_font
         curr_y += box_h + LINE_GAP
 
     return np.array(img)
-
 
 def render_style_active_word_box(lines, config, base_font, highlight_font, special_font, space_w, active_index):
     PAD_X = config.get("padding_x", 16)
@@ -495,13 +962,6 @@ def safe_draw_text(
     stroke_width=0,
     stroke_fill=None,
 ):
-    """
-    Safely render text with custom fonts.
-
-    Some custom OTF/TTF fonts contain problematic glyph metrics that
-    can cause Pillow/FreeType to attempt enormous memory allocations.
-    """
-
     try:
         draw.text(
             position,
@@ -512,56 +972,21 @@ def safe_draw_text(
             stroke_fill=stroke_fill,
         )
         return font
-
     except (OSError, ValueError) as exc:
-        print(
-            f"[!] Font render failed for word={text!r} "
-            f"font={getattr(font, 'path', 'unknown')}: {exc}"
-        )
-
-        # First fallback: base font
+        print(f"[!] Font render failed for word={text!r}: {exc}")
         if fallback_font is not None and fallback_font is not font:
             try:
-                draw.text(
-                    position,
-                    text,
-                    font=fallback_font,
-                    fill=fill,
-                    stroke_width=stroke_width,
-                    stroke_fill=stroke_fill,
-                )
-
-                print(
-                    f"    [+] Fallback font used for {text!r}: "
-                    f"{getattr(fallback_font, 'path', 'unknown')}"
-                )
-
+                draw.text(position, text, font=fallback_font, fill=fill, stroke_width=stroke_width, stroke_fill=stroke_fill)
                 return fallback_font
-
             except (OSError, ValueError):
                 pass
-
-        # Final fallback
         try:
             default_font = ImageFont.load_default()
-
-            draw.text(
-                position,
-                text,
-                font=default_font,
-                fill=fill,
-                stroke_width=0,
-            )
-
-            print(f"    [+] PIL default font used for {text!r}")
+            draw.text(position, text, font=default_font, fill=fill, stroke_width=0)
             return default_font
-
-        except Exception as final_exc:
-            print(
-                f"    [X] Could not render word {text!r}: "
-                f"{final_exc}"
-            )
+        except Exception:
             return None
+
 # -------------------------------------------------------------------
 # REGISTRY ROUTER
 # -------------------------------------------------------------------
@@ -576,7 +1001,7 @@ def render_caption_card(word_batch, active_index, config):
     font_path = config.get("font_path")
     highlight_font_path = config.get("highlight_font_path", font_path)
     special_font_path = config.get("special_font_path", font_path)
-    print(f"Using fonts: base={font_path}, highlight={highlight_font_path}, special={special_font_path}")
+    
     FONT_SIZE = config.get("font_size", 52)
     HIGHLIGHT_FONT_SIZE = config.get("highlight_font_size", FONT_SIZE)
     SPECIAL_FONT_SIZE = config.get("special_font_size", FONT_SIZE)
@@ -697,6 +1122,8 @@ def generate_caption_overlay(audio_path, config=CONFIG_STYLE_1):
     if not words_data:
         return None
 
+    audio_duration = words_data[-1]["end"] if words_data else 5.0
+
     for idx, w in enumerate(words_data):
         w["global_idx"] = idx
 
@@ -704,6 +1131,8 @@ def generate_caption_overlay(audio_path, config=CONFIG_STYLE_1):
                for i in range(0, len(words_data), config["max_words_per_batch"])]
 
     clip_list = []
+
+    # 2. Append individual caption clips batch-by-batch
     for batch in batches:
         for word_info in batch:
             start_t = word_info["start"]

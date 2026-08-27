@@ -27,7 +27,9 @@ from modules.caption_generator import (
     CONFIG_STYLE_PUNCHY,
     CONFIG_STYLE_STACKED_GRADIENT,
     generate_caption_overlay,
-    align_timeline_with_audio
+    align_timeline_with_audio,
+    create_top_layer_heading,
+    get_word_timestamps
 )
 from modules.transitions import build_transitioned_timeline
 
@@ -353,7 +355,6 @@ def get_random_outro_video() -> str:
     print(f"[+] Selected Outro Video: {os.path.basename(selected_outro)}")
     return selected_outro
 
-
 def process_script_item(
     script_data: dict,
     assets_dir: str = DEFAULT_ASSETS_DIR,
@@ -379,6 +380,15 @@ def process_script_item(
 
     if not script_title or not timeline:
         raise ValueError("Script object must contain 'script_title' and 'timeline'.")
+
+    # --- OPTIONAL HEADING EXTRACTOR ---
+    active_caption_config = caption_config.copy()
+    json_heading = script_data.get("heading_text")
+    if json_heading:
+        active_caption_config["heading_text"] = json_heading
+    else:
+        active_caption_config.pop("heading_text", None)
+    # -----------------------------------
 
     if audio_dir is None:
         audio_dir = resolve_project_path("mindscribble_podcaster", "voiceovers")
@@ -498,16 +508,27 @@ def process_script_item(
         )
         background = background.with_duration(audio_duration)
 
-        # 4. Generate Caption Overlay
+        # 4. Generate Caption Overlay (Using optional JSON heading config)
         print("[+] Generating Whisper caption overlay...")
         caption_overlay = generate_caption_overlay(
             audio_path,
-            config=caption_config
+            config=active_caption_config
         )
 
-        # 5. Composite Final Layer Stack: Background -> Stickers -> Captions
-        print(f"[+] Compositing Final Stack: Background + {len(all_sticker_clips)} Top-Level Sticker(s) + Caption Overlay")
+        # Generate Independent Top-Layer Heading Clip
+        heading_top_clip = create_top_layer_heading(
+            config=active_caption_config,
+            audio_path=audio_path,
+            total_duration=audio_duration
+        )
+
+        # 5. Composite Final Layer Stack: Background -> Stickers -> Captions -> Heading (Top Layer)
+        print(f"[+] Compositing Final Stack...")
         final_video_layers = [background] + all_sticker_clips + [caption_overlay]
+        
+        # Append heading to the absolute top of the visual stack
+        if heading_top_clip is not None:
+            final_video_layers.append(heading_top_clip)
 
         final_audio = CompositeAudioClip(sound_effects)
 
@@ -571,13 +592,13 @@ def process_script_item(
             if s is not None:
                 s.close()
 
-
 if __name__ == "__main__":
     sample_script = {
         "id": 4,
         "script_title": "Testing Decoy",
         "total_segments": 10,
         "posted": False,
+        "heading_text": "Decoy Effect",
         "timeline": [
             {
                 "segment_id": 1,

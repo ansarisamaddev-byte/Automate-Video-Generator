@@ -2,6 +2,7 @@
     {
         "id": 1,
         "script_title": "The Psychology of Silent Rejection",
+        "heading_text": "Intermittent Reinforcement",
         "total_segments": 11,
         "posted": true,
         "timeline": [
@@ -86,6 +87,7 @@
     {
         "id": 2,
         "script_title": "Why You Procrastinate on Things You Want",
+        "heading_text": "Procrastination",
         "total_segments": 12,
         "posted": true,
         "timeline": [
@@ -200,6 +202,7 @@
     {
         "id": 3,
         "script_title": "The Spotlight Effect Trap",
+        "heading_text": "Spotlight Effect",
         "total_segments": 10,
         "posted": true,
         "timeline": [
@@ -298,6 +301,7 @@
     {
         "id": 4,
         "script_title": "Dark Psychology of the Decoy Effect",
+        "heading_text": "Decoy Effect",
         "total_segments": 10,
         "posted": true,
         "timeline": [
@@ -381,6 +385,7 @@
     {
         "id": 5,
         "script_title": "The Power of the Zeigarnik Effect",
+        "heading_text": "Zeigarnik Effect",
         "total_segments": 10,
         "posted": true,
         "timeline": [
@@ -393,9 +398,8 @@
                         "file": "unfinished_task.png",
                         "delay": 0.8
                     }
-                ],
-                "start": 0.0,
-                "end": 3.76
+                ]
+
             },
             {
                 "segment_id": 2,
@@ -593,6 +597,7 @@
     {
         "id": 2,
         "script_title": "The Observer Effect in Your Room",
+        "heading_text": "Gaze Detection",
         "total_segments": 12,
         "posted": true,
         "timeline": [
@@ -711,6 +716,7 @@
     {
         "id": 3,
         "script_title": "The Phantom Vibration Syndrome",
+        "heading_text": "Phantom Vibration Syndrome",
         "total_segments": 12,
         "posted": true,
         "timeline": [
@@ -825,6 +831,7 @@
     {
         "id": 4,
         "script_title": "The Call of the Void",
+        "heading_text": "Call of the Void",
         "total_segments": 12,
         "posted": true,
         "timeline": [
@@ -944,6 +951,7 @@
     {
         "id": 5,
         "script_title": "The Capgras Delusion",
+        "heading_text": "Capgras Delusion",
         "total_segments": 10,
         "posted": false,
         "timeline": [
@@ -1026,6 +1034,7 @@
     {
         "id": 6,
         "script_title": "The Dead Time Phenomenon",
+        "heading_text": "Chronostasis",
         "total_segments": 11,
         "posted": false,
         "timeline": [
@@ -1110,6 +1119,7 @@
     {
         "id": 7,
         "script_title": "The Jamais Vu Glitch",
+        "heading_text": "Jamais Vu",
         "total_segments": 11,
         "posted": false,
         "timeline": [
@@ -1199,6 +1209,7 @@
     {
         "id": 8,
         "script_title": "The Third Person Memory Bias",
+        "heading_text": "Third-Person Memory",
         "total_segments": 12,
         "posted": false,
         "timeline": [
@@ -1298,6 +1309,7 @@
     {
         "id": 9,
         "script_title": "The Satiation Erasure",
+        "heading_text": "Semantic Satiation",
         "total_segments": 10,
         "posted": false,
         "timeline": [
@@ -1381,6 +1393,7 @@
     {
         "id": 10,
         "script_title": "The Phantom Limb of the Brain",
+        "heading_text": "Motor Memory",
         "total_segments": 11,
         "posted": false,
         "timeline": [
@@ -1471,6 +1484,7 @@
     {
         "id": 11,
         "script_title": "The Time-Compression Paradox",
+        "heading_text": "Time Compression",
         "total_segments": 12,
         "posted": false,
         "timeline": [
@@ -1566,6 +1580,7 @@
     {
         "id": 12,
         "script_title": "The Illusion of Multitasking",
+        "heading_text": "Context Switching",
         "total_segments": 8,
         "posted": false,
         "timeline": [
@@ -1636,6 +1651,7 @@
     {
         "id": 13,
         "script_title": "The Pygmalion Effect",
+        "heading_text": "Pygmalion Effect",
         "total_segments": 8,
         "posted": false,
         "timeline": [
@@ -1703,6 +1719,7 @@
     {
         "id": 14,
         "script_title": "The Baader-Meinhof Phenomenon",
+        "heading_text": "Baader-Meinhof Phenomenon",
         "total_segments": 7,
         "posted": false,
         "timeline": [
@@ -1767,6 +1784,7 @@
     {
         "id": 15,
         "script_title": "The Paradox of Choice",
+        "heading_text": "Paradox of Choice",
         "total_segments": 7,
         "posted": false,
         "timeline": [
@@ -1831,6 +1849,7 @@
     {
         "id": 16,
         "script_title": "The Halo Effect",
+        "heading_text": "Halo Effect",
         "total_segments": 7,
         "posted": false,
         "timeline": [
@@ -1891,6 +1910,7 @@
     {
         "id": 17,
         "script_title": "The Pratfall Effect",
+        "heading_text": "Pratfall Effect",
         "total_segments": 7,
         "posted": false,
         "timeline": [
@@ -1955,6 +1975,7 @@
     {
         "id": 18,
         "script_title": "The Reciprocity Norm",
+        "heading_text": "Reciprocity Norm",
         "total_segments": 7,
         "posted": false,
         "timeline": [
@@ -2019,6 +2040,7 @@
     {
         "id": 19,
         "script_title": "The Dunning-Kruger Trap",
+        "heading_text": "Dunning-Kruger Effect",
         "total_segments": 7,
         "posted": false,
         "timeline": [
@@ -2083,6 +2105,7 @@
     {
         "id": 20,
         "script_title": "The Nostalgia Loop",
+        "heading_text": "Reminiscence Bump",
         "total_segments": 7,
         "posted": false,
         "timeline": [
@@ -2143,6 +2166,7 @@
     {
         "id": 21,
         "script_title": "The Hedonic Treadmill",
+        "heading_text": "Hedonic Treadmill",
         "total_segments": 7,
         "posted": false,
         "timeline": [
