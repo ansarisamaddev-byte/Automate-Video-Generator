@@ -826,7 +826,7 @@
         "id": 4,
         "script_title": "The Call of the Void",
         "total_segments": 12,
-        "posted": false,
+        "posted": true,
         "timeline": [
             {
                 "segment_id": 1,
@@ -837,7 +837,9 @@
                         "file": "high_ledge.png",
                         "delay": 0.8
                     }
-                ]
+                ],
+                "start": 0.0,
+                "end": 5.08
             },
             {
                 "segment_id": 2,
@@ -848,61 +850,81 @@
                         "file": "dead_sign.png",
                         "delay": 0.8
                     }
-                ]
+                ],
+                "start": 5.08,
+                "end": 7.02
             },
             {
                 "segment_id": 3,
                 "folder": "09_traps_and_mazes",
                 "text": "Psychologists call this l\u2019appel du vide, or the Call of the Void.",
-                "stickers": []
+                "stickers": [],
+                "start": 7.3,
+                "end": 10.84
             },
             {
                 "segment_id": 4,
                 "folder": "09_traps_and_mazes",
                 "text": "For decades, it was mistaken for a dark subconscious urge,",
-                "stickers": []
+                "stickers": [],
+                "start": 11.08,
+                "end": 14.02
             },
             {
                 "segment_id": 5,
                 "folder": "09_traps_and_mazes",
                 "text": "but cognitive studies reveal it is actually a massive signal processing error in your brain\u2019s safety protocol.",
-                "stickers": []
+                "stickers": [],
+                "start": 14.28,
+                "end": 19.56
             },
             {
                 "segment_id": 6,
                 "folder": "04_anxiety_overwhelm",
                 "text": "When you stand near a drop, your rapid survival instinct detects danger and screams at you to back up instantly.",
-                "stickers": []
+                "stickers": [],
+                "start": 19.78,
+                "end": 25.54
             },
             {
                 "segment_id": 7,
                 "folder": "04_anxiety_overwhelm",
                 "text": "However, your slower, conscious mind processes that high-speed physical reflex half a second late.",
-                "stickers": []
+                "stickers": [],
+                "start": 25.54,
+                "end": 31.02
             },
             {
                 "segment_id": 8,
                 "folder": "04_anxiety_overwhelm",
                 "text": "To make sense of why you panicked so violently,",
-                "stickers": []
+                "stickers": [],
+                "start": 31.26,
+                "end": 33.38
             },
             {
                 "segment_id": 9,
                 "folder": "04_anxiety_overwhelm",
                 "text": "your brain accidentally misinterprets its own survival reflex as a secret desire to leap.",
-                "stickers": []
+                "stickers": [],
+                "start": 33.74,
+                "end": 38.42
             },
             {
                 "segment_id": 10,
                 "folder": "01_brain_anatomy",
                 "text": "Your mind literally invents a suicidal impulse just to explain a sudden surge of self-preservation adrenaline.",
-                "stickers": []
+                "stickers": [],
+                "start": 38.7,
+                "end": 44.06
             },
             {
                 "segment_id": 11,
                 "folder": "10_clarity_light",
                 "text": "Have you ever felt the Call of the Void on a cliff or high balcony?",
-                "stickers": []
+                "stickers": [],
+                "start": 44.4,
+                "end": 47.3
             },
             {
                 "segment_id": 12,
@@ -913,7 +935,9 @@
                         "file": "comment_bubble.png",
                         "delay": 0.3
                     }
-                ]
+                ],
+                "start": 47.3,
+                "end": 50.0
             }
         ]
     },
