@@ -212,88 +212,307 @@ def normalize_heading_tokens(text: str) -> list:
         if clean_word(token)
     ]
 
+
 def normalize_heading_word(word):
+    """
+    Normalize a word for heading matching.
+
+    Rules:
+        - Convert to lowercase
+        - Remove punctuation
+        - Remove symbols
+        - Keep only letters and numbers
+        - Ignore whitespace around the word
+
+    Examples:
+        "Capgras"       -> "capgras"
+        "delusion."     -> "delusion"
+        "DELUSION!"     -> "delusion"
+        "Capgras?"      -> "capgras"
+        "hello-world"   -> "helloworld"
+    """
+
     if not word:
         return ""
 
-    word = word.lower().strip()
-    word = re.sub(r"[^\w]+", "", word)
+    word = str(word).strip().lower()
+
+    # Keep only letters, numbers and underscore initially
+    word = re.sub(r"[^\w]", "", word)
+
+    # Remove underscore as well
+    word = word.replace("_", "")
 
     return word
 
+
 def find_heading_start_time(heading_text, word_timestamps):
     """
-    Find the exact Whisper timestamp where heading_text begins.
+    Find the exact timestamp where heading_text begins.
+
+    Matching is performed after applying the SAME normalization
+    to both heading text and Whisper words.
 
     Example:
-        heading_text = "Capgras Delusion"
 
-    Matches:
-        Capgras
-        delusion.
+        Heading:
+            "Capgras Delusion"
 
-    Matching ignores:
-        - case
-        - punctuation
+        Whisper:
+            "Capgras delusion."
+
+        Both become:
+
+            ["capgras", "delusion"]
+
+        Therefore they match.
+
+    Punctuation, symbols, uppercase/lowercase differences are ignored.
     """
 
-    if not heading_text or not word_timestamps:
+    print("\n" + "=" * 70)
+    print("[HEADING MATCH DEBUG]")
+    print("=" * 70)
+
+    # ---------------------------------------------------------
+    # VALIDATION
+    # ---------------------------------------------------------
+
+    if not heading_text:
+        print("[!] Heading text is empty.")
         return None
 
-    # Make sure heading is a string
+    if not word_timestamps:
+        print("[!] No Whisper word timestamps available.")
+        return None
+
+    # ---------------------------------------------------------
+    # MAKE SURE HEADING IS A STRING
+    # ---------------------------------------------------------
+
     if isinstance(heading_text, list):
-        heading_text = " ".join(str(x) for x in heading_text)
+        heading_text = " ".join(
+            str(x) for x in heading_text
+        )
 
-    heading_words = [
-        normalize_heading_word(word)
-        for word in heading_text.split()
-    ]
+    heading_text = str(heading_text)
 
-    heading_words = [
-        word for word in heading_words
-        if word
-    ]
+    # ---------------------------------------------------------
+    # NORMALIZE HEADING
+    # ---------------------------------------------------------
+
+    raw_heading_words = heading_text.split()
+
+    heading_words = []
+
+    for word in raw_heading_words:
+
+        normalized = normalize_heading_word(word)
+
+        if normalized:
+            heading_words.append(normalized)
+
+    print(f"[DEBUG] Original heading:")
+    print(f"        {heading_text}")
+
+    print(f"[DEBUG] Heading words:")
+    print(f"        {raw_heading_words}")
+
+    print(f"[DEBUG] Normalized heading:")
+    print(f"        {heading_words}")
 
     if not heading_words:
+        print("[!] Heading contains no usable words.")
         return None
+
+    # ---------------------------------------------------------
+    # NORMALIZE WHISPER WORDS
+    # ---------------------------------------------------------
 
     transcript_words = []
 
-    for item in word_timestamps:
+    print("\n[DEBUG] Whisper words:")
+    print("-" * 70)
+
+    for index, item in enumerate(word_timestamps):
+
         raw_word = item.get("word", "")
-        normalized_word = normalize_heading_word(raw_word)
+
+        normalized_word = normalize_heading_word(
+            raw_word
+        )
 
         if not normalized_word:
             continue
 
-        transcript_words.append({
+        word_data = {
             "word": normalized_word,
+            "raw_word": raw_word,
             "start": float(item["start"]),
             "end": float(item["end"]),
-        })
+            "original_index": index,
+        }
+
+        transcript_words.append(word_data)
+
+        print(
+            f"{len(transcript_words)-1:4d} | "
+            f"raw={raw_word!r:<20} | "
+            f"normalized={normalized_word!r:<20} | "
+            f"{float(item['start']):7.2f}s -> "
+            f"{float(item['end']):7.2f}s"
+        )
+
+    print("-" * 70)
+
+    if not transcript_words:
+        print("[!] Whisper returned no usable words.")
+        return None
+
+    # ---------------------------------------------------------
+    # SHOW COMPLETE NORMALIZED TRANSCRIPT
+    # ---------------------------------------------------------
+
+    print("\n[DEBUG] Normalized Whisper transcript:")
+
+    print(
+        " ".join(
+            item["word"]
+            for item in transcript_words
+        )
+    )
+
+    print()
+
+    # ---------------------------------------------------------
+    # EXACT SEQUENTIAL MATCH
+    # ---------------------------------------------------------
 
     required_count = len(heading_words)
 
-    # Search for the COMPLETE heading phrase
+    print(
+        f"[DEBUG] Searching for {required_count} "
+        f"consecutive words..."
+    )
+
+    print(
+        f"[DEBUG] Target: {' '.join(heading_words)}"
+    )
+
     for i in range(
         len(transcript_words) - required_count + 1
     ):
+
+        candidate_words = [
+            transcript_words[i + j]["word"]
+            for j in range(required_count)
+        ]
+
+        print(
+            f"[DEBUG] Checking position {i}: "
+            f"{candidate_words}"
+        )
+
         matched = True
 
         for j, heading_word in enumerate(heading_words):
 
-            transcript_word = transcript_words[i + j]["word"]
+            transcript_word = transcript_words[
+                i + j
+            ]["word"]
 
             if transcript_word != heading_word:
+
+                print(
+                    f"        NO MATCH: "
+                    f"heading={heading_word!r} "
+                    f"whisper={transcript_word!r}"
+                )
+
                 matched = False
                 break
 
+            else:
+
+                print(
+                    f"        MATCH: "
+                    f"{heading_word!r} == "
+                    f"{transcript_word!r}"
+                )
+
         if matched:
+
+            matched_start = transcript_words[i]["start"]
+            matched_end = transcript_words[
+                i + required_count - 1
+            ]["end"]
+
+            matched_raw_words = [
+                transcript_words[i + j]["raw_word"]
+                for j in range(required_count)
+            ]
+
+            print("\n" + "=" * 70)
+            print("[+] HEADING MATCH FOUND")
+            print("=" * 70)
+
+            print(
+                f"[+] Heading: "
+                f"{heading_text!r}"
+            )
+
+            print(
+                f"[+] Whisper words: "
+                f"{matched_raw_words}"
+            )
+
+            print(
+                f"[+] Normalized words: "
+                f"{candidate_words}"
+            )
+
+            print(
+                f"[+] Start: "
+                f"{matched_start:.3f}s"
+            )
+
+            print(
+                f"[+] End: "
+                f"{matched_end:.3f}s"
+            )
+
+            print("=" * 70 + "\n")
+
             # IMPORTANT:
-            # Return the start of the FIRST heading word
-            return transcript_words[i]["start"]
+            # Return the timestamp of the FIRST word.
+            return matched_start
+
+    # ---------------------------------------------------------
+    # NO MATCH
+    # ---------------------------------------------------------
+
+    print("\n" + "=" * 70)
+    print("[!] HEADING MATCH FAILED")
+    print("=" * 70)
+
+    print(
+        f"[!] Heading: {heading_text!r}"
+    )
+
+    print(
+        f"[!] Normalized heading:"
+        f" {' '.join(heading_words)}"
+    )
+
+    print(
+        "[!] The exact normalized phrase was not found "
+        "in the Whisper transcript."
+    )
+
+    print("=" * 70 + "\n")
 
     return None
+
 
 
 def render_heading_image(text: str, config: dict) -> np.ndarray:

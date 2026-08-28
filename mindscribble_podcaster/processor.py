@@ -598,7 +598,7 @@ if __name__ == "__main__":
         "script_title": "Testing Decoy",
         "total_segments": 10,
         "posted": False,
-        "heading_text": "Decoy Effect",
+        "heading_text": "Decoy Effects",
         "timeline": [
             {
                 "segment_id": 1,
