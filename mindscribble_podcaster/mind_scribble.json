@@ -1055,7 +1055,7 @@
         "script_title": "The Dead Time Phenomenon",
         "heading_text": "Chronostasis",
         "total_segments": 11,
-        "posted": false,
+        "posted": true,
         "timeline": [
             {
                 "segment_id": 1,
@@ -1066,61 +1066,81 @@
                         "file": "frozen_clock.png",
                         "delay": 0.8
                     }
-                ]
+                ],
+                "start": 0.0,
+                "end": 5.22
             },
             {
                 "segment_id": 2,
                 "folder": "08_time_mechanisms",
                 "text": "than a single second? This eerie pause is an actual illusion created by your visual system, called chronostasis.",
-                "stickers": []
+                "stickers": [],
+                "start": 5.22,
+                "end": 11.04
             },
             {
                 "segment_id": 3,
                 "folder": "08_time_mechanisms",
                 "text": "Whenever you dart your eyes quickly from one object to another,",
-                "stickers": []
+                "stickers": [],
+                "start": 11.84,
+                "end": 14.94
             },
             {
                 "segment_id": 4,
                 "folder": "08_time_mechanisms",
                 "text": "your brain experiences a brief gap in visual input while your eyes are in motion.",
-                "stickers": []
+                "stickers": [],
+                "start": 15.2,
+                "end": 19.54
             },
             {
                 "segment_id": 5,
                 "folder": "08_time_mechanisms",
                 "text": "To prevent your vision from becoming a blurry mess, your brain does something unbelievable.",
-                "stickers": []
+                "stickers": [],
+                "start": 19.82,
+                "end": 24.04
             },
             {
                 "segment_id": 6,
                 "folder": "01_brain_anatomy",
                 "text": "It retroactively erases the time your eyes spent moving and replaces that dead airtime with the image of whatever you",
-                "stickers": []
+                "stickers": [],
+                "start": 24.5,
+                "end": 30.9
             },
             {
                 "segment_id": 7,
                 "folder": "01_brain_anatomy",
                 "text": "looked at next\u2014the clock face.",
-                "stickers": []
+                "stickers": [],
+                "start": 30.9,
+                "end": 32.76
             },
             {
                 "segment_id": 8,
                 "folder": "02_neural_networks",
                 "text": "Your brain literally rewinds your perception of time, editing the immediate past so your reality feels continuous,",
-                "stickers": []
+                "stickers": [],
+                "start": 33.08,
+                "end": 39.42
             },
             {
                 "segment_id": 9,
                 "folder": "02_neural_networks",
                 "text": "making that first second feel impossibly stretched out.",
-                "stickers": []
+                "stickers": [],
+                "start": 39.76,
+                "end": 42.8
             },
             {
                 "segment_id": 10,
                 "folder": "10_clarity_light",
                 "text": "Have you ever caught time standing still on a clock or watch?",
-                "stickers": []
+                "stickers": [],
+                "start": 43.1,
+                "end": 45.98
             },
             {
                 "segment_id": 11,
@@ -1131,7 +1151,9 @@
                         "file": "comment_bubble.png",
                         "delay": 0.3
                     }
-                ]
+                ],
+                "start": 46.3,
+                "end": 49.6
             }
         ]
     },
