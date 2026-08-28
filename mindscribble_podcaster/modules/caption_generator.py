@@ -212,63 +212,69 @@ def normalize_heading_tokens(text: str) -> list:
         if clean_word(token)
     ]
 
+import re
+
+def to_alphanumeric(text: str) -> str:
+    """
+    Strips out all non-alphanumeric characters and converts to lowercase.
+    Example: "Decoy-Effect!!" -> "decoyeffect" -> "decoy" (tokenized)
+    """
+    if not text:
+        return ""
+    return re.sub(r'[^a-zA-Z0-9]', '', str(text)).lower()
+
 
 def find_exact_heading_start(words_data: list, heading_text: str):
     """
-    Find the EXACT consecutive phrase inside Whisper word timestamps.
+    Find the EXACT consecutive phrase inside Whisper word timestamps matching
+    ONLY alphanumeric characters (case-insensitive, ignoring all symbols/punctuation).
 
     Example:
-        heading_text = "Decoy Effect"
+        heading_text = "Decoy Effect!"
 
     Will match:
-        ... the / Decoy / Effect / and ...
-
-    It will NOT match:
-        ... Decoy / something / Effect ...
-
-    Returns:
-        start timestamp of the first heading word
-        or None if not found.
+        ... "the", "decoy,", "effect," ...
     """
-
-    heading_tokens = normalize_heading_tokens(heading_text)
-
-    if not heading_tokens or not words_data:
+    if not heading_text or not words_data:
         return None
 
-    total_words = len(words_data)
+    # 1. Normalize heading into alphanumeric-only tokens
+    heading_tokens = [
+        to_alphanumeric(token)
+        for token in heading_text.split()
+        if to_alphanumeric(token)
+    ]
+
+    if not heading_tokens:
+        return None
+
     phrase_length = len(heading_tokens)
+    total_words = len(words_data)
 
+    if phrase_length > total_words:
+        print(f"[!] Heading phrase longer than transcript: '{heading_text}'")
+        return None
+
+    # 2. Extract and clean transcript tokens (alphanumeric lowercased only)
+    transcript_tokens = [
+        to_alphanumeric(item.get("word", ""))
+        for item in words_data
+    ]
+
+    # 3. Sliding window exact sequence search
     for i in range(total_words - phrase_length + 1):
-
-        matched = True
-
-        for j, expected_token in enumerate(heading_tokens):
-
-            actual_token = words_data[i + j].get(
-                "clean_word",
-                clean_word(words_data[i + j].get("word", ""))
-            )
-
-            if actual_token != expected_token:
-                matched = False
-                break
-
-        if matched:
+        if transcript_tokens[i : i + phrase_length] == heading_tokens:
             start_time = float(words_data[i]["start"])
-
             print(
                 f"[+] Exact heading phrase found: "
                 f"'{heading_text}' at {start_time:.2f}s"
             )
-
             return start_time
 
     print(
         f"[!] Exact heading phrase NOT found in transcript: "
         f"'{heading_text}'"
     )
-
     return None
 
 

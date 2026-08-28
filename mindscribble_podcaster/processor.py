@@ -611,7 +611,7 @@ if __name__ == "__main__":
             {
                 "segment_id": 2,
                 "folder": "09_traps_and_mazes",
-                "text": "It’s called the Decoy Effect, and it triggers an automatic flaw in human value judgment.",
+                "text": "It’s called the Decoy effect, and it triggers an automatic flaw in human value judgment.",
                 "stickers": []
             },
             {
