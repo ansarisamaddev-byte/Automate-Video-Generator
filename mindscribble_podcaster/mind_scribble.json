@@ -952,7 +952,7 @@
         "script_title": "The Capgras Delusion",
         "heading_text": "Capgras Delusion",
         "total_segments": 10,
-        "posted": false,
+        "posted": true,
         "timeline": [
             {
                 "segment_id": 1,
@@ -1000,7 +1000,7 @@
                 "folder": "03_isolation_shadows",
                 "text": "but your brain fails to generate the warmth or familiarity you usually feel when looking at them.",
                 "stickers": [],
-                "start": 19.48,
+                "start": 19.46,
                 "end": 24.5
             },
             {
@@ -1008,7 +1008,7 @@
                 "folder": "04_anxiety_overwhelm",
                 "text": "Because the emotional connection is missing, your logical brain panics and invents a terrifying explanation to bridge the gap:",
                 "stickers": [],
-                "start": 24.64,
+                "start": 24.5,
                 "end": 30.86
             },
             {
@@ -1017,7 +1017,7 @@
                 "text": "this person looks identical to your loved one, but they must be an imposter.",
                 "stickers": [],
                 "start": 31.12,
-                "end": 34.82
+                "end": 34.8
             },
             {
                 "segment_id": 8,
@@ -1046,7 +1046,7 @@
                     }
                 ],
                 "start": 47.22,
-                "end": 48.16
+                "end": 48.14
             }
         ]
     },
