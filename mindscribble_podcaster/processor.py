@@ -19,6 +19,7 @@ from moviepy.video.VideoClip import ImageClip, VideoClip
 from moviepy.video.io.VideoFileClip import VideoFileClip
 from moviepy.video.compositing.CompositeVideoClip import CompositeVideoClip
 import moviepy.video.fx as vfx
+import moviepy.audio.fx as afx
 from moviepy import concatenate_videoclips
 
 from modules.caption_generator import (
@@ -424,10 +425,9 @@ def process_script_item(
                     bgm_clip = raw_bgm.subclipped(0, audio_duration)
 
                 # Lower volume so voiceover is prominent
-                try:
-                    bgm_clip = bgm_clip.with_effects([vfx.MultiplyVolume(bgm_volume)])
-                except AttributeError:
-                    bgm_clip = bgm_clip.volumex(bgm_volume)
+                bgm_clip = bgm_clip.with_effects([
+                    afx.MultiplyVolume(bgm_volume)
+                ])
 
                 sound_effects.append(bgm_clip)
                 print(f"[+] Added Background Music to audio stack (Vol: {bgm_volume})")
@@ -632,7 +632,7 @@ if __name__ == "__main__":
         audio_dir=r"D:\AI\Automate-Video-Generator\mindscribble_podcaster\voiceovers",
         stickers_dir=r"D:\AI\Automate-Video-Generator\stickers",
         bgm_dir=r"D:\AI\Automate-Video-Generator\background_music\mindscribble",
-        bgm_volume=0.12,
+        bgm_volume=0.22,
         output_dir=r"D:\AI\Automate-Video-Generator\mindscribble_podcaster",
         transition_type="zoom_dissolve",
         transition_duration=0.6,

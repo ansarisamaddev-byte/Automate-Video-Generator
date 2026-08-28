@@ -212,69 +212,87 @@ def normalize_heading_tokens(text: str) -> list:
         if clean_word(token)
     ]
 
-import re
-
-def to_alphanumeric(text: str) -> str:
-    """
-    Strips out all non-alphanumeric characters and converts to lowercase.
-    Example: "Decoy-Effect!!" -> "decoyeffect" -> "decoy" (tokenized)
-    """
-    if not text:
+def normalize_heading_word(word):
+    if not word:
         return ""
-    return re.sub(r'[^a-zA-Z0-9]', '', str(text)).lower()
 
+    word = word.lower().strip()
+    word = re.sub(r"[^\w]+", "", word)
 
-def find_exact_heading_start(words_data: list, heading_text: str):
+    return word
+
+def find_heading_start_time(heading_text, word_timestamps):
     """
-    Find the EXACT consecutive phrase inside Whisper word timestamps matching
-    ONLY alphanumeric characters (case-insensitive, ignoring all symbols/punctuation).
+    Find the exact Whisper timestamp where heading_text begins.
 
     Example:
-        heading_text = "Decoy Effect!"
+        heading_text = "Capgras Delusion"
 
-    Will match:
-        ... "the", "decoy,", "effect," ...
+    Matches:
+        Capgras
+        delusion.
+
+    Matching ignores:
+        - case
+        - punctuation
     """
-    if not heading_text or not words_data:
+
+    if not heading_text or not word_timestamps:
         return None
 
-    # 1. Normalize heading into alphanumeric-only tokens
-    heading_tokens = [
-        to_alphanumeric(token)
-        for token in heading_text.split()
-        if to_alphanumeric(token)
+    # Make sure heading is a string
+    if isinstance(heading_text, list):
+        heading_text = " ".join(str(x) for x in heading_text)
+
+    heading_words = [
+        normalize_heading_word(word)
+        for word in heading_text.split()
     ]
 
-    if not heading_tokens:
-        return None
-
-    phrase_length = len(heading_tokens)
-    total_words = len(words_data)
-
-    if phrase_length > total_words:
-        print(f"[!] Heading phrase longer than transcript: '{heading_text}'")
-        return None
-
-    # 2. Extract and clean transcript tokens (alphanumeric lowercased only)
-    transcript_tokens = [
-        to_alphanumeric(item.get("word", ""))
-        for item in words_data
+    heading_words = [
+        word for word in heading_words
+        if word
     ]
 
-    # 3. Sliding window exact sequence search
-    for i in range(total_words - phrase_length + 1):
-        if transcript_tokens[i : i + phrase_length] == heading_tokens:
-            start_time = float(words_data[i]["start"])
-            print(
-                f"[+] Exact heading phrase found: "
-                f"'{heading_text}' at {start_time:.2f}s"
-            )
-            return start_time
+    if not heading_words:
+        return None
 
-    print(
-        f"[!] Exact heading phrase NOT found in transcript: "
-        f"'{heading_text}'"
-    )
+    transcript_words = []
+
+    for item in word_timestamps:
+        raw_word = item.get("word", "")
+        normalized_word = normalize_heading_word(raw_word)
+
+        if not normalized_word:
+            continue
+
+        transcript_words.append({
+            "word": normalized_word,
+            "start": float(item["start"]),
+            "end": float(item["end"]),
+        })
+
+    required_count = len(heading_words)
+
+    # Search for the COMPLETE heading phrase
+    for i in range(
+        len(transcript_words) - required_count + 1
+    ):
+        matched = True
+
+        for j, heading_word in enumerate(heading_words):
+
+            transcript_word = transcript_words[i + j]["word"]
+
+            if transcript_word != heading_word:
+                matched = False
+                break
+
+        if matched:
+            # IMPORTANT:
+            # Return the start of the FIRST heading word
+            return transcript_words[i]["start"]
+
     return None
 
 
@@ -458,9 +476,9 @@ def create_top_layer_heading(config: dict, audio_path: str, total_duration: floa
 
     words_data = get_word_timestamps(audio_path)
 
-    start_time = find_exact_heading_start(
-        words_data or [],
-        heading_text
+    start_time = find_heading_start_time(
+        heading_text,
+        words_data or []
     )
 
     if start_time is None:
