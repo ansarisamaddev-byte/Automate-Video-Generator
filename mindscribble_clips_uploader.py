@@ -118,12 +118,14 @@ def build_metadata(script_title: str, custom_caption: str = None) -> tuple[str, 
 
     return title, description, hashtags
 
-
 def run_automation():
     json_file = os.path.join(BASE_DIR, "mindscribble_podcaster", "mind_scribble.json")
     assets_dir = os.path.join(BASE_DIR, "asset_library")
     audio_dir = os.path.join(BASE_DIR, "mindscribble_podcaster", "voiceovers")
     output_dir = os.path.join(BASE_DIR, "mindscribble_podcaster", "output")
+    
+    # 1. Define bgm_dir explicitly here
+    bgm_dir = os.path.join(BASE_DIR, "background_music", "mindscribble")
 
     if not os.path.exists(json_file):
         print(f"❌ JSON file missing: {json_file}")
@@ -155,6 +157,8 @@ def run_automation():
             assets_dir=assets_dir,
             audio_dir=audio_dir,
             output_dir=output_dir,
+            bgm_dir=bgm_dir,  # 2. Pass bgm_dir into the processor function
+            bgm_volume=0.12,  # (Optional) Adjust volume if needed
             transition_type=target_item.get("transition_type", "zoom_dissolve"),
             transition_duration=float(target_item.get("transition_duration", 0.6))
         )
