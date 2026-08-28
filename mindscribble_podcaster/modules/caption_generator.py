@@ -130,6 +130,8 @@ CONFIG_SAMPLE_STYLE = {
     "heading_font_path": DEFAULT_FONT,
     "heading_font_size": 92,
     "heading_text_transform": "uppercase",
+    "heading_max_width": 900,
+    "heading_line_gap": 8,
 
     # Canva "pop text" look: orange fill, blue outline, drop shadow.
     "heading_fill_color": (255, 159, 28, 255),
@@ -557,18 +559,24 @@ def find_heading_start_time(heading_text, word_timestamps):
 
     return None
 
-
 def render_heading_image(text: str, config: dict) -> np.ndarray:
     """
-    Render the heading in a bold "pop text" style (Canva-style):
+    Render a bold centered heading with a maximum of 2 lines.
 
-        - thick colored fill (default: orange)
-        - thick colored outline (default: blue)
-        - thin dark inner stroke to keep letterforms crisp
-        - soft drop shadow behind everything
+    Example:
 
-    Built from three stacked text layers (shadow -> outline -> fill),
-    composited with alpha_composite so the edges stay clean.
+        THE PSYCHOLOGY OF
+        SILENT REJECTION
+
+    The method automatically finds the most balanced 2-line split
+    that fits inside heading_max_width.
+
+    Styling:
+        - Orange fill
+        - Blue thick outline
+        - Dark inner stroke
+        - Soft drop shadow
+        - Center aligned
     """
 
     # ---------------------------------------------------------
@@ -580,14 +588,24 @@ def render_heading_image(text: str, config: dict) -> np.ndarray:
         config.get("font_path")
     )
 
-    font_size = config.get("heading_font_size", 92)
+    font_size = config.get(
+        "heading_font_size",
+        92
+    )
 
     try:
-        font = ImageFont.truetype(font_path, font_size)
+        font = ImageFont.truetype(
+            font_path,
+            font_size
+        )
     except Exception as e:
         print(f"[!] Heading font load error: {e}")
+
         try:
-            font = ImageFont.truetype(DEFAULT_FONT, font_size)
+            font = ImageFont.truetype(
+                DEFAULT_FONT,
+                font_size
+            )
         except Exception:
             font = ImageFont.load_default()
 
@@ -597,123 +615,584 @@ def render_heading_image(text: str, config: dict) -> np.ndarray:
 
     display_text = format_text(
         text,
-        config.get("heading_text_transform", "uppercase")
+        config.get(
+            "heading_text_transform",
+            "uppercase"
+        )
+    ).strip()
+
+    if not display_text:
+        return np.zeros(
+            (1, 1, 4),
+            dtype=np.uint8
+        )
+
+    # ---------------------------------------------------------
+    # CONFIG
+    # ---------------------------------------------------------
+
+    max_width = config.get(
+        "heading_max_width",
+        900
+    )
+
+    line_gap = config.get(
+        "heading_line_gap",
+        8
+    )
+
+    outline_width = config.get(
+        "heading_outline_width",
+        11
+    )
+
+    padding_x = config.get(
+        "heading_padding_x",
+        30
+    )
+
+    padding_y = config.get(
+        "heading_padding_y",
+        30
     )
 
     # ---------------------------------------------------------
-    # STYLE
+    # TEMP DRAWER FOR MEASUREMENT
     # ---------------------------------------------------------
 
-    fill_color = config.get("heading_fill_color", (255, 159, 28, 255))
-    outline_color = config.get("heading_outline_color", (58, 128, 222, 255))
-    outline_width = config.get("heading_outline_width", 11)
+    dummy = Image.new(
+        "RGBA",
+        (10, 10),
+        (0, 0, 0, 0)
+    )
 
-    inner_stroke_color = config.get("heading_inner_stroke_color", (30, 20, 60, 255))
-    inner_stroke_width = config.get("heading_inner_stroke_width", 3)
-
-    shadow_color = config.get("heading_shadow_color", (0, 0, 0, 150))
-    shadow_offset = config.get("heading_shadow_offset", (0, 10))
-    shadow_blur = config.get("heading_shadow_blur", 3)
-
-    padding_x = config.get("heading_padding_x", 30)
-    padding_y = config.get("heading_padding_y", 30)
-
-    # ---------------------------------------------------------
-    # MEASURE (use the widest stroke — the outline — for bounds)
-    # ---------------------------------------------------------
-
-    dummy = Image.new("RGBA", (10, 10), (0, 0, 0, 0))
     dummy_draw = ImageDraw.Draw(dummy)
 
-    bbox = dummy_draw.textbbox(
-        (0, 0),
-        display_text,
-        font=font,
-        stroke_width=outline_width
+    # ---------------------------------------------------------
+    # HELPER — GET TEXT WIDTH
+    # ---------------------------------------------------------
+
+    def get_text_width(line):
+        bbox = dummy_draw.textbbox(
+            (0, 0),
+            line,
+            font=font,
+            stroke_width=outline_width
+        )
+
+        return bbox[2] - bbox[0]
+
+    # ---------------------------------------------------------
+    # BUILD HEADING LINES
+    #
+    # Maximum = 2 lines
+    # ---------------------------------------------------------
+
+    words = display_text.split()
+
+    lines = []
+
+    # Empty/single word
+    if len(words) <= 1:
+
+        lines = [display_text]
+
+    else:
+
+        # -----------------------------------------------------
+        # FIRST: Check if entire heading fits on ONE line
+        # -----------------------------------------------------
+
+        full_width = get_text_width(
+            display_text
+        )
+
+        if full_width <= max_width:
+
+            lines = [
+                display_text
+            ]
+
+        else:
+
+            # -------------------------------------------------
+            # Find best 2-line split
+            # -------------------------------------------------
+
+            best_split = None
+            best_score = float("inf")
+
+            for split_index in range(
+                1,
+                len(words)
+            ):
+
+                line1 = " ".join(
+                    words[:split_index]
+                )
+
+                line2 = " ".join(
+                    words[split_index:]
+                )
+
+                width1 = get_text_width(
+                    line1
+                )
+
+                width2 = get_text_width(
+                    line2
+                )
+
+                # Both lines must fit
+                if (
+                    width1 <= max_width
+                    and
+                    width2 <= max_width
+                ):
+
+                    # -------------------------------------------------
+                    # Balance the visual widths.
+                    #
+                    # Smaller difference = better split.
+                    # -------------------------------------------------
+
+                    difference = abs(
+                        width1 - width2
+                    )
+
+                    # Slightly prefer larger overall usage
+                    # of available width.
+                    largest_width = max(
+                        width1,
+                        width2
+                    )
+
+                    unused_space = (
+                        max_width
+                        - largest_width
+                    )
+
+                    score = (
+                        difference
+                        + unused_space * 0.15
+                    )
+
+                    if score < best_score:
+
+                        best_score = score
+
+                        best_split = (
+                            line1,
+                            line2
+                        )
+
+            # -------------------------------------------------
+            # Use best balanced split
+            # -------------------------------------------------
+
+            if best_split:
+
+                lines = [
+                    best_split[0],
+                    best_split[1]
+                ]
+
+            else:
+
+                # -------------------------------------------------
+                # FALLBACK
+                #
+                # If no mathematically valid split exists,
+                # force a roughly balanced 2-line heading.
+                # -------------------------------------------------
+
+                midpoint = math.ceil(
+                    len(words) / 2
+                )
+
+                lines = [
+                    " ".join(
+                        words[:midpoint]
+                    ),
+                    " ".join(
+                        words[midpoint:]
+                    )
+                ]
+
+    # ---------------------------------------------------------
+    # DEBUG
+    # ---------------------------------------------------------
+
+    print(
+        f"[DEBUG] Heading text: "
+        f"'{display_text}'"
     )
 
-    text_w = bbox[2] - bbox[0]
-    text_h = bbox[3] - bbox[1]
+    print(
+        f"[DEBUG] Heading line count: "
+        f"{len(lines)}"
+    )
 
-    # Extra room so the blurred/offset shadow never clips at the edges.
-    extra = abs(shadow_offset[0]) + abs(shadow_offset[1]) + shadow_blur * 2
+    for index, line in enumerate(
+        lines,
+        start=1
+    ):
 
-    canvas_w = text_w + padding_x * 2 + extra
-    canvas_h = text_h + padding_y * 2 + extra
+        print(
+            f"[DEBUG] Heading Line {index}: "
+            f"'{line}' | "
+            f"Width: {get_text_width(line)}"
+        )
 
-    base_x = (canvas_w - text_w) // 2 - bbox[0]
-    base_y = (canvas_h - text_h) // 2 - bbox[1]
+    # ---------------------------------------------------------
+    # COLORS
+    # ---------------------------------------------------------
+
+    fill_color = config.get(
+        "heading_fill_color",
+        (255, 159, 28, 255)
+    )
+
+    outline_color = config.get(
+        "heading_outline_color",
+        (58, 128, 222, 255)
+    )
+
+    inner_stroke_color = config.get(
+        "heading_inner_stroke_color",
+        (30, 20, 60, 255)
+    )
+
+    inner_stroke_width = config.get(
+        "heading_inner_stroke_width",
+        3
+    )
+
+    shadow_color = config.get(
+        "heading_shadow_color",
+        (0, 0, 0, 150)
+    )
+
+    shadow_offset = config.get(
+        "heading_shadow_offset",
+        (0, 10)
+    )
+
+    shadow_blur = config.get(
+        "heading_shadow_blur",
+        3
+    )
+
+    # ---------------------------------------------------------
+    # MEASURE EACH LINE
+    # ---------------------------------------------------------
+
+    line_data = []
+
+    max_line_width = 0
+    total_text_height = 0
+
+    for line in lines:
+
+        bbox = dummy_draw.textbbox(
+            (0, 0),
+            line,
+            font=font,
+            stroke_width=outline_width
+        )
+
+        line_width = (
+            bbox[2] - bbox[0]
+        )
+
+        line_height = (
+            bbox[3] - bbox[1]
+        )
+
+        max_line_width = max(
+            max_line_width,
+            line_width
+        )
+
+        total_text_height += line_height
+
+        line_data.append({
+            "text": line,
+            "bbox": bbox,
+            "width": line_width,
+            "height": line_height
+        })
+
+    # Gap between lines
+    if len(line_data) > 1:
+
+        total_text_height += (
+            (len(line_data) - 1)
+            * line_gap
+        )
+
+    # ---------------------------------------------------------
+    # CANVAS SIZE
+    # ---------------------------------------------------------
+
+    shadow_extra = (
+        abs(shadow_offset[0])
+        +
+        abs(shadow_offset[1])
+        +
+        (shadow_blur * 2)
+    )
+
+    extra = (
+        shadow_extra
+        +
+        outline_width * 2
+    )
+
+    canvas_w = int(
+        max_line_width
+        +
+        padding_x * 2
+        +
+        extra
+    )
+
+    canvas_h = int(
+        total_text_height
+        +
+        padding_y * 2
+        +
+        extra
+    )
 
     # ---------------------------------------------------------
     # OPTIONAL BACKGROUND
     # ---------------------------------------------------------
 
-    heading_bg = config.get("heading_bg_color", None)
-    bg_layer = Image.new("RGBA", (canvas_w, canvas_h), (0, 0, 0, 0))
+    heading_bg = config.get(
+        "heading_bg_color",
+        None
+    )
+
+    bg_layer = Image.new(
+        "RGBA",
+        (canvas_w, canvas_h),
+        (0, 0, 0, 0)
+    )
 
     if heading_bg is not None:
-        radius = config.get("heading_corner_radius", 12)
-        ImageDraw.Draw(bg_layer).rounded_rectangle(
-            [0, 0, canvas_w - 1, canvas_h - 1],
+
+        radius = config.get(
+            "heading_corner_radius",
+            12
+        )
+
+        ImageDraw.Draw(
+            bg_layer
+        ).rounded_rectangle(
+            [
+                0,
+                0,
+                canvas_w - 1,
+                canvas_h - 1
+            ],
             radius=radius,
             fill=heading_bg
         )
 
     # ---------------------------------------------------------
-    # 1. DROP SHADOW LAYER
+    # CENTERED TEXT DRAW HELPER
     # ---------------------------------------------------------
 
-    shadow_layer = Image.new("RGBA", (canvas_w, canvas_h), (0, 0, 0, 0))
-    shadow_x = base_x + shadow_offset[0]
-    shadow_y = base_y + shadow_offset[1]
-    ImageDraw.Draw(shadow_layer).text(
-        (shadow_x, shadow_y),
-        display_text,
-        font=font,
-        fill=shadow_color,
-        stroke_width=outline_width,
-        stroke_fill=shadow_color
+    def draw_centered_line(
+        draw,
+        line_info,
+        y,
+        fill,
+        stroke_width,
+        stroke_fill
+    ):
+
+        bbox = line_info["bbox"]
+
+        line_width = line_info["width"]
+
+        # -----------------------------------------------------
+        # IMPORTANT:
+        #
+        # Calculate X from the actual rendered width.
+        # This guarantees center alignment.
+        # -----------------------------------------------------
+
+        x = (
+            canvas_w
+            -
+            line_width
+        ) / 2
+
+        # Correct for PIL's text bounding-box offset
+        x -= bbox[0]
+
+        y_position = (
+            y
+            -
+            bbox[1]
+        )
+
+        draw.text(
+            (
+                int(round(x)),
+                int(round(y_position))
+            ),
+            line_info["text"],
+            font=font,
+            fill=fill,
+            stroke_width=stroke_width,
+            stroke_fill=stroke_fill
+        )
+
+    # ---------------------------------------------------------
+    # START Y
+    # ---------------------------------------------------------
+
+    current_y = (
+        padding_y
+        +
+        outline_width
     )
+
+    # ---------------------------------------------------------
+    # 1. SHADOW
+    # ---------------------------------------------------------
+
+    shadow_layer = Image.new(
+        "RGBA",
+        (canvas_w, canvas_h),
+        (0, 0, 0, 0)
+    )
+
+    shadow_draw = ImageDraw.Draw(
+        shadow_layer
+    )
+
+    shadow_y = (
+        current_y
+        +
+        shadow_offset[1]
+    )
+
+    for line_info in line_data:
+
+        draw_centered_line(
+            shadow_draw,
+            line_info,
+            shadow_y,
+            shadow_color,
+            outline_width,
+            shadow_color
+        )
+
+        shadow_y += (
+            line_info["height"]
+            +
+            line_gap
+        )
+
     if shadow_blur > 0:
-        shadow_layer = shadow_layer.filter(ImageFilter.GaussianBlur(shadow_blur))
+
+        shadow_layer = shadow_layer.filter(
+            ImageFilter.GaussianBlur(
+                shadow_blur
+            )
+        )
 
     # ---------------------------------------------------------
-    # 2. THICK COLORED OUTLINE LAYER
+    # 2. COLORED OUTLINE
     # ---------------------------------------------------------
 
-    outline_layer = Image.new("RGBA", (canvas_w, canvas_h), (0, 0, 0, 0))
-    ImageDraw.Draw(outline_layer).text(
-        (base_x, base_y),
-        display_text,
-        font=font,
-        fill=outline_color,
-        stroke_width=outline_width,
-        stroke_fill=outline_color
+    outline_layer = Image.new(
+        "RGBA",
+        (canvas_w, canvas_h),
+        (0, 0, 0, 0)
     )
 
-    # ---------------------------------------------------------
-    # 3. FILL LAYER (crisp fill + thin dark inner stroke)
-    # ---------------------------------------------------------
-
-    fill_layer = Image.new("RGBA", (canvas_w, canvas_h), (0, 0, 0, 0))
-    ImageDraw.Draw(fill_layer).text(
-        (base_x, base_y),
-        display_text,
-        font=font,
-        fill=fill_color,
-        stroke_width=inner_stroke_width,
-        stroke_fill=inner_stroke_color
+    outline_draw = ImageDraw.Draw(
+        outline_layer
     )
 
+    outline_y = current_y
+
+    for line_info in line_data:
+
+        draw_centered_line(
+            outline_draw,
+            line_info,
+            outline_y,
+            outline_color,
+            outline_width,
+            outline_color
+        )
+
+        outline_y += (
+            line_info["height"]
+            +
+            line_gap
+        )
+
     # ---------------------------------------------------------
-    # COMPOSITE: bg -> shadow -> outline -> fill
+    # 3. FILL + INNER STROKE
     # ---------------------------------------------------------
 
-    img = Image.alpha_composite(bg_layer, shadow_layer)
-    img = Image.alpha_composite(img, outline_layer)
-    img = Image.alpha_composite(img, fill_layer)
+    fill_layer = Image.new(
+        "RGBA",
+        (canvas_w, canvas_h),
+        (0, 0, 0, 0)
+    )
+
+    fill_draw = ImageDraw.Draw(
+        fill_layer
+    )
+
+    fill_y = current_y
+
+    for line_info in line_data:
+
+        draw_centered_line(
+            fill_draw,
+            line_info,
+            fill_y,
+            fill_color,
+            inner_stroke_width,
+            inner_stroke_color
+        )
+
+        fill_y += (
+            line_info["height"]
+            +
+            line_gap
+        )
+
+    # ---------------------------------------------------------
+    # COMPOSITE
+    # ---------------------------------------------------------
+
+    img = Image.alpha_composite(
+        bg_layer,
+        shadow_layer
+    )
+
+    img = Image.alpha_composite(
+        img,
+        outline_layer
+    )
+
+    img = Image.alpha_composite(
+        img,
+        fill_layer
+    )
 
     return np.array(img)
+
 
 def create_top_layer_heading(config: dict, audio_path: str, total_duration: float):
     """
