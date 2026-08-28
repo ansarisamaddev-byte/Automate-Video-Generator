@@ -1162,7 +1162,7 @@
         "script_title": "The Jamais Vu Glitch",
         "heading_text": "Jamais Vu",
         "total_segments": 11,
-        "posted": false,
+        "posted": true,
         "timeline": [
             {
                 "segment_id": 1,
@@ -1173,7 +1173,9 @@
                         "file": "alien_word.png",
                         "delay": 0.8
                     }
-                ]
+                ],
+                "start": 0.0,
+                "end": 4.46
             },
             {
                 "segment_id": 2,
@@ -1184,55 +1186,73 @@
                         "file": "alien.png",
                         "delay": 0.8
                     }
-                ]
+                ],
+                "start": 4.46,
+                "end": 6.48
             },
             {
                 "segment_id": 3,
                 "folder": "14_memory_and_past",
                 "text": "You know d\u00e9j\u00e0 vu, but this is its terrifying counterpart: jamais vu.",
-                "stickers": []
+                "stickers": [],
+                "start": 6.84,
+                "end": 7.66
             },
             {
                 "segment_id": 4,
                 "folder": "14_memory_and_past",
                 "text": "It happens when your brain successfully retrieves a piece of familiar information,",
-                "stickers": []
+                "stickers": [],
+                "start": 11.14,
+                "end": 14.74
             },
             {
                 "segment_id": 5,
                 "folder": "14_memory_and_past",
                 "text": "but the neural network responsible for assigning the sensation of \"familiarity\" fails to fire.",
-                "stickers": []
+                "stickers": [],
+                "start": 14.94,
+                "end": 19.7
             },
             {
                 "segment_id": 6,
                 "folder": "04_anxiety_overwhelm",
                 "text": "You recognize the object or location logically, but the emotional recognition tag is completely missing.",
-                "stickers": []
+                "stickers": [],
+                "start": 19.94,
+                "end": 25.26
             },
             {
                 "segment_id": 7,
                 "folder": "04_anxiety_overwhelm",
                 "text": "For a brief, terrifying moment, your home feels like an elaborate set, or a simple word looks like ancient gibberish.",
-                "stickers": []
+                "stickers": [],
+                "start": 25.26,
+                "end": 31.62
             },
             {
                 "segment_id": 8,
                 "folder": "04_anxiety_overwhelm",
                 "text": "Your brain loses the ability to recognize something you\u2019ve known your entire life, treating your reality like a complete mystery.",
-                "stickers": []
+                "stickers": [],
+                "start": 31.98,
+                "end": 38.12
             },
             {
                 "segment_id": 9,
                 "folder": "01_brain_anatomy",
                 "text": "It proves that your sense of home and comfort isn't based on facts, but on a delicate chemical signal.",
-                "stickers": []
+                "stickers": [],
+                "start": 38.42,
+                "end": 43.64
             },
             {
                 "segment_id": 10,
                 "folder": "10_clarity_light",
                 "text": "Have you ever experienced jamais vu in your own home or with a common word?",
-                "stickers": []
+                "stickers": [],
+                "start": 43.9,
+                "end": 47.6
             },
             {
                 "segment_id": 11,
@@ -1243,7 +1263,9 @@
                         "file": "comment_bubble.png",
                         "delay": 0.3
                     }
-                ]
+                ],
+                "start": 47.88,
+                "end": 49.38
             }
         ]
     },
