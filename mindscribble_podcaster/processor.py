@@ -594,34 +594,105 @@ def process_script_item(
 
 if __name__ == "__main__":
     sample_script = {
-        "id": 4,
-        "script_title": "Testing Decoy",
+        "id": 5,
+        "script_title": "The Capgras Delusion",
+        "heading_text": "Capgras Delusion",
         "total_segments": 10,
         "posted": False,
-        "heading_text": "Decoy Effects",
         "timeline": [
             {
                 "segment_id": 1,
                 "folder": "16_podcaster_hoody",
-                "text": "Companies use an asymmetric choice model to manipulate your brain into spending more money.",
+                "text": "What if one day you looked at your closest family member and became utterly convinced they had been replaced by",
                 "stickers": [
-                    { "file": "money_trap.png", "delay": 0.2 }
-                ]
+                    {
+                        "file": "friends.png",
+                        "delay": 0.8
+                    },
+                    {
+                        "file": "duplicate_glitch.png",
+                        "delay": 1.0
+                    }
+                ],
+                "start": 0.0,
+                "end": 5.52
             },
             {
                 "segment_id": 2,
-                "folder": "09_traps_and_mazes",
-                "text": "It’s called the Decoy effect, and it triggers an automatic flaw in human value judgment.",
-                "stickers": []
+                "folder": "03_isolation_shadows",
+                "text": "a duplicate? This isn't sci-fi; it\u2019s a real neurological glitch known as the Capgras delusion.",
+                "stickers": [],
+                "start": 5.52,
+                "end": 10.6
             },
             {
                 "segment_id": 3,
-                "folder": "08_time_mechanisms",
-                "text": "When offered a small option for three dollars and a large for seven, most people choose the small.",
+                "folder": "03_isolation_shadows",
+                "text": "It occurs when the neural pathway connecting your visual recognition center to your emotional response system is severed.",
+                "stickers": [],
+                "start": 10.82,
+                "end": 16.68
+            },
+            {
+                "segment_id": 4,
+                "folder": "03_isolation_shadows",
+                "text": "You can clearly see and recognize the person's face,",
+                "stickers": [],
+                "start": 16.76,
+                "end": 19.3
+            },
+            {
+                "segment_id": 5,
+                "folder": "03_isolation_shadows",
+                "text": "but your brain fails to generate the warmth or familiarity you usually feel when looking at them.",
+                "stickers": [],
+                "start": 19.46,
+                "end": 24.5
+            },
+            {
+                "segment_id": 6,
+                "folder": "04_anxiety_overwhelm",
+                "text": "Because the emotional connection is missing, your logical brain panics and invents a terrifying explanation to bridge the gap:",
+                "stickers": [],
+                "start": 24.5,
+                "end": 30.86
+            },
+            {
+                "segment_id": 7,
+                "folder": "04_anxiety_overwhelm",
+                "text": "this person looks identical to your loved one, but they must be an imposter.",
+                "stickers": [],
+                "start": 31.12,
+                "end": 34.8
+            },
+            {
+                "segment_id": 8,
+                "folder": "12_dark_textures",
+                "text": "Your mind chooses to believe a massive conspiracy theory rather than accept that its internal emotional wiring failed for a",
+                "stickers": [],
+                "start": 35.1,
+                "end": 36.42
+            },
+            {
+                "segment_id": 9,
+                "folder": "10_clarity_light",
+                "text": "split second. If everyone in your life suddenly felt like an imposter, who is the first person you would suspect?",
+                "stickers": [],
+                "start": 41.58,
+                "end": 46.86
+            },
+            {
+                "segment_id": 10,
+                "folder": "16_podcaster_hoody",
+                "text": "Let me know in the comments.",
                 "stickers": [
-                    { "file": "popcorn_small.png", "delay": 0.3 },
-                    { "file": "popcorn_large.png", "delay": 1.5 }
-                ]
+                    {
+                        "file": "comment_bubble.png",
+                        "delay": 0.3
+                    }
+                ],
+                "start": 47.22,
+                "end": 48.14
             }
         ]
     }
