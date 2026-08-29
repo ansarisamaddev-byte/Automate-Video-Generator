@@ -1398,7 +1398,7 @@
         "script_title": "The Satiation Erasure",
         "heading_text": "Semantic Satiation",
         "total_segments": 10,
-        "posted": false,
+        "posted": true,
         "timeline": [
             {
                 "segment_id": 1,
@@ -1409,7 +1409,9 @@
                         "file": "repeating_word.png",
                         "delay": 0.8
                     }
-                ]
+                ],
+                "start": 0.0,
+                "end": 3.82
             },
             {
                 "segment_id": 2,
@@ -1420,49 +1422,65 @@
                         "file": "head_noise.png",
                         "delay": 0.8
                     }
-                ]
+                ],
+                "start": 4.0,
+                "end": 7.96
             },
             {
                 "segment_id": 3,
                 "folder": "02_neural_networks",
                 "text": "This phenomenon is known as semantic satiation. It happens because your brain is an hyper-efficient machine designed to conserve energy.",
-                "stickers": []
+                "stickers": [],
+                "start": 8.24,
+                "end": 15.22
             },
             {
                 "segment_id": 4,
                 "folder": "02_neural_networks",
                 "text": "When a specific neural pathway is stimulated repeatedly by the same auditory signal,",
-                "stickers": []
+                "stickers": [],
+                "start": 15.44,
+                "end": 19.82
             },
             {
                 "segment_id": 5,
                 "folder": "02_neural_networks",
                 "text": "the neurons become temporarily fatigued and stop firing with full intensity.",
-                "stickers": []
+                "stickers": [],
+                "start": 20.08,
+                "end": 23.7
             },
             {
                 "segment_id": 6,
                 "folder": "01_brain_anatomy",
                 "text": "Your brain literally mutes the meaning behind the word to save energy, reducing complex language to meaningless vocal vibrations.",
-                "stickers": []
+                "stickers": [],
+                "start": 24.08,
+                "end": 30.64
             },
             {
                 "segment_id": 7,
                 "folder": "12_dark_textures",
                 "text": "It reveals how fragile our grasp on communication really is:",
-                "stickers": []
+                "stickers": [],
+                "start": 31.08,
+                "end": 34.3
             },
             {
                 "segment_id": 8,
                 "folder": "12_dark_textures",
                 "text": "the concepts that define your entire life are held together by tiny electrical impulses that wear out in seconds under",
-                "stickers": []
+                "stickers": [],
+                "start": 34.6,
+                "end": 40.5
             },
             {
                 "segment_id": 9,
                 "folder": "10_clarity_light",
                 "text": "repetitive stress. Pick a word, repeat it continuously out loud right now,",
-                "stickers": []
+                "stickers": [],
+                "start": 40.5,
+                "end": 44.54
             },
             {
                 "segment_id": 10,
@@ -1473,7 +1491,9 @@
                         "file": "comment_bubble.png",
                         "delay": 0.3
                     }
-                ]
+                ],
+                "start": 44.7,
+                "end": 48.14
             }
         ]
     },
