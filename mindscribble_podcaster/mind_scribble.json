@@ -1274,7 +1274,7 @@
         "script_title": "The Third Person Memory Bias",
         "heading_text": "Third-Person Memory",
         "total_segments": 12,
-        "posted": false,
+        "posted": true,
         "timeline": [
             {
                 "segment_id": 1,
@@ -1285,7 +1285,9 @@
                         "file": "real_memory.png",
                         "delay": 0.8
                     }
-                ]
+                ],
+                "start": 0.0,
+                "end": 2.24
             },
             {
                 "segment_id": 2,
@@ -1300,61 +1302,81 @@
                         "file": "movie_camera.png",
                         "delay": 1.0
                     }
-                ]
+                ],
+                "start": 2.58,
+                "end": 6.78
             },
             {
                 "segment_id": 3,
                 "folder": "14_memory_and_past",
                 "text": "If you see yourself in the scene, that memory is partially fake.",
-                "stickers": []
+                "stickers": [],
+                "start": 7.14,
+                "end": 10.9
             },
             {
                 "segment_id": 4,
                 "folder": "14_memory_and_past",
                 "text": "Neuroscientists have proven that human visual memory does not record like a video camera.",
-                "stickers": []
+                "stickers": [],
+                "start": 11.42,
+                "end": 15.92
             },
             {
                 "segment_id": 5,
                 "folder": "14_memory_and_past",
                 "text": "Every single time you recall an event, your brain actively reconstructs it from scratch,",
-                "stickers": []
+                "stickers": [],
+                "start": 16.2,
+                "end": 21.02
             },
             {
                 "segment_id": 6,
                 "folder": "14_memory_and_past",
                 "text": "pulling raw facts while filling in missing visual gaps with your current perspective.",
-                "stickers": []
+                "stickers": [],
+                "start": 21.36,
+                "end": 25.56
             },
             {
                 "segment_id": 7,
                 "folder": "07_masks_identity",
                 "text": "When you remember an old memory from a third-person angle, your brain has edited the scene over years,",
-                "stickers": []
+                "stickers": [],
+                "start": 25.56,
+                "end": 31.38
             },
             {
                 "segment_id": 8,
                 "folder": "07_masks_identity",
                 "text": "literally fabricating a view of yourself that you could never have physically witnessed at the time.",
-                "stickers": []
+                "stickers": [],
+                "start": 31.74,
+                "end": 36.38
             },
             {
                 "segment_id": 9,
                 "folder": "01_brain_anatomy",
                 "text": "You aren't actually remembering the past;",
-                "stickers": []
+                "stickers": [],
+                "start": 36.76,
+                "end": 38.42
             },
             {
                 "segment_id": 10,
                 "folder": "01_brain_anatomy",
                 "text": "you are remembering the last time you thought about it, slowly altering the truth until it becomes a movie.",
-                "stickers": []
+                "stickers": [],
+                "start": 38.84,
+                "end": 44.02
             },
             {
                 "segment_id": 11,
                 "folder": "10_clarity_light",
                 "text": "Go test this right now: do you see your childhood memories in first person or third person?",
-                "stickers": []
+                "stickers": [],
+                "start": 44.46,
+                "end": 48.0
             },
             {
                 "segment_id": 12,
@@ -1365,7 +1387,9 @@
                         "file": "comment_bubble.png",
                         "delay": 0.3
                     }
-                ]
+                ],
+                "start": 49.22,
+                "end": 50.4
             }
         ]
     },
