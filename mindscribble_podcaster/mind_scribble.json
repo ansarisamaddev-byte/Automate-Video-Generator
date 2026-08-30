@@ -1502,7 +1502,7 @@
         "script_title": "The Phantom Limb of the Brain",
         "heading_text": "Motor Memory",
         "total_segments": 11,
-        "posted": false,
+        "posted": true,
         "timeline": [
             {
                 "segment_id": 1,
@@ -1513,7 +1513,9 @@
                         "file": "lost_item.png",
                         "delay": 0.8
                     }
-                ]
+                ],
+                "start": 0.0,
+                "end": 5.44
             },
             {
                 "segment_id": 2,
@@ -1524,56 +1526,74 @@
                         "file": "question_mark.png",
                         "delay": 0.8
                     }
-                ]
+                ],
+                "start": 5.7,
+                "end": 7.0
             },
             {
                 "segment_id": 3,
                 "folder": "14_memory_and_past",
                 "text": "This isn't simple forgetfulness; it's a phenomenon linked to motor memory automation.",
-                "stickers": []
+                "stickers": [],
+                "start": 7.26,
+                "end": 11.54
             },
             {
                 "segment_id": 4,
                 "folder": "14_memory_and_past",
                 "text": "When you perform routine daily actions, your brain runs automatic subroutines to save processing power.",
-                "stickers": []
+                "stickers": [],
+                "start": 11.86,
+                "end": 17.24
             },
             {
                 "segment_id": 5,
                 "folder": "14_memory_and_past",
                 "text": "It guides your physical body through the movements without recording the event into your conscious short-term memory bank.",
-                "stickers": []
+                "stickers": [],
+                "start": 17.46,
+                "end": 22.8
             },
             {
                 "segment_id": 6,
                 "folder": "04_anxiety_overwhelm",
                 "text": "When you go looking for the object later, your brain searches for a conscious memory that was never created.",
-                "stickers": []
+                "stickers": [],
+                "start": 22.94,
+                "end": 27.94
             },
             {
                 "segment_id": 7,
                 "folder": "04_anxiety_overwhelm",
                 "text": "To resolve the logical conflict, your mind builds a plausible visual hallucination of where the item should be,",
-                "stickers": []
+                "stickers": [],
+                "start": 28.18,
+                "end": 33.82
             },
             {
                 "segment_id": 8,
                 "folder": "04_anxiety_overwhelm",
                 "text": "convincing you that reality shifted.",
-                "stickers": []
+                "stickers": [],
+                "start": 34.08,
+                "end": 35.86
             },
             {
                 "symbol_id": 4,
                 "segment_id": 9,
                 "folder": "01_brain_anatomy",
                 "text": "Your brain invents a false history of where you put something down just to cover up its own background automation",
-                "stickers": []
+                "stickers": [],
+                "start": 36.18,
+                "end": 41.74
             },
             {
                 "segment_id": 10,
                 "folder": "10_clarity_light",
                 "text": "errors. What is the most impossible place you\u2019ve ever found an item you lost?",
-                "stickers": []
+                "stickers": [],
+                "start": 41.74,
+                "end": 45.64
             },
             {
                 "segment_id": 11,
@@ -1584,7 +1604,9 @@
                         "file": "comment_bubble.png",
                         "delay": 0.3
                     }
-                ]
+                ],
+                "start": 46.02,
+                "end": 47.98
             }
         ]
     },
