@@ -1615,7 +1615,7 @@
         "script_title": "The Time-Compression Paradox",
         "heading_text": "Time Compression",
         "total_segments": 12,
-        "posted": false,
+        "posted": true,
         "timeline": [
             {
                 "segment_id": 1,
@@ -1626,7 +1626,9 @@
                         "file": "hourglass.png",
                         "delay": 0.8
                     }
-                ]
+                ],
+                "start": 0.0,
+                "end": 3.84
             },
             {
                 "segment_id": 2,
@@ -1637,61 +1639,81 @@
                         "file": "question_mark.png",
                         "delay": 0.8
                     }
-                ]
+                ],
+                "start": 4.02,
+                "end": 7.04
             },
             {
                 "segment_id": 3,
                 "folder": "08_time_mechanisms",
                 "text": "This terrifying acceleration of time is called the time-compression paradox.",
-                "stickers": []
+                "stickers": [],
+                "start": 7.18,
+                "end": 10.98
             },
             {
                 "segment_id": 4,
                 "folder": "08_time_mechanisms",
                 "text": "Neuroscientists explain that our perception of time is directly measured by the amount of new sensory information our brain processes.",
-                "stickers": []
+                "stickers": [],
+                "start": 11.66,
+                "end": 17.94
             },
             {
                 "segment_id": 5,
                 "folder": "08_time_mechanisms",
                 "text": "As a child, almost every experience is novel, forcing your brain to create dense,",
-                "stickers": []
+                "stickers": [],
+                "start": 18.32,
+                "end": 22.52
             },
             {
                 "segment_id": 6,
                 "folder": "08_time_mechanisms",
                 "text": "detailed neural networks that stretch your perception of time.",
-                "stickers": []
+                "stickers": [],
+                "start": 22.86,
+                "end": 25.72
             },
             {
                 "segment_id": 7,
                 "folder": "02_neural_networks",
                 "text": "As an adult, routine dominates.",
-                "stickers": []
+                "stickers": [],
+                "start": 25.94,
+                "end": 27.9
             },
             {
                 "segment_id": 8,
                 "folder": "02_neural_networks",
                 "text": "Your brain operates on autopilot, batching familiar experiences together and skipping the creation of detailed memory checkpoints.",
-                "stickers": []
+                "stickers": [],
+                "start": 27.9,
+                "end": 34.6
             },
             {
                 "segment_id": 9,
                 "folder": "12_dark_textures",
                 "text": "When you look back, your brain has stripped away the repetitive days, compressing months into a single,",
-                "stickers": []
+                "stickers": [],
+                "start": 34.9,
+                "end": 39.52
             },
             {
                 "segment_id": 10,
                 "folder": "12_dark_textures",
                 "text": "terrifyingly brief memory blur that makes your life feel like it's speeding up.",
-                "stickers": []
+                "stickers": [],
+                "start": 39.7,
+                "end": 43.5
             },
             {
                 "segment_id": 11,
                 "folder": "10_clarity_light",
                 "text": "When was the exact moment you realized time was moving way faster than it used to?",
-                "stickers": []
+                "stickers": [],
+                "start": 43.74,
+                "end": 47.9
             },
             {
                 "segment_id": 12,
@@ -1702,7 +1724,9 @@
                         "file": "comment_bubble.png",
                         "delay": 0.3
                     }
-                ]
+                ],
+                "start": 48.14,
+                "end": 50.1
             }
         ]
     },
