@@ -1822,13 +1822,15 @@
         "script_title": "The Pygmalion Effect",
         "heading_text": "Pygmalion Effect",
         "total_segments": 8,
-        "posted": false,
+        "posted": true,
         "timeline": [
             {
                 "segment_id": 1,
                 "folder": "06_social_crowds",
                 "text": "The subtle expectations that people hold for you can completely alter your actual intelligence and performance.",
-                "stickers": []
+                "stickers": [],
+                "start": 0.0,
+                "end": 5.92
             },
             {
                 "segment_id": 2,
@@ -1838,37 +1840,49 @@
                     {
                         "file": "brain_shortcut.png"
                     }
-                ]
+                ],
+                "start": 6.58,
+                "end": 8.7
             },
             {
                 "segment_id": 3,
                 "folder": "06_social_crowds",
                 "text": "In a famous study, teachers were falsely told that a random group of average students were intellectual prodigies destined to bloom.",
-                "stickers": []
+                "stickers": [],
+                "start": 9.36,
+                "end": 16.02
             },
             {
                 "segment_id": 4,
                 "folder": "06_social_crowds",
                 "text": "Without realizing it, the teachers began offering those specific students warmer feedback, more time to speak, and tougher challenges.",
-                "stickers": []
+                "stickers": [],
+                "start": 16.62,
+                "end": 23.66
             },
             {
                 "segment_id": 5,
                 "folder": "02_neural_networks",
                 "text": "By the end of the year, those random children actually showed a massive, measurable spike in their real IQ scores.",
-                "stickers": []
+                "stickers": [],
+                "start": 23.66,
+                "end": 31.0
             },
             {
                 "segment_id": 6,
                 "folder": "02_neural_networks",
                 "text": "High expectations created a self-fulfilling cycle where subconscious encouragement directly forced growth.",
-                "stickers": []
+                "stickers": [],
+                "start": 31.58,
+                "end": 37.3
             },
             {
                 "segment_id": 7,
                 "folder": "15_ego_and_power",
                 "text": "Conversely, the Golem Effect proves that when authority figures treat you like you are incompetent, your performance will inevitably tank.",
-                "stickers": []
+                "stickers": [],
+                "start": 37.9,
+                "end": 44.88
             },
             {
                 "segment_id": 8,
@@ -1881,7 +1895,9 @@
                     {
                         "file": "subscribe_button.png"
                     }
-                ]
+                ],
+                "start": 45.66,
+                "end": 52.06
             }
         ]
     },
