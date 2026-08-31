@@ -1735,7 +1735,7 @@
         "script_title": "The Illusion of Multitasking",
         "heading_text": "Context Switching",
         "total_segments": 8,
-        "posted": false,
+        "posted": true,
         "timeline": [
             {
                 "segment_id": 1,
@@ -1745,43 +1745,57 @@
                     {
                         "file": "illusion_grid.png"
                     }
-                ]
+                ],
+                "start": 0.0,
+                "end": 5.76
             },
             {
                 "segment_id": 2,
                 "folder": "01_brain_anatomy",
                 "text": "Humans are physically incapable of processing two high-level cognitive tasks at the exact same time.",
-                "stickers": []
+                "stickers": [],
+                "start": 6.3,
+                "end": 12.0
             },
             {
                 "segment_id": 3,
                 "folder": "02_neural_networks",
                 "text": "What you are actually doing is called micro context-switching.",
-                "stickers": []
+                "stickers": [],
+                "start": 12.74,
+                "end": 15.92
             },
             {
                 "segment_id": 4,
                 "folder": "01_brain_anatomy",
                 "text": "Your prefrontal cortex is frantically shutting down one thought pattern, reloading another, and jumping back and forth hundreds of times an hour.",
-                "stickers": []
+                "stickers": [],
+                "start": 16.38,
+                "end": 23.56
             },
             {
                 "segment_id": 5,
                 "folder": "04_anxiety_overwhelm",
                 "text": "This rapid toggling creates cognitive friction that drains your mental energy reserves at double the speed.",
-                "stickers": []
+                "stickers": [],
+                "start": 24.2,
+                "end": 30.02
             },
             {
                 "segment_id": 6,
                 "folder": "01_brain_anatomy",
                 "text": "Studies reveal that constant multitasking lowers your functional IQ temporarily by up to fifteen points\u2014the equivalent of missing an entire night of sleep.",
-                "stickers": []
+                "stickers": [],
+                "start": 30.5,
+                "end": 39.26
             },
             {
                 "segment_id": 7,
                 "folder": "04_anxiety_overwhelm",
                 "text": "Even worse, your error rate spikes by fifty percent because your brain never stays locked into one task long enough to catch mistakes.",
-                "stickers": []
+                "stickers": [],
+                "start": 39.82,
+                "end": 46.72
             },
             {
                 "segment_id": 8,
@@ -1797,7 +1811,9 @@
                     {
                         "file": "save_bookmark.png"
                     }
-                ]
+                ],
+                "start": 47.42,
+                "end": 54.4
             }
         ]
     },
