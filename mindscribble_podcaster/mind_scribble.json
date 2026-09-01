@@ -1985,13 +1985,15 @@
         "script_title": "The Paradox of Choice",
         "heading_text": "Paradox of Choice",
         "total_segments": 7,
-        "posted": false,
+        "posted": true,
         "timeline": [
             {
                 "segment_id": 1,
                 "folder": "05_internal_conflict",
                 "text": "We are conditioned to believe that having absolute freedom and unlimited choices makes us happier, but cognitive science proves the exact opposite.",
-                "stickers": []
+                "stickers": [],
+                "start": 0.0,
+                "end": 7.84
             },
             {
                 "segment_id": 2,
@@ -2001,31 +2003,41 @@
                     {
                         "file": "question_mark.png"
                     }
-                ]
+                ],
+                "start": 8.28,
+                "end": 9.92
             },
             {
                 "segment_id": 3,
                 "folder": "05_internal_conflict",
                 "text": "When you are confronted with dozens of options\u2014whether choosing a streaming movie, a restaurant menu item, or a career path\u2014your brain enters severe decision paralysis.",
-                "stickers": []
+                "stickers": [],
+                "start": 10.58,
+                "end": 19.06
             },
             {
                 "segment_id": 4,
                 "folder": "04_anxiety_overwhelm",
                 "text": "The sheer volume of options creates an overwhelming cognitive load.",
-                "stickers": []
+                "stickers": [],
+                "start": 19.62,
+                "end": 23.02
             },
             {
                 "segment_id": 5,
                 "folder": "05_internal_conflict",
                 "text": "Even when you finally force yourself to pick one, your post-choice satisfaction plummets.",
-                "stickers": []
+                "stickers": [],
+                "start": 23.26,
+                "end": 28.02
             },
             {
                 "segment_id": 6,
                 "folder": "09_traps_and_mazes",
                 "text": "Why? Because your mind endlessly loops through the alternatives you rejected, tormenting you with buyer's remorse and the fear of missing out. Having too many options makes you constantly suspect a better choice existed.",
-                "stickers": []
+                "stickers": [],
+                "start": 28.28,
+                "end": 39.7
             },
             {
                 "segment_id": 7,
@@ -2041,7 +2053,9 @@
                     {
                         "file": "subscribe_button.png"
                     }
-                ]
+                ],
+                "start": 40.12,
+                "end": 47.54
             }
         ]
     },
