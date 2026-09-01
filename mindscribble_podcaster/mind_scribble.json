@@ -1906,7 +1906,7 @@
         "script_title": "The Baader-Meinhof Phenomenon",
         "heading_text": "Baader-Meinhof Phenomenon",
         "total_segments": 7,
-        "posted": false,
+        "posted": true,
         "timeline": [
             {
                 "segment_id": 1,
@@ -1916,37 +1916,49 @@
                     {
                         "file": "eye_open.png"
                     }
-                ]
+                ],
+                "start": 0.0,
+                "end": 6.94
             },
             {
                 "segment_id": 2,
                 "folder": "03_isolation_shadows",
                 "text": "It feels like a glitch in the matrix, but it\u2019s actually the Baader-Meinhof Phenomenon.",
-                "stickers": []
+                "stickers": [],
+                "start": 7.64,
+                "end": 11.8
             },
             {
                 "segment_id": 3,
                 "folder": "02_neural_networks",
                 "text": "Your environment hasn't changed at all; your brain\u2019s data filtering system just got reconfigured.",
-                "stickers": []
+                "stickers": [],
+                "start": 12.78,
+                "end": 17.8
             },
             {
                 "segment_id": 4,
                 "folder": "01_brain_anatomy",
                 "text": "Every single second, your sensory organs take in millions of bits of raw information.",
-                "stickers": []
+                "stickers": [],
+                "start": 18.6,
+                "end": 23.16
             },
             {
                 "segment_id": 5,
                 "folder": "04_anxiety_overwhelm",
                 "text": "To keep you sane, your reticular activating system ruthlessly discards ninety-nine percent of it as background noise.",
-                "stickers": []
+                "stickers": [],
+                "start": 23.94,
+                "end": 30.3
             },
             {
                 "segment_id": 6,
                 "folder": "02_neural_networks",
                 "text": "But the instant you place conscious value on a new concept, your brain labels it as vital for survival. Suddenly, your subconscious radar starts hunting for matches in real time.",
-                "stickers": []
+                "stickers": [],
+                "start": 31.14,
+                "end": 41.34
             },
             {
                 "segment_id": 7,
@@ -1962,7 +1974,9 @@
                     {
                         "file": "share_arrow.png"
                     }
-                ]
+                ],
+                "start": 42.24,
+                "end": 51.34
             }
         ]
     },
