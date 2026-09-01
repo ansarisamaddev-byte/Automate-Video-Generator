@@ -2064,43 +2064,55 @@
         "script_title": "The Halo Effect",
         "heading_text": "Halo Effect",
         "total_segments": 7,
-        "posted": false,
+        "posted": true,
         "timeline": [
             {
                 "segment_id": 1,
                 "folder": "07_masks_identity",
                 "text": "Your judgment of human character is heavily manipulated by a single cognitive shortcut known as the Halo Effect.",
-                "stickers": []
+                "stickers": [],
+                "start": 0.0,
+                "end": 6.54
             },
             {
                 "segment_id": 2,
                 "folder": "15_ego_and_power",
                 "text": "When you meet someone who possesses one noticeably positive trait\u2014like high physical attractiveness, immense charisma, or confidence\u2014your brain automatically projects other positive qualities onto them without proof.",
-                "stickers": []
+                "stickers": [],
+                "start": 6.82,
+                "end": 18.24
             },
             {
                 "segment_id": 3,
                 "folder": "07_masks_identity",
                 "text": "You subconsciously assume they are also intelligent, honest, kind, and capable.",
-                "stickers": []
+                "stickers": [],
+                "start": 18.76,
+                "end": 23.32
             },
             {
                 "segment_id": 4,
                 "folder": "06_social_crowds",
                 "text": "This visual bias influences everything from job hiring decisions to criminal courtroom verdicts.",
-                "stickers": []
+                "stickers": [],
+                "start": 23.74,
+                "end": 29.16
             },
             {
                 "segment_id": 5,
                 "folder": "06_social_crowds",
                 "text": "Studies show attractive defendants consistently receive lighter prison sentences for identical crimes compared to average-looking peers.",
-                "stickers": []
+                "stickers": [],
+                "start": 29.16,
+                "end": 36.54
             },
             {
                 "segment_id": 6,
                 "folder": "07_masks_identity",
                 "text": "Your brain hates taking the time to evaluate people deeply, so it lets one bright trait blind you to their entire true character.",
-                "stickers": []
+                "stickers": [],
+                "start": 37.04,
+                "end": 43.92
             },
             {
                 "segment_id": 7,
@@ -2116,7 +2128,9 @@
                     {
                         "file": "save_bookmark.png"
                     }
-                ]
+                ],
+                "start": 44.36,
+                "end": 50.32
             }
         ]
     },
