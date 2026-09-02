@@ -2139,13 +2139,15 @@
         "script_title": "The Pratfall Effect",
         "heading_text": "Pratfall Effect",
         "total_segments": 7,
-        "posted": false,
+        "posted": true,
         "timeline": [
             {
                 "segment_id": 1,
                 "folder": "15_ego_and_power",
                 "text": "If you want people to like and trust you instantly, stop trying to portray yourself as flawless.",
-                "stickers": []
+                "stickers": [],
+                "start": 0.0,
+                "end": 5.22
             },
             {
                 "segment_id": 2,
@@ -2155,31 +2157,41 @@
                     {
                         "file": "brain_shortcut.png"
                     }
-                ]
+                ],
+                "start": 5.7,
+                "end": 9.68
             },
             {
                 "segment_id": 3,
                 "folder": "06_social_crowds",
                 "text": "Highly competent individuals who make a small, clumsy blunder\u2014like spilling coffee, tripping slightly, or stumbling over a word\u2014are perceived as significantly more likable than those who perform flawlessly.",
-                "stickers": []
+                "stickers": [],
+                "start": 10.04,
+                "end": 20.7
             },
             {
                 "segment_id": 4,
                 "folder": "15_ego_and_power",
                 "text": "Perfection creates an invisible wall of intimidation and jealousy.",
-                "stickers": []
+                "stickers": [],
+                "start": 21.04,
+                "end": 24.58
             },
             {
                 "segment_id": 5,
                 "folder": "07_masks_identity",
                 "text": "It makes people feel insecure around you and suspicious of what you are hiding.",
-                "stickers": []
+                "stickers": [],
+                "start": 24.94,
+                "end": 28.68
             },
             {
                 "segment_id": 6,
                 "folder": "06_social_crowds",
                 "text": "But when a capable person shows a moment of vulnerability, it shatters that icy distance. It signals humanity and makes you relatable.",
-                "stickers": []
+                "stickers": [],
+                "start": 28.96,
+                "end": 36.18
             },
             {
                 "segment_id": 7,
@@ -2195,7 +2207,9 @@
                     {
                         "file": "subscribe_button.png"
                     }
-                ]
+                ],
+                "start": 36.64,
+                "end": 43.62
             }
         ]
     },
