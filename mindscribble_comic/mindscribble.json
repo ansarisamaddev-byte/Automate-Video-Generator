@@ -1,0 +1,79 @@
+{
+  "script_title": "The Pratfall Effect",
+  "heading_text": "PRATFALL EFFECT",
+  "total_segments": 4,
+  "timeline": [
+    {
+      "segment_id": 1,
+      "text": "Stop trying to act flawless if you want people to trust you.",
+      "header_text": "STOP ACTING PERFECT",
+      "background": {
+        "file": "bg_confident_character.png",
+        "effect": "zoom_in"
+      },
+      "stickers": [
+        {
+          "file": "question_mark.png",
+          "position": [800, 400],
+          "delay_offset": 0.2,
+          "duration": 1.2,
+          "animation": "pop_and_shake"
+        }
+      ]
+    },
+    {
+      "segment_id": 2,
+      "text": "Making a small clumsy mistake actually makes you instantly more likable.",
+      "header_text": "PRATFALL EFFECT",
+      "background": {
+        "file": "bg_coffee_spill.png",
+        "effect": "zoom_out"
+      },
+      "stickers": [
+        {
+          "file": "splash_burst.png",
+          "position": [500, 800],
+          "delay_offset": 0.4,
+          "duration": 1.0,
+          "animation": "pop_in"
+        }
+      ]
+    },
+    {
+      "segment_id": 3,
+      "text": "Perfection creates an invisible wall of insecurity, but vulnerability shatters that icy distance.",
+      "header_text": "VULNERABILITY = TRUST",
+      "background": {
+        "file": "bg_crowd_warm.png",
+        "effect": "pan_right"
+      },
+      "stickers": [
+        {
+          "file": "ice_shard.png",
+          "position": [200, 600],
+          "delay_offset": 0.5,
+          "duration": 1.2,
+          "animation": "shatter_fall"
+        }
+      ]
+    },
+    {
+      "segment_id": 4,
+      "text": "That is exactly why...",
+      "header_text": "THAT IS WHY...",
+      "background": {
+        "file": "bg_loop_transition.png",
+        "effect": "zoom_in"
+      },
+      "stickers": [
+        {
+          "file": "loop_arrow.png",
+          "position": [540, 960],
+          "delay_offset": 0.0,
+          "duration": 1.0,
+          "animation": "pulse_scale"
+        }
+      ]
+    }
+  ]
+}
