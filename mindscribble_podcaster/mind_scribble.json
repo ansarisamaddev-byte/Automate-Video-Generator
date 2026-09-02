@@ -2218,13 +2218,15 @@
         "script_title": "The Reciprocity Norm",
         "heading_text": "Reciprocity Norm",
         "total_segments": 7,
-        "posted": false,
+        "posted": true,
         "timeline": [
             {
                 "segment_id": 1,
                 "folder": "01_brain_anatomy",
                 "text": "There is an evolutionary rule hardcoded into human psychology that makes it nearly impossible to say no to certain requests.",
-                "stickers": []
+                "stickers": [],
+                "start": 0.0,
+                "end": 7.44
             },
             {
                 "segment_id": 2,
@@ -2234,31 +2236,41 @@
                     {
                         "file": "brain_shortcut.png"
                     }
-                ]
+                ],
+                "start": 8.06,
+                "end": 9.94
             },
             {
                 "segment_id": 3,
                 "folder": "06_social_crowds",
                 "text": "For thousands of years, human survival depended on mutual sharing; if a tribe member shared food, refusing to return the favor meant isolation and death.",
-                "stickers": []
+                "stickers": [],
+                "start": 10.66,
+                "end": 19.58
             },
             {
                 "segment_id": 4,
                 "folder": "09_traps_and_mazes",
                 "text": "Today, this evolutionary trigger is weaponized by master manipulators.",
-                "stickers": []
+                "stickers": [],
+                "start": 20.36,
+                "end": 24.48
             },
             {
                 "segment_id": 5,
                 "folder": "09_traps_and_mazes",
                 "text": "When someone gives you a small, unexpected gift or does you a minor favor, an immediate psychological pressure builds up inside your chest.",
-                "stickers": []
+                "stickers": [],
+                "start": 25.02,
+                "end": 33.0
             },
             {
                 "segment_id": 6,
                 "folder": "09_traps_and_mazes",
                 "text": "You feel a deep, uncomfortable obligation to clear the debt. Marketing agencies give out free samples and salespeople buy you coffee precisely to activate this guilt trip.",
-                "stickers": []
+                "stickers": [],
+                "start": 33.52,
+                "end": 43.98
             },
             {
                 "segment_id": 7,
@@ -2274,7 +2286,9 @@
                     {
                         "file": "share_arrow.png"
                     }
-                ]
+                ],
+                "start": 44.58,
+                "end": 48.84
             }
         ]
     },
