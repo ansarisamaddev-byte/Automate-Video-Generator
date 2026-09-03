@@ -2297,13 +2297,15 @@
         "script_title": "The Dunning-Kruger Trap",
         "heading_text": "Dunning-Kruger Effect",
         "total_segments": 7,
-        "posted": false,
+        "posted": true,
         "timeline": [
             {
                 "segment_id": 1,
                 "folder": "15_ego_and_power",
                 "text": "The less you know about a complex subject, the more confident you are that you\u2019ve mastered it.",
-                "stickers": []
+                "stickers": [],
+                "start": 0.0,
+                "end": 4.94
             },
             {
                 "segment_id": 2,
@@ -2313,31 +2315,41 @@
                     {
                         "file": "brain_shortcut.png"
                     }
-                ]
+                ],
+                "start": 5.18,
+                "end": 9.08
             },
             {
                 "segment_id": 3,
                 "folder": "02_neural_networks",
                 "text": "When you first begin learning a new skill or topic, your brain experiences a rapid surge of basic knowledge.",
-                "stickers": []
+                "stickers": [],
+                "start": 9.7,
+                "end": 15.2
             },
             {
                 "segment_id": 4,
                 "folder": "15_ego_and_power",
                 "text": "Because you don't yet understand how deep the topic actually goes, you stand atop what psychologists call \"Mount Stupid\"\u2014a peak of maximum confidence backed by zero real expertise.",
-                "stickers": []
+                "stickers": [],
+                "start": 15.62,
+                "end": 26.28
             },
             {
                 "segment_id": 5,
                 "folder": "07_masks_identity",
                 "text": "True experts, on the other hand, sit in constant self-doubt because they realize how vast the unknown territory really is.",
-                "stickers": []
+                "stickers": [],
+                "start": 27.08,
+                "end": 34.42
             },
             {
                 "segment_id": 6,
                 "folder": "07_masks_identity",
                 "text": "Incompetence inherently blinds you to your own shortcomings, making ignorance sound completely certain while real wisdom sounds cautious and hesitant.",
-                "stickers": []
+                "stickers": [],
+                "start": 34.96,
+                "end": 43.14
             },
             {
                 "segment_id": 7,
@@ -2353,7 +2365,9 @@
                     {
                         "file": "subscribe_button.png"
                     }
-                ]
+                ],
+                "start": 43.82,
+                "end": 50.48
             }
         ]
     },
