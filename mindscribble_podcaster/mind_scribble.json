@@ -2139,13 +2139,15 @@
         "script_title": "The Pratfall Effect",
         "heading_text": "Pratfall Effect",
         "total_segments": 7,
-        "posted": false,
+        "posted": true,
         "timeline": [
             {
                 "segment_id": 1,
                 "folder": "15_ego_and_power",
                 "text": "If you want people to like and trust you instantly, stop trying to portray yourself as flawless.",
-                "stickers": []
+                "stickers": [],
+                "start": 0.0,
+                "end": 5.22
             },
             {
                 "segment_id": 2,
@@ -2155,31 +2157,41 @@
                     {
                         "file": "brain_shortcut.png"
                     }
-                ]
+                ],
+                "start": 5.7,
+                "end": 9.68
             },
             {
                 "segment_id": 3,
                 "folder": "06_social_crowds",
                 "text": "Highly competent individuals who make a small, clumsy blunder\u2014like spilling coffee, tripping slightly, or stumbling over a word\u2014are perceived as significantly more likable than those who perform flawlessly.",
-                "stickers": []
+                "stickers": [],
+                "start": 10.04,
+                "end": 20.7
             },
             {
                 "segment_id": 4,
                 "folder": "15_ego_and_power",
                 "text": "Perfection creates an invisible wall of intimidation and jealousy.",
-                "stickers": []
+                "stickers": [],
+                "start": 21.04,
+                "end": 24.58
             },
             {
                 "segment_id": 5,
                 "folder": "07_masks_identity",
                 "text": "It makes people feel insecure around you and suspicious of what you are hiding.",
-                "stickers": []
+                "stickers": [],
+                "start": 24.94,
+                "end": 28.68
             },
             {
                 "segment_id": 6,
                 "folder": "06_social_crowds",
                 "text": "But when a capable person shows a moment of vulnerability, it shatters that icy distance. It signals humanity and makes you relatable.",
-                "stickers": []
+                "stickers": [],
+                "start": 28.96,
+                "end": 36.18
             },
             {
                 "segment_id": 7,
@@ -2195,7 +2207,9 @@
                     {
                         "file": "subscribe_button.png"
                     }
-                ]
+                ],
+                "start": 36.64,
+                "end": 43.62
             }
         ]
     },
@@ -2204,13 +2218,15 @@
         "script_title": "The Reciprocity Norm",
         "heading_text": "Reciprocity Norm",
         "total_segments": 7,
-        "posted": false,
+        "posted": true,
         "timeline": [
             {
                 "segment_id": 1,
                 "folder": "01_brain_anatomy",
                 "text": "There is an evolutionary rule hardcoded into human psychology that makes it nearly impossible to say no to certain requests.",
-                "stickers": []
+                "stickers": [],
+                "start": 0.0,
+                "end": 7.44
             },
             {
                 "segment_id": 2,
@@ -2220,31 +2236,41 @@
                     {
                         "file": "brain_shortcut.png"
                     }
-                ]
+                ],
+                "start": 8.06,
+                "end": 9.94
             },
             {
                 "segment_id": 3,
                 "folder": "06_social_crowds",
                 "text": "For thousands of years, human survival depended on mutual sharing; if a tribe member shared food, refusing to return the favor meant isolation and death.",
-                "stickers": []
+                "stickers": [],
+                "start": 10.66,
+                "end": 19.58
             },
             {
                 "segment_id": 4,
                 "folder": "09_traps_and_mazes",
                 "text": "Today, this evolutionary trigger is weaponized by master manipulators.",
-                "stickers": []
+                "stickers": [],
+                "start": 20.36,
+                "end": 24.48
             },
             {
                 "segment_id": 5,
                 "folder": "09_traps_and_mazes",
                 "text": "When someone gives you a small, unexpected gift or does you a minor favor, an immediate psychological pressure builds up inside your chest.",
-                "stickers": []
+                "stickers": [],
+                "start": 25.02,
+                "end": 33.0
             },
             {
                 "segment_id": 6,
                 "folder": "09_traps_and_mazes",
                 "text": "You feel a deep, uncomfortable obligation to clear the debt. Marketing agencies give out free samples and salespeople buy you coffee precisely to activate this guilt trip.",
-                "stickers": []
+                "stickers": [],
+                "start": 33.52,
+                "end": 43.98
             },
             {
                 "segment_id": 7,
@@ -2260,7 +2286,9 @@
                     {
                         "file": "share_arrow.png"
                     }
-                ]
+                ],
+                "start": 44.58,
+                "end": 48.84
             }
         ]
     },
@@ -2269,13 +2297,15 @@
         "script_title": "The Dunning-Kruger Trap",
         "heading_text": "Dunning-Kruger Effect",
         "total_segments": 7,
-        "posted": false,
+        "posted": true,
         "timeline": [
             {
                 "segment_id": 1,
                 "folder": "15_ego_and_power",
                 "text": "The less you know about a complex subject, the more confident you are that you\u2019ve mastered it.",
-                "stickers": []
+                "stickers": [],
+                "start": 0.0,
+                "end": 4.94
             },
             {
                 "segment_id": 2,
@@ -2285,31 +2315,41 @@
                     {
                         "file": "brain_shortcut.png"
                     }
-                ]
+                ],
+                "start": 5.18,
+                "end": 9.08
             },
             {
                 "segment_id": 3,
                 "folder": "02_neural_networks",
                 "text": "When you first begin learning a new skill or topic, your brain experiences a rapid surge of basic knowledge.",
-                "stickers": []
+                "stickers": [],
+                "start": 9.7,
+                "end": 15.2
             },
             {
                 "segment_id": 4,
                 "folder": "15_ego_and_power",
                 "text": "Because you don't yet understand how deep the topic actually goes, you stand atop what psychologists call \"Mount Stupid\"\u2014a peak of maximum confidence backed by zero real expertise.",
-                "stickers": []
+                "stickers": [],
+                "start": 15.62,
+                "end": 26.28
             },
             {
                 "segment_id": 5,
                 "folder": "07_masks_identity",
                 "text": "True experts, on the other hand, sit in constant self-doubt because they realize how vast the unknown territory really is.",
-                "stickers": []
+                "stickers": [],
+                "start": 27.08,
+                "end": 34.42
             },
             {
                 "segment_id": 6,
                 "folder": "07_masks_identity",
                 "text": "Incompetence inherently blinds you to your own shortcomings, making ignorance sound completely certain while real wisdom sounds cautious and hesitant.",
-                "stickers": []
+                "stickers": [],
+                "start": 34.96,
+                "end": 43.14
             },
             {
                 "segment_id": 7,
@@ -2325,7 +2365,9 @@
                     {
                         "file": "subscribe_button.png"
                     }
-                ]
+                ],
+                "start": 43.82,
+                "end": 50.48
             }
         ]
     },
