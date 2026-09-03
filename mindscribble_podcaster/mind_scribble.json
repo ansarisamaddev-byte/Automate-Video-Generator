@@ -2376,43 +2376,55 @@
         "script_title": "The Nostalgia Loop",
         "heading_text": "Reminiscence Bump",
         "total_segments": 7,
-        "posted": false,
+        "posted": true,
         "timeline": [
             {
                 "segment_id": 1,
                 "folder": "14_memory_and_past",
                 "text": "Why does the music you listened to during your teenage years hit your soul harder than anything released today?",
-                "stickers": []
+                "stickers": [],
+                "start": 0.0,
+                "end": 5.74
             },
             {
                 "segment_id": 2,
                 "folder": "14_memory_and_past",
                 "text": "It isn't just because older music was better\u2014it\u2019s due to a biological event called the Reminiscence Bump.",
-                "stickers": []
+                "stickers": [],
+                "start": 6.3,
+                "end": 12.02
             },
             {
                 "segment_id": 3,
                 "folder": "01_brain_anatomy",
                 "text": "Between the ages of twelve and twenty-two, your brain is flooded with developmental hormones that crank your emotional sensitivity to maximum levels.",
-                "stickers": []
+                "stickers": [],
+                "start": 12.28,
+                "end": 20.28
             },
             {
                 "segment_id": 4,
                 "folder": "14_memory_and_past",
                 "text": "Every heartbreak, friendship, and victory during this window is recorded with incredible neural detail.",
-                "stickers": []
+                "stickers": [],
+                "start": 20.82,
+                "end": 26.38
             },
             {
                 "segment_id": 5,
                 "folder": "07_masks_identity",
                 "text": "The songs you play during these years become neurochemically linked to your emerging sense of identity.",
-                "stickers": []
+                "stickers": [],
+                "start": 26.38,
+                "end": 31.88
             },
             {
                 "segment_id": 6,
                 "folder": "13_addiction_dopamine",
                 "text": "Listening to those tracks years later triggers a massive release of dopamine and oxytocin, instantly transporting you back to how intensely you felt life back then.",
-                "stickers": []
+                "stickers": [],
+                "start": 32.36,
+                "end": 41.04
             },
             {
                 "segment_id": 7,
@@ -2428,7 +2440,9 @@
                     {
                         "file": "save_bookmark.png"
                     }
-                ]
+                ],
+                "start": 41.74,
+                "end": 49.2
             }
         ]
     },
