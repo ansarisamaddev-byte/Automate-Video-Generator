@@ -1,0 +1,91 @@
+[
+    {
+        "script_title": "The Screaming Mummy of Egypt",
+        "heading_text": "COLD CASES",
+        "posted": true,
+        "total_segments": 4,
+        "timeline": [
+            {
+                "segment_id": 1,
+                "text": "Archaeologists opening an untouched Egyptian coffin found a mummy frozen in a blood-curdling scream.",
+                "header_text": "UNSOLVED MYSTERY",
+                "background": {
+                    "file": "screaming_mummy_crate_discovery.jpg",
+                    "effect": "zoom_in"
+                }
+            },
+            {
+                "segment_id": 2,
+                "text": "In 1935, researchers in Luxor unearthed a sealed wooden sarcophagus containing an ancient woman with her jaw locked wide open in utter agony.",
+                "header_text": "LUXOR EGYPT 1935",
+                "background": {
+                    "file": "screaming_mummy_researchers_tomb.jpg",
+                    "effect": "pan_left"
+                }
+            },
+            {
+                "segment_id": 3,
+                "text": "Modern CT scans revealed no sign of violent struggle, yet her body was embalmed with her mouth pinned open\u2014a direct violation of ancient burial rites.",
+                "header_text": "BURIAL VIOLATION",
+                "background": {
+                    "file": "screaming_mummy_macro_mouth.jpg",
+                    "effect": "zoom_out"
+                }
+            },
+            {
+                "segment_id": 4,
+                "text": "Why would embalmers intentionally preserve someone in eternal terror, making you wonder why...",
+                "header_text": "ETERNAL TERROR",
+                "background": {
+                    "file": "screaming_mummy_closed_sarcophagus.jpg",
+                    "effect": "pan_right"
+                }
+            }
+        ]
+    },
+    {
+        "script_title": "The Mystery of the Lighthouse Keepers",
+        "heading_text": "COLD CASES",
+        "posted": false,
+        "pin_comment": "What do you think really happened to the 3 keepers? Rogue wave or something unexplainable? \ud83d\udc47",
+        "total_segments": 4,
+        "timeline": [
+            {
+                "segment_id": 1,
+                "text": "In 1900, three lighthouse keepers vanished from a remote island without leaving a single trace.",
+                "header_text": "FLANNAN ISLES 1900",
+                "background": {
+                    "file": "lighthouse_flannan_isles_storm.mp4",
+                    "effect": "zoom_in"
+                }
+            },
+            {
+                "segment_id": 2,
+                "text": "When a supply ship arrived at the Flannan Isles, the lighthouse was dead dark. Inside, rescuers found an untouched meal on the table and a clock stopped on the wall.",
+                "header_text": "THE EMPTY LIGHTHOUSE",
+                "background": {
+                    "file": "lighthouse_interior_untouched_meal.mp4",
+                    "effect": "pan_right"
+                }
+            },
+            {
+                "segment_id": 3,
+                "text": "The heavy iron gates were locked, two oilskins were missing, and the logbook ended with an entry describing a storm that never happened according to nearby ships.",
+                "header_text": "THE PHANTOM STORM",
+                "background": {
+                    "file": "lighthouse_logbook_locked_gate.mp4",
+                    "effect": "zoom_out"
+                }
+            },
+            {
+                "segment_id": 4,
+                "text": "How could three experienced men vanish from a locked island in clear weather, leaving us to wonder how...",
+                "header_text": "VANISHED WITHOUT TRACE",
+                "background": {
+                    "file": "lighthouse_rocky_shore_loop.mp4",
+                    "effect": "pan_left"
+                }
+            }
+        ]
+    }
+]
