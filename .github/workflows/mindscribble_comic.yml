@@ -6,51 +6,67 @@ on:
     - cron: '0 17 * * *'
   workflow_dispatch: # Allows manual trigger anytime from GitHub Actions tab
 
+permissions:
+  contents: write
+
 jobs:
-  build-and-upload:
+  build:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout repository
+      - name: Checkout code
         uses: actions/checkout@v4
         with:
-          fetch-depth: 0 # Full git history to support pushing state updates back to main
+          lfs: true
+          persist-credentials: true
 
-      - name: Set up Python 3.10
-        uses: actions/setup-python@v5
-        with:
-          python-version: "3.10"
-          cache: "pip"
-
-      - name: Install System Dependencies (FFmpeg & OpenCV runtime)
+      - name: Fetch LFS video binary files
         run: |
           sudo apt-get update
-          sudo apt-get install -y ffmpeg libsm6 libxext6 libgl1-mesa-glx
+          sudo apt-get install -y git-lfs
+          git lfs pull
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.10'
+
+      - name: Install System Dependencies & Fonts
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y ffmpeg imagemagick fonts-liberation fonts-dejavu
+
+          sudo sed -i 's/domain="coder" rights="none" pattern="PDF"/domain="coder" rights="read|write" pattern="PDF"/' /etc/ImageMagick-6/policy.xml || true
 
       - name: Install Python Dependencies
         run: |
           python -m pip install --upgrade pip
-          if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
-          pip install google-api-python-client google-auth-oauthlib google-auth-httplib2 moviepy opencv-python numpy pillow faster-whisper
+          pip install moviepy==2.1.1
+          pip install pandas google-api-python-client google-auth google-auth-oauthlib \
+                      google-auth-httplib2 pillow numpy faster-whisper opencv-python
 
-      - name: Run Video Generation & YouTube Upload
+      - name: Run Script
         env:
-          # Stored in Repo Settings -> Secrets and variables -> Actions
           YOUTUBE_TOKEN_PICKLE_BASE64: ${{ secrets.YOUTUBE_TOKEN_PICKLE_BASE64 }}
-        run: |
-          python mindscribble_comic.py
+          CLOUDINARY_CLOUD_NAME: ${{ secrets.CLOUDINARY_CLOUD_NAME }}
+          CLOUDINARY_API_KEY: ${{ secrets.CLOUDINARY_API_KEY }}
+          CLOUDINARY_API_SECRET: ${{ secrets.CLOUDINARY_API_SECRET }}
+        run: python mindscribble_comic.py
 
-      - name: Commit and push updated JSON state
+      - name: Commit updated JSON status
         run: |
           git config --global user.name "github-actions[bot]"
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
-          
-          # Stage changes in mind_scribble.json where posted status was updated
-          git add mindscribble_podcaster/mind_scribble.json
-          
-          if git diff --staged --quiet; then
-            echo "No changes in mind_scribble.json to commit."
-          else
-            git commit -m "auto: update posted status in mind_scribble.json [skip ci]"
-            git push
-          fi
+
+          git stash
+
+          git pull origin main --rebase
+
+          git stash pop || echo "No changes to pop"
+
+          git add mindscribble_comic/mindscribble.json
+
+          git diff --quiet && git diff --staged --quiet || \
+            git commit -m "Auto-update posted status in mindscribble.json [skip ci]"
+
+          git push origin main
