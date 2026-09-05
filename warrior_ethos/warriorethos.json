@@ -1,0 +1,72 @@
+[
+{
+    "id": "001",
+    "script_title": "No One Is Coming",
+    "tag": "Statues_Stoicism",
+    "segments": 5,
+    "bg_music": "dark_ambient_01.mp3",
+    "pinned_comment": "No rescue team is coming. Take full responsibility today. Drop a 🔥 if you needed this.",
+    "posted": false,
+    "scenes": [
+      {
+        "text": "No one is coming to save you.",
+        "heading_text": "THE HARD TRUTH",
+        "transition": "zoom_dissolve"
+      },
+      {
+        "text": "No government, no mentor, and no miraculous event is going to fix your life.",
+        "transition": "cross_dissolve"
+      },
+      {
+        "text": "The weight of your future sits entirely on your own shoulders.",
+        "transition": "cut_smooth"
+      },
+      {
+        "text": "Stop waiting for the right mood and start building relentless discipline.",
+        "heading_text": "BUILD DISCIPLINE",
+        "transition": "zoom_dissolve"
+      },
+      {
+        "text": "Because in the end... you will realize that...",
+        "transition": "cross_dissolve"
+      }
+    ]
+  },
+  {
+    "id": "002",
+    "script_title": "Work In Silence",
+    "tag": "Gym_Training",
+    "segments": 6,
+    "bg_music": "dark_ambient_01.mp3",
+    "pinned_comment": "Let your execution speak for you. What goal are you quietly working on right now?",
+    "posted": false,
+    "scenes": [
+      {
+        "text": "Work in total silence.",
+        "heading_text": "SILENT EXECUTION",
+        "transition": "zoom_dissolve"
+      },
+      {
+        "text": "Never announce your moves before you make them.",
+        "transition": "cross_dissolve"
+      },
+      {
+        "text": "Let your results shatter the room while your mouth stays closed.",
+        "transition": "cut_smooth"
+      },
+      {
+        "text": "Weak men broadcast their plans to get temporary applause.",
+        "transition": "zoom_dissolve"
+      },
+      {
+        "text": "Strong men stay quiet until the execution is done.",
+        "heading_text": "STAY QUIET",
+        "transition": "cross_dissolve"
+      },
+      {
+        "text": "Always remember to... keep your focus sharp and...",
+        "transition": "cut_smooth"
+      }
+    ]
+  }
+]
