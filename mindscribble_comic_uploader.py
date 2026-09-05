@@ -126,10 +126,10 @@ def build_metadata(script_title: str, custom_caption: str = None) -> tuple[str, 
 
 def run_automation():
     """Main function to scan JSON queue, generate video, upload, and update JSON."""
-    json_file = os.path.join(BASE_DIR, "mindscribble_podcaster", "mind_scribble.json")
+    json_file = os.path.join(BASE_DIR, "mindscribble_comic", "mindscribble.json")
     assets_dir = os.path.join(BASE_DIR, "asset_library")
-    audio_dir = os.path.join(BASE_DIR, "mindscribble_podcaster", "voiceovers")
-    output_dir = os.path.join(BASE_DIR, "mindscribble_podcaster", "output")
+    audio_dir = os.path.join(BASE_DIR, "mindscribble_comic", "voiceovers")
+    output_dir = os.path.join(BASE_DIR, "mindscribble_comic", "output")
     bgm_dir = os.path.join(BASE_DIR, "background_music", "mindscribble")
 
     if not os.path.exists(json_file):
