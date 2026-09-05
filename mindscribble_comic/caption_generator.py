@@ -25,18 +25,18 @@ CONFIG_STYLE_PUNCHY = {
     "font_path": DEFAULT_FONT, 
     "highlight_font_path": HIGHLIGHT_FONT, 
     "special_font_path": SPECIAL_FONT,
-    "font_size": 62,                           
-    "special_font_size": 62,
+    "font_size": 58,                           
+    "special_font_size": 58,
     "text_transform": "uppercase",             
     "padding_x": 20,                           
     "padding_y": 10,                            
     "box_corner_radius": 12,                    
-    "line_gap": 16,                            
+    "line_gap": 14,                            
     "max_words_per_batch": 3,                  
-    "max_line_width": 850,                     
+    "max_line_width": 800,                     
     "video_width": 1080,
     "video_height": 1920,
-    "vertical_pos": 0.76,                      
+    "vertical_pos": 0.72,                      
     "text_color": (255, 255, 255, 255),        
     "active_text_color": (0, 0, 0, 255),       
     "active_box_color": (255, 230, 0, 255),    
@@ -116,7 +116,7 @@ def render_style_active_word_box(lines, config, base_font, highlight_font, speci
     img = Image.new("RGBA", (config["video_width"], config["video_height"]), (0, 0, 0, 0))
     draw = ImageDraw.Draw(img)
 
-    curr_y = int(config["video_height"] * config.get("vertical_pos", 0.76)) - (total_h // 2)
+    curr_y = int(config["video_height"] * config.get("vertical_pos", 0.72)) - (total_h // 2)
 
     for ld in line_data:
         text_x = (config["video_width"] - ld["width"]) // 2
@@ -146,7 +146,7 @@ def render_style_active_word_box(lines, config, base_font, highlight_font, speci
 
 def render_caption_card(word_batch, active_index, config):
     font_path = config.get("font_path")
-    font_size = config.get("font_size", 62)
+    font_size = config.get("font_size", 58)
     
     base_font = safe_load_font(font_path, font_size)
     highlight_font = safe_load_font(config.get("highlight_font_path", font_path), config.get("highlight_font_size", font_size))
@@ -156,6 +156,8 @@ def render_caption_card(word_batch, active_index, config):
     space_w = base_bbox[2] - base_bbox[0]
     lines, current_line, current_line_width = [], [], 0
 
+    max_allowed_w = config.get("max_line_width", 800) - (config.get("padding_x", 20) * 2)
+
     for item in word_batch:
         w = item["word"]
         target_font = special_font if clean_word(w) in SPECIAL_WORDS else base_font
@@ -163,7 +165,7 @@ def render_caption_card(word_batch, active_index, config):
         w_w = bbox[2] - bbox[0]
         test_width = current_line_width + w_w + (space_w if current_line else 0)
 
-        if current_line and test_width > config.get("max_line_width", 850):
+        if current_line and test_width > max_allowed_w:
             lines.append(current_line)
             current_line = [item]
             current_line_width = w_w

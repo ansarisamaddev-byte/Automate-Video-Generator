@@ -32,20 +32,10 @@ def resolve_project_path(*path_parts: str) -> str:
     path_parent = os.path.abspath(os.path.join(BASE_DIR, "..", *path_parts))
     return path_parent
 
-DEFAULT_POP_SFX = resolve_project_path("audio", "sound_effect", "pop.mp3")
-DEFAULT_SWOOSH_SFX = resolve_project_path("audio", "sound_effect", "swoosh.mp3")
-DEFAULT_SHATTER_SFX = resolve_project_path("audio", "sound_effect", "glass_break.mp3")
-
-SFX_MAP = {
-    "pop_and_shake": DEFAULT_POP_SFX,
-    "pop_in": DEFAULT_POP_SFX,
-    "shatter_fall": DEFAULT_SHATTER_SFX,
-    "pulse_scale": DEFAULT_SWOOSH_SFX
-}
-
+DEFAULT_SFX_DIR = resolve_project_path("mindscribble_comic", "sfx")
 DEFAULT_STICKERS_DIR = resolve_project_path("mindscribble_comic", "stickers")
 DEFAULT_ASSETS_DIR = resolve_project_path("mindscribble_comic", "background_assets")
-DEFAULT_BGM_DIR = resolve_project_path("background_music", "mindscribble")
+DEFAULT_BGM_DIR = resolve_project_path("mindscribble_comic", "background_music")
 
 def sanitize_filename(name: str) -> str:
     clean_name = re.sub(r'[\\/*?:"<>|]', "", name)
@@ -69,6 +59,47 @@ def find_audio_file(audio_dir: str, target_title: str) -> str:
         make_silence = AudioArrayClip(np.zeros((44100 * 5, 2)), fps=44100)
         make_silence.write_audiofile(dummy_audio_path, fps=44100)
     return dummy_audio_path
+
+def get_sfx_clip(sfx_name: str, start_time: float, max_duration: float = None, sfx_dir: str = DEFAULT_SFX_DIR):
+    """
+    Dynamically finds and loads an SFX clip, capping its duration to max_duration so it stops 
+    when the segment ends.
+    """
+    if not sfx_name or not os.path.exists(sfx_dir):
+        return None
+
+    stem = os.path.splitext(sfx_name)[0].lower()
+    
+    if os.path.isabs(sfx_name) and os.path.exists(sfx_name):
+        target_path = sfx_name
+    else:
+        target_path = None
+        for file in os.listdir(sfx_dir):
+            if file.lower().endswith((".mp3", ".wav", ".m4a", ".ogg")):
+                file_stem = os.path.splitext(file)[0].lower()
+                if file_stem == stem:
+                    target_path = os.path.join(sfx_dir, file)
+                    break
+
+    if target_path and os.path.exists(target_path):
+        try:
+            sfx_clip = AudioFileClip(target_path)
+            
+            # Calculate maximum allowed duration for the sound effect
+            allowed_duration = sfx_clip.duration
+            if max_duration is not None and max_duration > 0:
+                allowed_duration = min(sfx_clip.duration, max_duration)
+
+            # Trim the sound effect so it doesn't bleed into the next segment
+            return (
+                sfx_clip
+                .subclipped(0, allowed_duration)
+                .with_start(start_time)
+            )
+        except Exception as e:
+            print(f"[WARNING] Could not load SFX file '{target_path}': {e}")
+            
+    return None
 
 def get_random_bgm_file(bgm_dir: str) -> str:
     if not os.path.exists(bgm_dir):
@@ -120,9 +151,6 @@ def force_aspect_fill(image_array, target_w=1080, target_h=1920):
     return resized[crop_y : crop_y + target_h, crop_x : crop_x + target_w]
 
 def apply_background_effect(clip, effect_type, duration, target_w=1080, target_h=1920):
-    """
-    Renders frames natively at target dimensions (1080x1920) so canvas offsets are impossible.
-    """
     def transform_frame(get_frame, t):
         raw_frame = get_frame(t)
         if raw_frame is None or raw_frame.size == 0:
@@ -160,35 +188,58 @@ def apply_background_effect(clip, effect_type, duration, target_w=1080, target_h
 
         return cropped
 
-    # Returning clip sized directly to target canvas guarantees no top-left shift
     return clip.transform(transform_frame).with_position((0, 0))
 
-def loop_video_to_duration(source_clip, target_duration):
-    if source_clip.duration >= target_duration:
-        speed_factor = source_clip.duration / target_duration
-        return (
-            source_clip
-            .with_effects([vfx.MultiplySpeed(speed_factor)])
-            .with_duration(target_duration)
-            .with_position((0, 0))
-        )
 
-    forward_clip = source_clip
-    reversed_clip = source_clip.with_effects([vfx.TimeMirror()])
+def loop_video_to_duration(source_clip, target_duration, base_slow_duration=5.0, crossfade_duration=0.4):
+    if source_clip.duration > 0:
+        speed_factor = source_clip.duration / base_slow_duration
+    else:
+        speed_factor = 1.0
 
-    segments = []
+    slowed_clip = (
+        source_clip
+        .with_effects([vfx.MultiplySpeed(speed_factor)])
+        .with_duration(base_slow_duration)
+        .with_position((0, 0))
+    )
+
+    if target_duration <= base_slow_duration:
+        return slowed_clip.subclipped(0, target_duration).with_position((0, 0))
+
+    forward_clip = slowed_clip
+    reversed_clip = slowed_clip.with_effects([vfx.TimeMirror()])
+
+    raw_clips = []
     accumulated = 0.0
     i = 0
 
-    while accumulated < target_duration + 2.0:
+    while accumulated < target_duration + base_slow_duration:
         base = forward_clip if i % 2 == 0 else reversed_clip
-        segments.append(base)
+        raw_clips.append(base)
         accumulated += base.duration
         i += 1
 
-    concatenated = concatenate_videoclips(segments)
+    composite_layers = []
+    current_start_time = 0.0
+
+    for idx, clip in enumerate(raw_clips):
+        if idx == 0:
+            layer = clip.with_start(current_start_time)
+        else:
+            current_start_time -= crossfade_duration
+            layer = (
+                clip
+                .with_start(current_start_time)
+                .with_effects([vfx.CrossFadeIn(crossfade_duration)])
+            )
+
+        composite_layers.append(layer)
+        current_start_time += clip.duration
+
+    composited = CompositeVideoClip(composite_layers)
     return (
-        concatenated
+        composited
         .subclipped(0, target_duration)
         .with_position((0, 0))
     )
@@ -244,14 +295,22 @@ def load_animated_sticker(sticker_path, start_time, position, animation_type="po
         elif animation_type == "pulse_scale":
             scale = 1.0 + (math.sin(t * 8.0) * 0.12)
 
+        elif animation_type == "continuous_rotate":
+            scale = min(1.0, t / 0.15) if t < 0.15 else 1.0
+            # Positive angle calculation
+            angle = (t * 360.0) % 360.0
+
         if scale <= 0.01:
             return canvas
 
         curr_w, curr_h = max(2, int(target_w * scale)), max(2, int(target_h * scale))
         resized = cv2.resize(base_img, (curr_w, curr_h), interpolation=cv2.INTER_LANCZOS4)
 
+        # Change this inside load_animated_sticker:
+
         if angle != 0.0:
-            M = cv2.getRotationMatrix2D((curr_w // 2, curr_h // 2), angle, 1.0)
+            # Passing -float(angle) forces clockwise rotation in OpenCV
+            M = cv2.getRotationMatrix2D((curr_w // 2, curr_h // 2), -float(angle), 1.0)
             resized = cv2.warpAffine(
                 resized, M, (curr_w, curr_h), 
                 borderMode=cv2.BORDER_CONSTANT, 
@@ -456,7 +515,6 @@ def process_script_item(
                 else:
                     media_clip = ImageClip(file_path).with_duration(clip_duration)
 
-            # Apply pan/zoom effects cleanly to a 1080x1920 canvas
             media_clip = apply_background_effect(media_clip, effect_type=effect_type, duration=clip_duration, target_w=1080, target_h=1920)
             media_clips.append(media_clip)
 
@@ -470,6 +528,7 @@ def process_script_item(
                 s_pos = st_item.get("position", [540, 960])
                 s_delay = float(st_item.get("delay_offset", st_item.get("delay", 0.0)))
                 s_anim = st_item.get("animation", "pop_in")
+                custom_sfx = st_item.get("sfx")
 
                 s_start_time = start_time + s_delay
                 s_path = os.path.join(stickers_dir, s_file) if not os.path.isabs(s_file) else s_file
@@ -484,13 +543,19 @@ def process_script_item(
                 if st_clip:
                     all_sticker_clips.append(st_clip)
 
-                    sfx_path = SFX_MAP.get(s_anim, DEFAULT_POP_SFX)
-                    if os.path.exists(sfx_path):
-                        try:
-                            sfx_clip = AudioFileClip(sfx_path).with_start(s_start_time)
-                            sound_effects.append(sfx_clip)
-                        except Exception:
-                            pass
+                    # 1. Look for custom sfx in JSON first, fallback directly to animation name
+                    target_sfx_name = custom_sfx if custom_sfx else s_anim
+
+                    sfx_max_duration = max(0.1, base_duration - s_delay)
+
+                    sfx_clip = get_sfx_clip(
+                        target_sfx_name, 
+                        start_time=s_start_time, 
+                        max_duration=sfx_max_duration, 
+                        sfx_dir=DEFAULT_SFX_DIR
+                    )
+                    if sfx_clip:
+                        sound_effects.append(sfx_clip)
 
         background = build_transitioned_timeline(
             media_clips,
@@ -498,7 +563,7 @@ def process_script_item(
             duration=transition_duration,
             size=(1080, 1920),
             final_duration=audio_duration
-        ).with_duration(audio_duration).with_position((0, 0)) # Ensure composite doesn't drop back to default center offset
+        ).with_duration(audio_duration).with_position((0, 0))
 
         shadow_overlay = create_bottom_shadow_overlay(
             width=1080,
@@ -555,67 +620,70 @@ def process_script_item(
 
 if __name__ == "__main__":
     SCHEMA_DATA = {
-        "script_title": "The Pratfall Effect",
-        "heading_text": "PRATFALL EFFECT",
+        "script_title": "The Overwhelmed Mind Hack",
+        "heading_text": "MINDSCRIBBLE METHOD",
         "total_segments": 4,
         "timeline": [
             {
                 "segment_id": 1,
-                "text": "Stop trying to act flawless if you want people to trust you.",
-                "header_text": "STOP ACTING PERFECT",
+                "text": "Feeling completely overwhelmed with too many thoughts inside your head?",
+                "header_text": "TOO MANY THOUGHTS?",
                 "background": {
-                    "file": "bg_confident_character.mp4",
+                    "file": "bg_overwhelmed_workplace.mp4",
                     "effect": "zoom_in"
                 },
                 "stickers": [
                     {
-                        "file": "question_mark.png",
-                        "position": [800, 400],
+                        "file": "mind_chaos.png",
+                        "position": [540, 500],
                         "delay_offset": 0.2,
-                        "animation": "pop_and_shake"
+                        "animation": "pop_and_shake",
+                        "sfx": "static_fuzz.mp3"
                     }
                 ]
             },
             {
                 "segment_id": 2,
-                "text": "Making a small clumsy mistake actually makes you instantly more likable.",
-                "header_text": "PRATFALL EFFECT",
+                "text": "Stop forcing structure and just start dumping raw, unfiltered thoughts on paper.",
+                "header_text": "UNFILTERED DUMP",
                 "background": {
-                    "file": "bg_coffee_spill.mp4",
+                    "file": "bg_scribble_paper.mp4",
                     "effect": "zoom_out"
                 },
                 "stickers": [
                     {
-                        "file": "splash_burst.png",
-                        "position": [500, 800],
-                        "delay_offset": 0.4,
-                        "animation": "pop_in"
+                        "file": "pencil_draw.png",
+                        "position": [540, 960],
+                        "delay_offset": 0.3,
+                        "animation": "pop_in",
+                        "sfx": "scribble_scratch_slow.mp3"
                     }
                 ]
             },
             {
                 "segment_id": 3,
-                "text": "Perfection creates an invisible wall of insecurity, but vulnerability shatters that icy distance.",
-                "header_text": "VULNERABILITY = TRUST",
+                "text": "You can never organize a messy mind until you lay all the chaotic pieces out first.",
+                "header_text": "CHAOS BRINGS CLARITY",
                 "background": {
-                    "file": "bg_crowd_warm.mp4",
+                    "file": "bg_organized_workspace.mp4",
                     "effect": "pan_right"
                 },
                 "stickers": [
                     {
-                        "file": "ice_shard.png",
-                        "position": [200, 600],
-                        "delay_offset": 0.5,
-                        "animation": "shatter_fall"
+                        "file": "lightbulb_spark.png",
+                        "position": [540, 960],
+                        "delay_offset": 0.4,
+                        "animation": "pulse_scale",
+                        "sfx": "lightbulb_on.mp3"
                     }
                 ]
             },
             {
                 "segment_id": 4,
-                "text": "That is exactly why...",
-                "header_text": "THAT IS WHY...",
+                "text": "Which stops you from...",
+                "header_text": "CLEAR THE CLUTTER",
                 "background": {
-                    "file": "bg_loop_transition.mp4",
+                    "file": "bg_loop_transition_2.mp4",
                     "effect": "zoom_in"
                 },
                 "stickers": [
@@ -623,7 +691,8 @@ if __name__ == "__main__":
                         "file": "loop_arrow.png",
                         "position": [540, 960],
                         "delay_offset": 0.0,
-                        "animation": "pulse_scale"
+                        "animation": "continuous_rotate",
+                        "sfx": "whoosh.mp3"
                     }
                 ]
             }

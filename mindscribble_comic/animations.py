@@ -1,4 +1,5 @@
 import numpy as np
+import cv2
 from PIL import Image, ImageFilter
 from moviepy.video.compositing.CompositeVideoClip import CompositeVideoClip
 import moviepy.video.fx as vfx
@@ -52,7 +53,10 @@ def transition_blur_dissolve(clip_a, clip_b, duration, size=DEFAULT_SIZE, max_bl
         frame = get_frame(t)
         progress = _progress(t, duration)
         radius = max_blur * (1.0 - progress)
-        return _blur_frame(frame, radius)
+        blurred = _blur_frame(frame, radius)
+        if blurred.shape[:2] != (size[1], size[0]):
+            blurred = cv2.resize(blurred, (size[0], size[1]), interpolation=cv2.INTER_LINEAR)
+        return blurred
 
     incoming = clip_b.transform(_make_frame)
     return incoming.with_effects([vfx.CrossFadeIn(duration)])
@@ -84,7 +88,10 @@ def transition_zoom_dissolve(clip_a, clip_b, duration, size=DEFAULT_SIZE, zoom_s
             crop_x = max(0, (new_w - canvas_w) // 2)
             crop_y = max(0, (new_h - canvas_h) // 2)
             
-            return resized_frame[crop_y : crop_y + canvas_h, crop_x : crop_x + canvas_w]
+            cropped = resized_frame[crop_y : crop_y + canvas_h, crop_x : crop_x + canvas_w]
+            if cropped.shape[:2] != (canvas_h, canvas_w):
+                cropped = cv2.resize(cropped, (canvas_w, canvas_h), interpolation=cv2.INTER_LINEAR)
+            return cropped
 
         return frame
 
