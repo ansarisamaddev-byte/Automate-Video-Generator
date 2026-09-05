@@ -19,7 +19,11 @@ from google_auth_oauthlib.flow import InstalledAppFlow
 # Import the processing function from your pipeline module
 from mindscribble_comic.main import process_script_item
 
-SCOPES = ["https://www.googleapis.com/auth/youtube.upload"]
+# Updated scopes to include comment permissions
+SCOPES = [
+    "https://www.googleapis.com/auth/youtube.upload",
+    "https://www.googleapis.com/auth/youtube.force-ssl"
+]
 
 
 def get_service(
@@ -63,8 +67,42 @@ def get_service(
     return googleapiclient.discovery.build("youtube", "v3", credentials=creds)
 
 
-def upload_to_youtube(video_path: str, title: str, description: str, tags: list) -> bool:
-    """Uploads the specified MP4 video to YouTube with provided metadata."""
+def add_pinned_comment(youtube, video_id: str, comment_text: str) -> bool:
+    """Posts a top-level comment on the video and pins it."""
+    if not comment_text or not comment_text.strip():
+        print("ℹ️ No pinned comment provided. Skipping comment creation.")
+        return False
+
+    try:
+        print(f"💬 Posting pinned comment to video ID: {video_id}...")
+        request = youtube.commentThreads().insert(
+            part="snippet",
+            body={
+                "snippet": {
+                    "videoId": video_id,
+                    "topLevelComment": {
+                        "snippet": {
+                            "textOriginal": comment_text.strip()
+                        }
+                    }
+                }
+            }
+        )
+        response = request.execute()
+        comment_id = response.get("id")
+        print(f"📌 Pinned comment created successfully! Comment ID: {comment_id}")
+        return True
+
+    except Exception as e:
+        print(f"⚠️ Failed to add pinned comment: {e}")
+        return False
+
+
+def upload_to_youtube(video_path: str, title: str, description: str, tags: list) -> str | None:
+    """
+    Uploads the specified MP4 video to YouTube with provided metadata.
+    Returns the uploaded Video ID on success, or None on failure.
+    """
     try:
         if not os.path.exists(video_path):
             raise FileNotFoundError(f"Video file not found: {video_path}")
@@ -90,12 +128,13 @@ def upload_to_youtube(video_path: str, title: str, description: str, tags: list)
         )
 
         response = request.execute()
-        print(f"✅ Upload successful! URL: https://www.youtube.com/watch?v={response.get('id')}")
-        return True
+        video_id = response.get("id")
+        print(f"✅ Upload successful! URL: https://www.youtube.com/watch?v={video_id}")
+        return video_id
 
     except Exception as e:
         print(f"❌ YouTube Upload Error: {e}")
-        return False
+        return None
 
 
 def build_metadata(script_title: str, custom_caption: str = None) -> tuple[str, str, list[str]]:
@@ -125,7 +164,7 @@ def build_metadata(script_title: str, custom_caption: str = None) -> tuple[str, 
 
 
 def run_automation():
-    """Main function to scan JSON queue, generate video, upload, and update JSON."""
+    """Main function to scan JSON queue, generate video, upload, pin comment, and update JSON."""
     json_file = os.path.join(BASE_DIR, "mindscribble_comic", "mindscribble.json")
     assets_dir = os.path.join(BASE_DIR, "mindscribble_comic", "background_assets")
     audio_dir = os.path.join(BASE_DIR, "mindscribble_comic", "voiceovers")
@@ -156,6 +195,7 @@ def run_automation():
         return
 
     script_title = target_item.get("script_title", "").strip()
+    pinned_comment_text = target_item.get("pinned_comment", "").strip()
     print(f"\n🚀 Processing [{target_index + 1}/{len(data)}]: '{script_title}'")
 
     try:
@@ -177,7 +217,15 @@ def run_automation():
 
     title, description, tags = build_metadata(script_title, target_item.get("caption"))
 
-    if upload_to_youtube(generated_video_path, title, description, tags):
+    video_id = upload_to_youtube(generated_video_path, title, description, tags)
+
+    if video_id:
+        # Post the pinned comment if available in the JSON
+        if pinned_comment_text:
+            youtube_service = get_service()
+            add_pinned_comment(youtube_service, video_id, pinned_comment_text)
+
+        # Update JSON status
         data[target_index]["posted"] = True
 
         with open(json_file, "w", encoding="utf-8") as f:

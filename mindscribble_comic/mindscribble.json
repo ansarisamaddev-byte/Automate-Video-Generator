@@ -3,6 +3,7 @@
         "script_title": "The Pratfall Effect",
         "heading_text": "PRATFALL EFFECT",
         "posted": true,
+        "pinned_comment": "Drop a ☕ if you’ve ever spilled something and immediately made a new best friend. Perfection is overrated anyway!",
         "total_segments": 4,
         "timeline": [
             {
@@ -91,6 +92,7 @@
         "script_title": "The Overwhelmed Mind Hack",
         "heading_text": "MINDSCRIBBLE METHOD",
         "posted": true,
+        "pinned_comment": "Grab a blank piece of paper right now and write down the FIRST 3 things cluttering your mind. What’s taking up space today?",
         "total_segments": 4,
         "timeline": [
             {
@@ -183,6 +185,7 @@
         "script_title": "Why You Can't Sleep at 2 AM",
         "heading_text": "ZEIGARNIK EFFECT",
         "posted": false,
+        "pinned_comment": "Saving this for when your brain decides 2 AM is prime time to replay every unfinished task from 2019 🧠⏰ Try the 5-second plan tonight!",
         "total_segments": 4,
         "timeline": [
             {
@@ -274,8 +277,9 @@
     {
         "script_title": "Nobody Is Watching You",
         "heading_text": "SPOTLIGHT EFFECT",
-        "total_segments": 4,
         "posted": false,
+        "total_segments": 4,
+        "pinned_comment": "Friendly reminder: No one remembers that awkward thing you said 3 years ago. Drop a ❤️ if you needed this reminder today!",
         "timeline": [
             {
                 "segment_id": 1,
@@ -366,8 +370,9 @@
     {
         "script_title": "How Stores Scam Your Brain",
         "heading_text": "DECOY EFFECT",
-        "total_segments": 4,
         "posted": false,
+        "pinned_comment": "Have you ever bought the medium popcorn just because the large was 'only 50 cents more'? 🍿 Tag a friend who falls for this every time!",
+        "total_segments": 4,
         "timeline": [
             {
                 "segment_id": 1,
