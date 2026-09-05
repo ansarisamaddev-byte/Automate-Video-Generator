@@ -2376,43 +2376,55 @@
         "script_title": "The Nostalgia Loop",
         "heading_text": "Reminiscence Bump",
         "total_segments": 7,
-        "posted": false,
+        "posted": true,
         "timeline": [
             {
                 "segment_id": 1,
                 "folder": "14_memory_and_past",
                 "text": "Why does the music you listened to during your teenage years hit your soul harder than anything released today?",
-                "stickers": []
+                "stickers": [],
+                "start": 0.0,
+                "end": 5.74
             },
             {
                 "segment_id": 2,
                 "folder": "14_memory_and_past",
                 "text": "It isn't just because older music was better\u2014it\u2019s due to a biological event called the Reminiscence Bump.",
-                "stickers": []
+                "stickers": [],
+                "start": 6.3,
+                "end": 12.02
             },
             {
                 "segment_id": 3,
                 "folder": "01_brain_anatomy",
                 "text": "Between the ages of twelve and twenty-two, your brain is flooded with developmental hormones that crank your emotional sensitivity to maximum levels.",
-                "stickers": []
+                "stickers": [],
+                "start": 12.28,
+                "end": 20.28
             },
             {
                 "segment_id": 4,
                 "folder": "14_memory_and_past",
                 "text": "Every heartbreak, friendship, and victory during this window is recorded with incredible neural detail.",
-                "stickers": []
+                "stickers": [],
+                "start": 20.82,
+                "end": 26.38
             },
             {
                 "segment_id": 5,
                 "folder": "07_masks_identity",
                 "text": "The songs you play during these years become neurochemically linked to your emerging sense of identity.",
-                "stickers": []
+                "stickers": [],
+                "start": 26.38,
+                "end": 31.88
             },
             {
                 "segment_id": 6,
                 "folder": "13_addiction_dopamine",
                 "text": "Listening to those tracks years later triggers a massive release of dopamine and oxytocin, instantly transporting you back to how intensely you felt life back then.",
-                "stickers": []
+                "stickers": [],
+                "start": 32.36,
+                "end": 41.04
             },
             {
                 "segment_id": 7,
@@ -2428,7 +2440,9 @@
                     {
                         "file": "save_bookmark.png"
                     }
-                ]
+                ],
+                "start": 41.74,
+                "end": 49.2
             }
         ]
     },
@@ -2437,13 +2451,15 @@
         "script_title": "The Hedonic Treadmill",
         "heading_text": "Hedonic Treadmill",
         "total_segments": 7,
-        "posted": false,
+        "posted": true,
         "timeline": [
             {
                 "segment_id": 1,
                 "folder": "13_addiction_dopamine",
                 "text": "Whether you win a hundred million dollars in the lottery or lose everything you own, your overall happiness will eventually return to the exact same baseline.",
-                "stickers": []
+                "stickers": [],
+                "start": 0.0,
+                "end": 8.78
             },
             {
                 "segment_id": 2,
@@ -2453,31 +2469,41 @@
                     {
                         "file": "brain_shortcut.png"
                     }
-                ]
+                ],
+                "start": 9.18,
+                "end": 12.88
             },
             {
                 "segment_id": 3,
                 "folder": "01_brain_anatomy",
                 "text": "Human beings are wired with incredible emotional adaptation.",
-                "stickers": []
+                "stickers": [],
+                "start": 13.36,
+                "end": 16.36
             },
             {
                 "segment_id": 4,
                 "folder": "13_addiction_dopamine",
                 "text": "When you achieve a dream\u2014getting a major promotion, buying your dream car, or finding a partner\u2014your brain releases a temporary spike of happiness.",
-                "stickers": []
+                "stickers": [],
+                "start": 16.94,
+                "end": 24.72
             },
             {
                 "segment_id": 5,
                 "folder": "08_time_mechanisms",
                 "text": "But within months, that new reality becomes your new normal.",
-                "stickers": []
+                "stickers": [],
+                "start": 25.08,
+                "end": 28.28
             },
             {
                 "segment_id": 6,
                 "folder": "13_addiction_dopamine",
                 "text": "The excitement fades, dopamine resets, and you find yourself right back on the treadmill, sprinting toward the next goal just to feel that temporary high again.",
-                "stickers": []
+                "stickers": [],
+                "start": 28.28,
+                "end": 37.16
             },
             {
                 "segment_id": 7,
@@ -2493,7 +2519,9 @@
                     {
                         "file": "subscribe_button.png"
                     }
-                ]
+                ],
+                "start": 37.52,
+                "end": 45.32
             }
         ]
     }
