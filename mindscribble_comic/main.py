@@ -163,7 +163,7 @@ def apply_background_effect(clip, effect_type, duration, target_w=1080, target_h
             scale = 1.0 + (0.15 * progress)
         elif effect_type == "zoom_out":
             scale = 1.15 - (0.15 * progress)
-        elif effect_type == "pan_right":
+        elif effect_type in ("pan_right", "pan_left"):
             scale = 1.10
         else:
             scale = 1.0
@@ -172,9 +172,11 @@ def apply_background_effect(clip, effect_type, duration, target_w=1080, target_h
         scaled_h = int(math.ceil(target_h * scale))
         resized = cv2.resize(base_frame, (scaled_w, scaled_h), interpolation=cv2.INTER_LINEAR)
 
-        if effect_type == "pan_right":
+        if effect_type in ("pan_right", "pan_left"):
             max_shift = scaled_w - target_w
-            shift_x = int((progress - 0.5) * max_shift)
+            # Reverse direction for pan_left
+            direction = -1 if effect_type == "pan_left" else 1
+            shift_x = int(direction * (progress - 0.5) * max_shift)
             crop_x = max(0, min(scaled_w - target_w, ((scaled_w - target_w) // 2) + shift_x))
             crop_y = (scaled_h - target_h) // 2
         else:
