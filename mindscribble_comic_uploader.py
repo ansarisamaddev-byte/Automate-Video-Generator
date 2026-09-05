@@ -127,8 +127,9 @@ def build_metadata(script_title: str, custom_caption: str = None) -> tuple[str, 
 def run_automation():
     """Main function to scan JSON queue, generate video, upload, and update JSON."""
     json_file = os.path.join(BASE_DIR, "mindscribble_comic", "mindscribble.json")
-    assets_dir = os.path.join(BASE_DIR, "asset_library")
+    assets_dir = os.path.join(BASE_DIR, "mindscribble_comic", "background_assets")
     audio_dir = os.path.join(BASE_DIR, "mindscribble_comic", "voiceovers")
+    stickers_dir = os.path.join(BASE_DIR, "mindscribble_comic", "stickers")
     output_dir = os.path.join(BASE_DIR, "mindscribble_comic", "output")
     bgm_dir = os.path.join(BASE_DIR, "background_music", "mindscribble")
 
@@ -158,13 +159,15 @@ def run_automation():
     print(f"\n🚀 Processing [{target_index + 1}/{len(data)}]: '{script_title}'")
 
     try:
+        # Pass all path and options parameters matching your process_script_item signature
         generated_video_path = process_script_item(
             script_data=target_item,
             assets_dir=assets_dir,
             audio_dir=audio_dir,
-            output_dir=output_dir,
+            stickers_dir=stickers_dir,
             bgm_dir=bgm_dir,
             bgm_volume=0.12,
+            output_dir=output_dir,
             transition_type=target_item.get("transition_type", "zoom_dissolve"),
             transition_duration=float(target_item.get("transition_duration", 0.6))
         )

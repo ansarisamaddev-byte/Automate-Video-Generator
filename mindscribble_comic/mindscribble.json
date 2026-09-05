@@ -1,5 +1,5 @@
 [
-   {
+    {
         "script_title": "The Pratfall Effect",
         "heading_text": "PRATFALL EFFECT",
         "posted": true,
@@ -16,7 +16,10 @@
                 "stickers": [
                     {
                         "file": "question_mark.png",
-                        "position": [800, 400],
+                        "position": [
+                            800,
+                            400
+                        ],
                         "delay_offset": 0.2,
                         "animation": "pop_and_shake"
                     }
@@ -33,7 +36,10 @@
                 "stickers": [
                     {
                         "file": "splash_burst.png",
-                        "position": [500, 800],
+                        "position": [
+                            500,
+                            800
+                        ],
                         "delay_offset": 0.4,
                         "animation": "pop_in"
                     }
@@ -50,7 +56,10 @@
                 "stickers": [
                     {
                         "file": "ice_shard.png",
-                        "position": [200, 600],
+                        "position": [
+                            200,
+                            600
+                        ],
                         "delay_offset": 0.5,
                         "animation": "shatter_fall"
                     }
@@ -67,7 +76,10 @@
                 "stickers": [
                     {
                         "file": "loop_arrow.png",
-                        "position": [540, 960],
+                        "position": [
+                            540,
+                            960
+                        ],
                         "delay_offset": 0.0,
                         "animation": "pulse_scale"
                     }
@@ -75,324 +87,372 @@
             }
         ]
     },
-{
-  "script_title": "The Overwhelmed Mind Hack",
-  "heading_text": "MINDSCRIBBLE METHOD",
-  "posted": true, 
-  "total_segments": 4,
-  "timeline": [
     {
-      "segment_id": 1,
-      "text": "Feeling completely overwhelmed with too many thoughts inside your head?",
-      "header_text": "TOO MANY THOUGHTS?",
-      "background": {
-        "file": "bg_overwhelmed_workplace.mp4",
-        "effect": "zoom_in"
-      },
-      "stickers": [
-        {
-          "file": "mind_chaos.png",
-          "position": [540, 500],
-          "delay_offset": 0.2,
-          "animation": "pop_and_shake",
-          "sfx": "static_fuzz.mp3"
-        }
-      ]
+        "script_title": "The Overwhelmed Mind Hack",
+        "heading_text": "MINDSCRIBBLE METHOD",
+        "posted": true,
+        "total_segments": 4,
+        "timeline": [
+            {
+                "segment_id": 1,
+                "text": "Feeling completely overwhelmed with too many thoughts inside your head?",
+                "header_text": "TOO MANY THOUGHTS?",
+                "background": {
+                    "file": "bg_overwhelmed_workplace.mp4",
+                    "effect": "zoom_in"
+                },
+                "stickers": [
+                    {
+                        "file": "mind_chaos.png",
+                        "position": [
+                            540,
+                            500
+                        ],
+                        "delay_offset": 0.2,
+                        "animation": "pop_and_shake",
+                        "sfx": "static_fuzz.mp3"
+                    }
+                ]
+            },
+            {
+                "segment_id": 2,
+                "text": "Stop forcing structure and just start dumping raw, unfiltered thoughts on paper.",
+                "header_text": "UNFILTERED DUMP",
+                "background": {
+                    "file": "bg_scribble_paper.mp4",
+                    "effect": "zoom_out"
+                },
+                "stickers": [
+                    {
+                        "file": "pencil_draw.png",
+                        "position": [
+                            540,
+                            960
+                        ],
+                        "delay_offset": 0.3,
+                        "animation": "pop_in",
+                        "sfx": "scribble_scratch.mp3"
+                    }
+                ]
+            },
+            {
+                "segment_id": 3,
+                "text": "You can never organize a messy mind until you lay all the chaotic pieces out first.",
+                "header_text": "CHAOS BRINGS CLARITY",
+                "background": {
+                    "file": "bg_organized_workspace.mp4",
+                    "effect": "pan_right"
+                },
+                "stickers": [
+                    {
+                        "file": "lightbulb_spark.png",
+                        "position": [
+                            540,
+                            960
+                        ],
+                        "delay_offset": 0.4,
+                        "animation": "pulse_scale",
+                        "sfx": "lightbulb_on.mp3"
+                    }
+                ]
+            },
+            {
+                "segment_id": 4,
+                "text": "Which stops you from...",
+                "header_text": "CLEAR THE CLUTTER",
+                "background": {
+                    "file": "bg_loop_transition_2.mp4",
+                    "effect": "zoom_in"
+                },
+                "stickers": [
+                    {
+                        "file": "loop_arrow.png",
+                        "position": [
+                            540,
+                            1100
+                        ],
+                        "delay_offset": 0.0,
+                        "animation": "pulse_scale",
+                        "sfx": "whoosh.mp3"
+                    }
+                ]
+            }
+        ]
     },
     {
-      "segment_id": 2,
-      "text": "Stop forcing structure and just start dumping raw, unfiltered thoughts on paper.",
-      "header_text": "UNFILTERED DUMP",
-      "background": {
-        "file": "bg_scribble_paper.mp4",
-        "effect": "zoom_out"
-      },
-      "stickers": [
-        {
-          "file": "pencil_draw.png",
-          "position": [540, 960],
-          "delay_offset": 0.3,
-          "animation": "pop_in",
-          "sfx": "scribble_scratch.mp3"
-        }
-      ]
+        "script_title": "Why You Can't Sleep at 2 AM",
+        "heading_text": "ZEIGARNIK EFFECT",
+        "posted": false,
+        "total_segments": 4,
+        "timeline": [
+            {
+                "segment_id": 1,
+                "text": "Why are unfinished tasks haunting your brain at 2 AM?",
+                "header_text": "STUCK AT 2 AM?",
+                "background": {
+                    "file": "bg_sleepless_night.mp4",
+                    "effect": "zoom_in"
+                },
+                "stickers": [
+                    {
+                        "file": "glowing_clock.png",
+                        "position": [
+                            540,
+                            450
+                        ],
+                        "delay_offset": 0.2,
+                        "animation": "pop_and_shake",
+                        "sfx": "tick_tock.mp3"
+                    }
+                ]
+            },
+            {
+                "segment_id": 2,
+                "text": "Your brain creates intense cognitive tension for anything left incomplete.",
+                "header_text": "BRAIN ON OVERLOAD",
+                "background": {
+                    "file": "bg_brain_waves.mp4",
+                    "effect": "zoom_out"
+                },
+                "stickers": [
+                    {
+                        "file": "brain_wire.png",
+                        "position": [
+                            540,
+                            960
+                        ],
+                        "delay_offset": 0.3,
+                        "animation": "pulse_scale",
+                        "sfx": "electricity_buzz.mp3"
+                    }
+                ]
+            },
+            {
+                "segment_id": 3,
+                "text": "Write down a five-second action plan to trick your brain into letting go.",
+                "header_text": "TRICK YOUR BRAIN",
+                "background": {
+                    "file": "bg_digital_note.mp4",
+                    "effect": "pan_left"
+                },
+                "stickers": [
+                    {
+                        "file": "check_mark.png",
+                        "position": [
+                            540,
+                            960
+                        ],
+                        "delay_offset": 0.4,
+                        "animation": "pop_in",
+                        "sfx": "pop_click.mp3"
+                    }
+                ]
+            },
+            {
+                "segment_id": 4,
+                "text": "Otherwise, you'll keep asking...",
+                "header_text": "BEAT PROCRASTINATION",
+                "background": {
+                    "file": "bg_loop_transition_2.mp4",
+                    "effect": "zoom_in"
+                },
+                "stickers": [
+                    {
+                        "file": "loop_arrow.png",
+                        "position": [
+                            540,
+                            1100
+                        ],
+                        "delay_offset": 0.0,
+                        "animation": "pulse_scale",
+                        "sfx": "whoosh.mp3"
+                    }
+                ]
+            }
+        ]
     },
     {
-      "segment_id": 3,
-      "text": "You can never organize a messy mind until you lay all the chaotic pieces out first.",
-      "header_text": "CHAOS BRINGS CLARITY",
-      "background": {
-        "file": "bg_organized_workspace.mp4",
-        "effect": "pan_right"
-      },
-      "stickers": [
-        {
-          "file": "lightbulb_spark.png",
-          "position": [540, 960],
-          "delay_offset": 0.4,
-          "animation": "pulse_scale",
-          "sfx": "lightbulb_on.mp3"
-        }
-      ]
+        "script_title": "Nobody Is Watching You",
+        "heading_text": "SPOTLIGHT EFFECT",
+        "total_segments": 4,
+        "posted": false,
+        "timeline": [
+            {
+                "segment_id": 1,
+                "text": "You think everyone is obsessing over your tiny mistakes, but they aren't.",
+                "header_text": "NOBODY CARES!",
+                "background": {
+                    "file": "bg_crowd_walking.mp4",
+                    "effect": "zoom_in"
+                },
+                "stickers": [
+                    {
+                        "file": "spotlight_beam.png",
+                        "position": [
+                            540,
+                            500
+                        ],
+                        "delay_offset": 0.1,
+                        "animation": "pop_in",
+                        "sfx": "light_switch.mp3"
+                    }
+                ]
+            },
+            {
+                "segment_id": 2,
+                "text": "Psychology proves people are way too self-absorbed to notice your subtle blunders.",
+                "header_text": "THE REAL TRUTH",
+                "background": {
+                    "file": "bg_mirror_reflection.mp4",
+                    "effect": "zoom_out"
+                },
+                "stickers": [
+                    {
+                        "file": "ego_bubble.png",
+                        "position": [
+                            540,
+                            960
+                        ],
+                        "delay_offset": 0.3,
+                        "animation": "pop_and_shake",
+                        "sfx": "pop_click.mp3"
+                    }
+                ]
+            },
+            {
+                "segment_id": 3,
+                "text": "Turn off the mental spotlight and give yourself permission to just be human.",
+                "header_text": "FREE YOUR MIND",
+                "background": {
+                    "file": "bg_walking_confident.mp4",
+                    "effect": "pan_right"
+                },
+                "stickers": [
+                    {
+                        "file": "shield_lock.png",
+                        "position": [
+                            540,
+                            960
+                        ],
+                        "delay_offset": 0.4,
+                        "animation": "pop_in",
+                        "sfx": "unlock.mp3"
+                    }
+                ]
+            },
+            {
+                "segment_id": 4,
+                "text": "So remember this before you worry...",
+                "header_text": "BEFORE YOU PANIC",
+                "background": {
+                    "file": "bg_loop_transition_2.mp4",
+                    "effect": "zoom_in"
+                },
+                "stickers": [
+                    {
+                        "file": "loop_arrow.png",
+                        "position": [
+                            540,
+                            1100
+                        ],
+                        "delay_offset": 0.0,
+                        "animation": "pulse_scale",
+                        "sfx": "whoosh.mp3"
+                    }
+                ]
+            }
+        ]
     },
     {
-      "segment_id": 4,
-      "text": "Which stops you from...",
-      "header_text": "CLEAR THE CLUTTER",
-      "background": {
-        "file": "bg_loop_transition_2.mp4",
-        "effect": "zoom_in"
-      },
-      "stickers": [
-        {
-          "file": "loop_arrow.png",
-          "position": [540, 1100],
-          "delay_offset": 0.0,
-          "animation": "pulse_scale",
-          "sfx": "whoosh.mp3"
-        }
-      ]
+        "script_title": "How Stores Scam Your Brain",
+        "heading_text": "DECOY EFFECT",
+        "total_segments": 4,
+        "posted": false,
+        "timeline": [
+            {
+                "segment_id": 1,
+                "text": "Companies are manipulating your choices without you ever noticing it.",
+                "header_text": "YOU'RE BEING TRICKED",
+                "background": {
+                    "file": "bg_shopping_mall.mp4",
+                    "effect": "zoom_in"
+                },
+                "stickers": [
+                    {
+                        "file": "price_tag.png",
+                        "position": [
+                            540,
+                            500
+                        ],
+                        "delay_offset": 0.2,
+                        "animation": "pop_in",
+                        "sfx": "cash_register.mp3"
+                    }
+                ]
+            },
+            {
+                "segment_id": 2,
+                "text": "They add an overpriced middle option just to make the expensive one look cheap.",
+                "header_text": "THE PRICING TRAP",
+                "background": {
+                    "file": "bg_popcorn_sizes.mp4",
+                    "effect": "zoom_out"
+                },
+                "stickers": [
+                    {
+                        "file": "asymmetrical_scales.png",
+                        "position": [
+                            540,
+                            960
+                        ],
+                        "delay_offset": 0.3,
+                        "animation": "pop_and_shake",
+                        "sfx": "alert_ding.mp3"
+                    }
+                ]
+            },
+            {
+                "segment_id": 3,
+                "text": "By understanding the Decoy Effect, you instantly protect your money from smart marketing.",
+                "header_text": "SAVE YOUR CASH",
+                "background": {
+                    "file": "bg_wallet_savings.mp4",
+                    "effect": "pan_left"
+                },
+                "stickers": [
+                    {
+                        "file": "dollar_shield.png",
+                        "position": [
+                            540,
+                            960
+                        ],
+                        "delay_offset": 0.4,
+                        "animation": "pulse_scale",
+                        "sfx": "shield_guard.mp3"
+                    }
+                ]
+            },
+            {
+                "segment_id": 4,
+                "text": "Which is exactly how...",
+                "header_text": "STOP WASTING MONEY",
+                "background": {
+                    "file": "bg_loop_transition_2.mp4",
+                    "effect": "zoom_in"
+                },
+                "stickers": [
+                    {
+                        "file": "loop_arrow.png",
+                        "position": [
+                            540,
+                            1100
+                        ],
+                        "delay_offset": 0.0,
+                        "animation": "pulse_scale",
+                        "sfx": "whoosh.mp3"
+                    }
+                ]
+            }
+        ]
     }
-  ]
-},
-  {
-    "script_title": "Why You Can't Sleep at 2 AM",
-    "heading_text": "ZEIGARNIK EFFECT",
-    "posted": false,
-    "total_segments": 4,
-    "timeline": [
-      {
-        "segment_id": 1,
-        "text": "Why are unfinished tasks haunting your brain at 2 AM?",
-        "header_text": "STUCK AT 2 AM?",
-        "background": {
-          "file": "bg_sleepless_night.mp4",
-          "effect": "zoom_in"
-        },
-        "stickers": [
-          {
-            "file": "glowing_clock.png",
-            "position": [540, 450],
-            "delay_offset": 0.2,
-            "animation": "pop_and_shake",
-            "sfx": "tick_tock.mp3"
-          }
-        ]
-      },
-      {
-        "segment_id": 2,
-        "text": "Your brain creates intense cognitive tension for anything left incomplete.",
-        "header_text": "BRAIN ON OVERLOAD",
-        "background": {
-          "file": "bg_brain_waves.mp4",
-          "effect": "zoom_out"
-        },
-        "stickers": [
-          {
-            "file": "brain_wire.png",
-            "position": [540, 960],
-            "delay_offset": 0.3,
-            "animation": "pulse_scale",
-            "sfx": "electricity_buzz.mp3"
-          }
-        ]
-      },
-      {
-        "segment_id": 3,
-        "text": "Write down a five-second action plan to trick your brain into letting go.",
-        "header_text": "TRICK YOUR BRAIN",
-        "background": {
-          "file": "bg_digital_note.mp4",
-          "effect": "pan_left"
-        },
-        "stickers": [
-          {
-            "file": "check_mark.png",
-            "position": [540, 960],
-            "delay_offset": 0.4,
-            "animation": "pop_in",
-            "sfx": "pop_click.mp3"
-          }
-        ]
-      },
-      {
-        "segment_id": 4,
-        "text": "Otherwise, you'll keep asking...",
-        "header_text": "BEAT PROCRASTINATION",
-        "background": {
-          "file": "bg_loop_transition_2.mp4",
-          "effect": "zoom_in"
-        },
-        "stickers": [
-          {
-            "file": "loop_arrow.png",
-            "position": [540, 1100],
-            "delay_offset": 0.0,
-            "animation": "pulse_scale",
-            "sfx": "whoosh.mp3"
-          }
-        ]
-      }
-    ]
-  },
-  {
-    "script_title": "Nobody Is Watching You",
-    "heading_text": "SPOTLIGHT EFFECT",
-    "total_segments": 4,
-    "posted": false,
-    "timeline": [
-      {
-        "segment_id": 1,
-        "text": "You think everyone is obsessing over your tiny mistakes, but they aren't.",
-        "header_text": "NOBODY CARES!",
-        "background": {
-          "file": "bg_crowd_walking.mp4",
-          "effect": "zoom_in"
-        },
-        "stickers": [
-          {
-            "file": "spotlight_beam.png",
-            "position": [540, 500],
-            "delay_offset": 0.1,
-            "animation": "pop_in",
-            "sfx": "light_switch.mp3"
-          }
-        ]
-      },
-      {
-        "segment_id": 2,
-        "text": "Psychology proves people are way too self-absorbed to notice your subtle blunders.",
-        "header_text": "THE REAL TRUTH",
-        "background": {
-          "file": "bg_mirror_reflection.mp4",
-          "effect": "zoom_out"
-        },
-        "stickers": [
-          {
-            "file": "ego_bubble.png",
-            "position": [540, 960],
-            "delay_offset": 0.3,
-            "animation": "pop_and_shake",
-            "sfx": "pop_click.mp3"
-          }
-        ]
-      },
-      {
-        "segment_id": 3,
-        "text": "Turn off the mental spotlight and give yourself permission to just be human.",
-        "header_text": "FREE YOUR MIND",
-        "background": {
-          "file": "bg_walking_confident.mp4",
-          "effect": "pan_right"
-        },
-        "stickers": [
-          {
-            "file": "shield_lock.png",
-            "position": [540, 960],
-            "delay_offset": 0.4,
-            "animation": "pop_in",
-            "sfx": "unlock.mp3"
-          }
-        ]
-      },
-      {
-        "segment_id": 4,
-        "text": "So remember this before you worry...",
-        "header_text": "BEFORE YOU PANIC",
-        "background": {
-          "file": "bg_loop_transition_2.mp4",
-          "effect": "zoom_in"
-        },
-        "stickers": [
-          {
-            "file": "loop_arrow.png",
-            "position": [540, 1100],
-            "delay_offset": 0.0,
-            "animation": "pulse_scale",
-            "sfx": "whoosh.mp3"
-          }
-        ]
-      }
-    ]
-  },
-  {
-    "script_title": "How Stores Scam Your Brain",
-    "heading_text": "DECOY EFFECT",
-    "total_segments": 4,
-    "posted": false,
-    "timeline": [
-      {
-        "segment_id": 1,
-        "text": "Companies are manipulating your choices without you ever noticing it.",
-        "header_text": "YOU'RE BEING TRICKED",
-        "background": {
-          "file": "bg_shopping_mall.mp4",
-          "effect": "zoom_in"
-        },
-        "stickers": [
-          {
-            "file": "price_tag.png",
-            "position": [540, 500],
-            "delay_offset": 0.2,
-            "animation": "pop_in",
-            "sfx": "cash_register.mp3"
-          }
-        ]
-      },
-      {
-        "segment_id": 2,
-        "text": "They add an overpriced middle option just to make the expensive one look cheap.",
-        "header_text": "THE PRICING TRAP",
-        "background": {
-          "file": "bg_popcorn_sizes.mp4",
-          "effect": "zoom_out"
-        },
-        "stickers": [
-          {
-            "file": "asymmetrical_scales.png",
-            "position": [540, 960],
-            "delay_offset": 0.3,
-            "animation": "pop_and_shake",
-            "sfx": "alert_ding.mp3"
-          }
-        ]
-      },
-      {
-        "segment_id": 3,
-        "text": "By understanding the Decoy Effect, you instantly protect your money from smart marketing.",
-        "header_text": "SAVE YOUR CASH",
-        "background": {
-          "file": "bg_wallet_savings.mp4",
-          "effect": "pan_left"
-        },
-        "stickers": [
-          {
-            "file": "dollar_shield.png",
-            "position": [540, 960],
-            "delay_offset": 0.4,
-            "animation": "pulse_scale",
-            "sfx": "shield_guard.mp3"
-          }
-        ]
-      },
-      {
-        "segment_id": 4,
-        "text": "Which is exactly how...",
-        "header_text": "STOP WASTING MONEY",
-        "background": {
-          "file": "bg_loop_transition_2.mp4",
-          "effect": "zoom_in"
-        },
-        "stickers": [
-          {
-            "file": "loop_arrow.png",
-            "position": [540, 1100],
-            "delay_offset": 0.0,
-            "animation": "pulse_scale",
-            "sfx": "whoosh.mp3"
-          }
-        ]
-      }
-    ]
-  }
 ]
