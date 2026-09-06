@@ -360,7 +360,7 @@
                             1100
                         ],
                         "delay_offset": 0.0,
-                        "animation": "pulse_scale",
+                        "animation": "continuous_rotate",
                         "sfx": "whoosh.mp3"
                     }
                 ]
@@ -453,7 +453,7 @@
                             1100
                         ],
                         "delay_offset": 0.0,
-                        "animation": "pulse_scale",
+                        "animation": "continuous_rotate",
                         "sfx": "whoosh.mp3"
                     }
                 ]
