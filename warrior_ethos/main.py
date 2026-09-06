@@ -186,32 +186,26 @@ def apply_background_effect(
 
     return clip.transform(transform_frame).with_position((0, 0))
 
-
 def loop_video_to_duration(
     source_clip,
     target_duration,
-    base_slow_duration=5.0,
     crossfade_duration=0.5
 ):
-    speed_factor = source_clip.duration / base_slow_duration if source_clip.duration > 0 else 1.0
+    """Loops a source video clip at its standard, native speed to fill target_duration."""
+    clip_len = source_clip.duration
+    
+    # If the clip is already long enough, slice it directly at native speed
+    if clip_len >= target_duration:
+        return source_clip.subclipped(0, target_duration).with_position((0, 0))
 
-    slowed_clip = (
-        source_clip
-        .with_effects([vfx.MultiplySpeed(speed_factor)])
-        .with_duration(base_slow_duration)
-        .with_position((0, 0))
-    )
-
-    if target_duration <= base_slow_duration:
-        return slowed_clip.subclipped(0, target_duration).with_position((0, 0))
-
-    forward_clip = slowed_clip
-    reversed_clip = slowed_clip.with_effects([vfx.TimeMirror()])
+    forward_clip = source_clip
+    reversed_clip = source_clip.with_effects([vfx.TimeMirror()])
 
     composite_layers = []
     current_time = 0.0
     i = 0
 
+    # Chain alternating forward/reverse clips at natural playback speed
     while current_time < target_duration:
         base = forward_clip if i % 2 == 0 else reversed_clip
         if i == 0:
@@ -220,12 +214,11 @@ def loop_video_to_duration(
             layer = base.with_start(current_time).with_effects([vfx.CrossFadeIn(crossfade_duration)])
 
         composite_layers.append(layer)
-        current_time += (base_slow_duration - crossfade_duration)
+        current_time += max(0.1, (clip_len - crossfade_duration))
         i += 1
 
     composited = CompositeVideoClip(composite_layers, size=source_clip.size, bg_color=(0, 0, 0))
     return composited.subclipped(0, target_duration).with_position((0, 0))
-
 
 def build_dynamic_transitioned_timeline(
     clip_list,
@@ -380,7 +373,7 @@ def process_script_item(
     assets_dir: str = DEFAULT_ASSETS_DIR,
     audio_dir: str = None,
     bgm_dir: str = DEFAULT_BGM_DIR,
-    bgm_volume: float = 0.08,
+    bgm_volume: float = 0.5,
     output_dir: str = "output",
     transition_duration: float = 0.6,
     caption_config: dict = CONFIG_STYLE_PUNCHY
@@ -430,7 +423,7 @@ def process_script_item(
             bgm_file_path = os.path.join(bgm_dir, bg_music_target)
         else:
             bgm_file_path = get_random_bgm_file(bgm_dir)
-
+        print(f"[BGM] Selected background music: {bgm_file_path}")
         if bgm_file_path and os.path.exists(bgm_file_path):
             try:
                 raw_bgm = AudioFileClip(bgm_file_path)
@@ -466,7 +459,7 @@ def process_script_item(
             raw_clip = VideoFileClip(unique_video_files[idx])
             effect_type = random.choice(["zoom_in", "zoom_out", "pan_right", "pan_left"])
             
-            processed_clip = loop_video_to_duration(raw_clip, clip_duration)
+            processed_clip = loop_video_to_duration(raw_clip, clip_duration, crossfade_duration=0.4)
             processed_clip = apply_background_effect(
                 processed_clip, 
                 effect_type=effect_type, 
@@ -547,40 +540,43 @@ def process_script_item(
             final_video.close()
 
 if __name__ == "__main__":
-    JSON_DATA = {
-    "id": "001",
-    "script_title": "No One Is Coming",
-    "tag": "Statues_Stoicism",
-    "segments": 10,
-    "bg_music": "dark_ambient_01.mp3",
-    "pinned_comment": "No rescue team is coming. Take full responsibility today. Drop a 🔥 if you needed this.",
-    "posted": False,
-    "scenes": [
-      {
-        "text": "No one is coming to save you.",
-        "heading_text": "THE HARD TRUTH",
-        "transition": "zoom_dissolve"
-      },
-      {
-        "text": "No government, no mentor, and no miraculous event is going to fix your life.",
-        "transition": "cross_dissolve"
-      },
-      {
-        "text": "The weight of your future sits entirely on your own shoulders.",
-        "transition": "cut_smooth"
-      },
-      {
-        "text": "Stop waiting for the right mood and start building relentless discipline.",
-        "heading_text": "BUILD DISCIPLINE",
-        "transition": "zoom_dissolve"
-      },
-      {
-        "text": "Because in the end... you will realize that...",
-        "transition": "cross_dissolve"
-      }
-    ]
-  }
-
+    JSON_DATA =  {
+        "id": "002",
+        "script_title": "Work In Silence",
+        "tag": "Gym_Training",
+        "segments": 6,
+        "bg_music": "dark_ambient_01.mp3",
+        "pinned_comment": "Let your execution speak for you. What goal are you quietly working on right now?",
+        "posted": False,
+        "scenes": [
+            {
+                "text": "Work in total silence.",
+                "heading_text": "SILENT EXECUTION",
+                "transition": "zoom_dissolve"
+            },
+            {
+                "text": "Never announce your moves before you make them.",
+                "transition": "cross_dissolve"
+            },
+            {
+                "text": "Let your results shatter the room while your mouth stays closed.",
+                "transition": "cut_smooth"
+            },
+            {
+                "text": "Weak men broadcast their plans to get temporary applause.",
+                "transition": "zoom_dissolve"
+            },
+            {
+                "text": "Strong men stay quiet until the execution is done.",
+                "heading_text": "STAY QUIET",
+                "transition": "cross_dissolve"
+            },
+            {
+                "text": "Always remember to... keep your focus sharp and...",
+                "transition": "cut_smooth"
+            }
+        ]
+    }
 
     INPUT_AUDIO_DIR = os.path.join(BASE_DIR, "voiceovers")
     OUTPUT_DIR = os.path.join(BASE_DIR, "output")
