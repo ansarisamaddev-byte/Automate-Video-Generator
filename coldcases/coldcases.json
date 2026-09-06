@@ -87,5 +87,410 @@
                 }
             }
         ]
-    }
+    },
+  {
+    "script_title": "The Mystery of the Oak Island Money Pit",
+    "heading_text": "COLD CASES",
+    "posted": false,
+    "pin_comment": "Ancient treasure, pirate gold, or elaborate natural booby trap? What's down there? 👇",
+    "total_segments": 4,
+    "timeline": [
+      {
+        "segment_id": 1,
+        "text": "In 1795, a teenager discovered a circular depression in Nova Scotia and began digging up an impossible shaft.",
+        "header_text": "OAK ISLAND 1795",
+        "background": {
+          "file": "misty_oak_island_forest.mp4",
+          "effect": "zoom_in"
+        }
+      },
+      {
+        "segment_id": 2,
+        "text": "Every ten feet, excavators uncovered wooden platforms, oak beams, and stone layers sealed with coconut fiber.",
+        "header_text": "BOOBY TRAPPED SHAFT",
+        "background": {
+          "file": "deep_dirt_pit_wooden_beams.mp4",
+          "effect": "pan_right"
+        }
+      },
+      {
+        "segment_id": 3,
+        "text": "At ninety feet, diggers hit a stone engraved with cipher code, triggering hidden sea tunnels that flooded the entire pit.",
+        "header_text": "FLOODED BY THE SEA",
+        "background": {
+          "file": "underground_water_flooding_shaft.mp4",
+          "effect": "zoom_out"
+        }
+      },
+      {
+        "segment_id": 4,
+        "text": "Who spent years engineering a self-drowning vault to protect something buried two centuries ago, making you wonder why...",
+        "header_text": "THE IMPOSSIBLE VAULT",
+        "background": {
+          "file": "dark_coastal_island_rain.mp4",
+          "effect": "pan_left"
+        }
+      }
+    ]
+  },
+  {
+    "script_title": "The Mystery of the Phoenix Lights",
+    "heading_text": "COLD CASES",
+    "posted": false,
+    "pin_comment": "Military flares or a massive alien craft? What saw thousands of people in 1997? 👇",
+    "total_segments": 4,
+    "timeline": [
+      {
+        "segment_id": 1,
+        "text": "In 1997, thousands of people across Arizona witnessed a giant V-shaped craft gliding silently through the night sky.",
+        "header_text": "ARIZONA 1997",
+        "background": {
+          "file": "night_sky_phoenix_city_lights.mp4",
+          "effect": "zoom_in"
+        }
+      },
+      {
+        "segment_id": 2,
+        "text": "The massive object stretched over a mile wide, blocking out stars overhead without producing a single sound.",
+        "header_text": "MILE WIDE SILENCE",
+        "background": {
+          "file": "v_shaped_lights_night_sky.mp4",
+          "effect": "pan_right"
+        }
+      },
+      {
+        "segment_id": 3,
+        "text": "Air traffic radar detected nothing, yet military pilots sent to intercept reported seeing five glowing orb thrusters.",
+        "header_text": "ZERO RADAR SIGNATURE",
+        "background": {
+          "file": "radar_screen_empty_cockpit_view.mp4",
+          "effect": "zoom_out"
+        }
+      },
+      {
+        "segment_id": 4,
+        "text": "How could a city-sized structure cross hundreds of miles completely undetected by radar, leaving us to wonder how...",
+        "header_text": "THE UNSEEN VISITOR",
+        "background": {
+          "file": "desert_highway_night_sky.mp4",
+          "effect": "pan_left"
+        }
+      }
+    ]
+  },
+  {
+    "script_title": "The Mysterious Death of Edgar Allan Poe",
+    "heading_text": "COLD CASES",
+    "posted": false,
+    "pin_comment": "Cooping election fraud, rabies, or murder? How did Poe really die? 👇",
+    "total_segments": 4,
+    "timeline": [
+      {
+        "segment_id": 1,
+        "text": "In 1849, Edgar Allan Poe was found delirious outside a Baltimore tavern wearing someone else's cheap clothes.",
+        "header_text": "BALTIMORE 1849",
+        "background": {
+          "file": "rainy_baltimore_street_night.mp4",
+          "effect": "zoom_in"
+        }
+      },
+      {
+        "segment_id": 2,
+        "text": "He repeatedly called out for a man named Reynolds, but died in hospital four days later without regaining lucidity.",
+        "header_text": "REYNOLDS CALL",
+        "background": {
+          "file": "victorian_hospital_bed_shadows.mp4",
+          "effect": "pan_right"
+        }
+      },
+      {
+        "segment_id": 3,
+        "text": "All medical records, death certificates, and autopsy reports vanished mysteriously from the hospital archives within weeks.",
+        "header_text": "VANISHED RECORDS",
+        "background": {
+          "file": "empty_file_cabinet_dusty_office.mp4",
+          "effect": "zoom_out"
+        }
+      },
+      {
+        "segment_id": 4,
+        "text": "Who dressed the famous author in strange clothes and erased all traces of his final hours, making you wonder why...",
+        "header_text": "THE FINAL POE MYSTERY",
+        "background": {
+          "file": "foggy_graveyard_victorian_tomb.mp4",
+          "effect": "pan_left"
+        }
+      }
+    ]
+  },
+  {
+    "script_title": "The Mystery of the Belmez Faces",
+    "heading_text": "COLD CASES",
+    "posted": false,
+    "pin_comment": "Paranormal phenomenon or clever paint trick? Tell us what you think! 👇",
+    "total_segments": 4,
+    "timeline": [
+      {
+        "segment_id": 1,
+        "text": "In 1971, a Spanish homemaker noticed a dark human face spontaneously forming on her concrete kitchen floor.",
+        "header_text": "BÉLMEZ SPAIN 1971",
+        "background": {
+          "file": "old_spanish_kitchen_floor.mp4",
+          "effect": "zoom_in"
+        }
+      },
+      {
+        "segment_id": 2,
+        "text": "Her family scraped away the concrete and laid fresh cement, but the same anguished face reappeared within days.",
+        "header_text": "REAPPEARING FACE",
+        "background": {
+          "file": "ghostly_face_concrete_floor.mp4",
+          "effect": "pan_right"
+        }
+      },
+      {
+        "segment_id": 3,
+        "text": "Excavation under the floor revealed a medieval graveyard buried nine feet below, packed with headless human skeletons.",
+        "header_text": "BURIED GRAVEYARD",
+        "background": {
+          "file": "excavated_graveyard_skeletons_underground.mp4",
+          "effect": "zoom_out"
+        }
+      },
+      {
+        "segment_id": 4,
+        "text": "Scientists found no paints or chemicals in the concrete samples, leaving us to wonder how...",
+        "header_text": "VOICES FROM CEMENT",
+        "background": {
+          "file": "dark_hallway_creepy_shadows.mp4",
+          "effect": "pan_left"
+        }
+      }
+    ]
+  },
+  {
+    "script_title": "The Mystery of the San Pedro Mummy",
+    "heading_text": "COLD CASES",
+    "posted": false,
+    "pin_comment": "Lost pygmy race or medical anomaly? Share your theory below! 👇",
+    "total_segments": 4,
+    "timeline": [
+      {
+        "segment_id": 1,
+        "text": "In 1932, two prospectors blasting rock in Wyoming discovered a sealed cave containing a tiny fourteen-inch mummy.",
+        "header_text": "WYOMING 1932",
+        "background": {
+          "file": "wyoming_cave_mountains_rock.mp4",
+          "effect": "zoom_in"
+        }
+      },
+      {
+        "segment_id": 2,
+        "text": "X-rays showed a complete adult human skeleton inside with a full set of teeth and flattened skull features.",
+        "header_text": "ADULT SKELETON",
+        "background": {
+          "file": "xray_tiny_humanoid_skeleton.mp4",
+          "effect": "pan_right"
+        }
+      },
+      {
+        "segment_id": 3,
+        "text": "Anthropologists confirmed the specimen was sixty years old at death despite weighing less than sixteen ounces.",
+        "header_text": "FULL GROWN AT 14 INCHES",
+        "background": {
+          "file": "cross_legged_tiny_mummy.mp4",
+          "effect": "zoom_out"
+        }
+      },
+      {
+        "segment_id": 4,
+        "text": "Before modern genetic testing could be conducted, the mummy vanished from a private collection, making you wonder where...",
+        "header_text": "VANISHED FROM VAULT",
+        "background": {
+          "file": "rocky_canyon_misty_mountains.mp4",
+          "effect": "pan_left"
+        }
+      }
+    ]
+  },
+  {
+    "script_title": "The Mystery of the Mad Gasser",
+    "heading_text": "COLD CASES",
+    "posted": false,
+    "pin_comment": "Industrial toxic leak, phantom phantom prowler, or mass hysteria? 👇",
+    "total_segments": 4,
+    "timeline": [
+      {
+        "segment_id": 1,
+        "text": "In 1944, residents across Mattoon began waking up to a sweet odor followed by immediate paralysis.",
+        "header_text": "MATTOON ILLINOIS 1944",
+        "background": {
+          "file": "1940s_suburban_house_night.mp4",
+          "effect": "zoom_in"
+        }
+      },
+      {
+        "segment_id": 2,
+        "text": "Victims reported seeing a tall figure in dark clothing pumping gas through open bedroom windows before fleeing.",
+        "header_text": "THE TALL PROWLER",
+        "background": {
+          "file": "shadowy_figure_outside_window.mp4",
+          "effect": "pan_right"
+        }
+      },
+      {
+        "segment_id": 3,
+        "text": "Over two dozen families suffered severe facial swelling, burning throats, and temporary leg paralysis over two weeks.",
+        "header_text": "PARALYZED IN BED",
+        "background": {
+          "file": "vintage_bedroom_gasping_shadows.mp4",
+          "effect": "zoom_out"
+        }
+      },
+      {
+        "segment_id": 4,
+        "text": "Police found footprints and chemical canisters at multiple scenes yet never identified the attacker, making you wonder who...",
+        "header_text": "THE PHANTOM ATTACKER",
+        "background": {
+          "file": "empty_suburban_street_mist.mp4",
+          "effect": "pan_left"
+        }
+      }
+    ]
+  },
+  {
+    "script_title": "The Mystery of the Spontaneous Combustion",
+    "heading_text": "COLD CASES",
+    "posted": false,
+    "pin_comment": "The wick effect or internal chemical reaction? What incinerated Mary Reeser? 👇",
+    "total_segments": 4,
+    "timeline": [
+      {
+        "segment_id": 1,
+        "text": "In 1951, landlady Telegram found Mary Reeser reduced to ashes inside her apartment without destroying the room.",
+        "header_text": "ST PETERSBURG 1951",
+        "background": {
+          "file": "1950s_apartment_doorway_smoke.mp4",
+          "effect": "zoom_in"
+        }
+      },
+      {
+        "segment_id": 2,
+        "text": "The fire burned at three thousand degrees, incinerating bone, yet nearby plastic household items didn't even melt.",
+        "header_text": "3000 DEGREE HEAT",
+        "background": {
+          "file": "charred_armchair_ashes_floor.mp4",
+          "effect": "pan_right"
+        }
+      },
+      {
+        "segment_id": 3,
+        "text": "Only her left foot remained completely intact, still wearing an undamaged satin slipper amidst the piles of ash.",
+        "header_text": "THE INTACT SLIPPER",
+        "background": {
+          "file": "ashes_satin_slipper_close_up.mp4",
+          "effect": "zoom_out"
+        }
+      },
+      {
+        "segment_id": 4,
+        "text": "FBI forensic experts conceded they couldn't explain how a human body burned like a furnace, making you wonder how...",
+        "header_text": "THE CONSUMING FIRE",
+        "background": {
+          "file": "smoke_rising_dark_room.mp4",
+          "effect": "pan_left"
+        }
+      }
+    ]
+  },
+  {
+    "script_title": "The Mystery of the Barisal Guns",
+    "heading_text": "COLD CASES",
+    "posted": false,
+    "pin_comment": "Atmospheric booms, underwater gas vents, or military trials? What causes the sound? 👇",
+    "total_segments": 4,
+    "timeline": [
+      {
+        "segment_id": 1,
+        "text": "For centuries, residents near the Bay of Bengal have heard thunderous explosive booms coming from open water.",
+        "header_text": "BAY OF BENGAL",
+        "background": {
+          "file": "bay_of_bengal_coastline_mist.mp4",
+          "effect": "zoom_in"
+        }
+      },
+      {
+        "segment_id": 2,
+        "text": "The deep sonic detonations mimic artillery fire, shaking buildings miles inland during completely clear weather.",
+        "header_text": "SONIC EXPLOSIONS",
+        "background": {
+          "file": "calm_ocean_horizon_sunset.mp4",
+          "effect": "pan_right"
+        }
+      },
+      {
+        "segment_id": 3,
+        "text": "Seismographs register no tectonic activity during the noise, ruling out earthquakes, quarry blasts, or tsunamis.",
+        "header_text": "NO TECTONIC ACTIVITY",
+        "background": {
+          "file": "seismograph_needle_flatline.mp4",
+          "effect": "zoom_out"
+        }
+      },
+      {
+        "segment_id": 4,
+        "text": "What generates massive cannon-like blasts across miles of calm sea without leaving smoke, leaving us to wonder what...",
+        "header_text": "THE SKY CANNONS",
+        "background": {
+          "file": "dark_ocean_cloudy_sky.mp4",
+          "effect": "pan_left"
+        }
+      }
+    ]
+  },
+  {
+    "script_title": "The Disappearance of the Joyita",
+    "heading_text": "COLD CASES",
+    "posted": false,
+    "pin_comment": "Piracy, rogue wave, or crew mutiny? What happened onboard the MV Joyita? 👇",
+    "total_segments": 4,
+    "timeline": [
+      {
+        "segment_id": 1,
+        "text": "In 1955, the merchant vessel Joyita was found drifting in the South Pacific five weeks after going missing.",
+        "header_text": "SOUTH PACIFIC 1955",
+        "background": {
+          "file": "derelict_ship_drifting_ocean.mp4",
+          "effect": "zoom_in"
+        }
+      },
+      {
+        "segment_id": 2,
+        "text": "All twenty-five passengers and crew had disappeared, leaving behind bloody bandages and four tons of cargo.",
+        "header_text": "25 PEOPLE MISSING",
+        "background": {
+          "file": "ship_deck_bloody_bandages.mp4",
+          "effect": "pan_right"
+        }
+      },
+      {
+        "segment_id": 3,
+        "text": "The ship's radio was tuned to the international distress frequency, but its wiring was mysteriously severed.",
+        "header_text": "CUT RADIO WIRES",
+        "background": {
+          "file": "vintage_radio_cut_wires.mp4",
+          "effect": "zoom_out"
+        }
+      },
+      {
+        "segment_id": 4,
+        "text": "The vessel was virtually unsinkable due to cork lining, so why would everyone abandon a safe ship, making you wonder why...",
+        "header_text": "ABANDONED UNSINKABLE",
+        "background": {
+          "file": "vast_empty_pacific_ocean.mp4",
+          "effect": "pan_left"
+        }
+      }
+    ]
+  }
 ]
