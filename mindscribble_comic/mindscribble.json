@@ -277,7 +277,7 @@
     {
         "script_title": "Nobody Is Watching You",
         "heading_text": "SPOTLIGHT EFFECT",
-        "posted": false,
+        "posted": true,
         "total_segments": 4,
         "pinned_comment": "Friendly reminder: No one remembers that awkward thing you said 3 years ago. Drop a \u2764\ufe0f if you needed this reminder today!",
         "timeline": [
