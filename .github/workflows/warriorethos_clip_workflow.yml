@@ -1,9 +1,8 @@
 name: Youtube Warrior Ethos Clip
 on:
   schedule:
-    # Runs daily at 17:00 UTC (1:00 PM EST / 10:00 AM PST)
-    # Target peak engagement hours: 2:00 PM - 4:00 PM EST
-    - cron: '0 17 * * *'
+    # Runs daily at 16:40 UTC (20 minutes before 17:00 UTC)
+    - cron: '40 16 * * *'
   workflow_dispatch: # Allows manual trigger anytime from GitHub Actions tab
 
 permissions:
@@ -57,17 +56,19 @@ jobs:
       - name: Commit updated JSON status
         run: |
           git config --global user.name "github-actions[bot]"
-          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          git config --global user.email "github-actions[bot]"
 
-          git stash
+          # Fetch latest changes from main branch without stashing video artifacts
+          git fetch origin main
+          git rebase origin/main || git rebase --abort
 
-          git pull origin main --rebase
-
-          git stash pop || echo "No changes to pop"
-
+          # Explicitly add only the JSON file to prevent committing temp video files
           git add warrior_ethos/warriorethos.json
 
-          git diff --quiet && git diff --staged --quiet || \
+          # Commit and push only if warriorethos.json changed
+          if ! git diff --staged --quiet; then
             git commit -m "Auto-update posted status in warrior_ethos.json [skip ci]"
-
-          git push origin main
+            git push origin main
+          else
+            echo "No changes detected in warrior_ethos/warriorethos.json"
+          fi

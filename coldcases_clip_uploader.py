@@ -21,8 +21,9 @@ from coldcases.main import process_script_item
 
 SCOPES = [
     "https://www.googleapis.com/auth/youtube.upload",
-    "https://www.googleapis.com/auth/youtube.force-ssl"  # Required to post comments
+    "https://www.googleapis.com/auth/youtube.force-ssl",  # Required to post comments
 ]
+
 
 def get_service(
     pickle_file: str = os.path.join(BASE_DIR, "coldcases_pickle.pickle"),
@@ -36,9 +37,7 @@ def get_service(
         "COLDCASES_TOKEN_PICKLE_BASE64"
     ):
         print("🔑 Restoring Cold Cases pickle token from GitHub Secrets...")
-        token_data = base64.b64decode(
-            os.environ["COLDCASES_TOKEN_PICKLE_BASE64"]
-        )
+        token_data = base64.b64decode(os.environ["COLDCASES_TOKEN_PICKLE_BASE64"])
         with open(pickle_file, "wb") as f:
             f.write(token_data)
 
@@ -50,18 +49,27 @@ def get_service(
         print("🔄 Refreshing YouTube access token...")
         try:
             creds.refresh(Request())
+            # Save refreshed credentials back to local file
+            with open(pickle_file, "wb") as f:
+                pickle.dump(creds, f)
         except Exception as e:
             print(f"⚠️ Could not refresh token: {e}")
             creds = None
 
+    # If credentials are missing/invalid in a non-interactive CI environment
     if not creds or not creds.valid:
+        if os.environ.get("GITHUB_ACTIONS") == "true":
+            raise RuntimeError(
+                "❌ YouTube OAuth token in 'COLDCASES_TOKEN_PICKLE_BASE64' is missing, expired, or invalid.\n"
+                "Interactive browser authentication cannot be performed in GitHub Actions.\n"
+                "Please regenerate 'coldcases_pickle.pickle' locally and update the secret."
+            )
+
         if not os.path.exists(client_secrets):
             raise FileNotFoundError(f"❌ Missing '{client_secrets}'.")
 
         print("--- AUTHENTICATION REQUIRED (COLD CASES) ---")
-        flow = InstalledAppFlow.from_client_secrets_file(
-            client_secrets, SCOPES
-        )
+        flow = InstalledAppFlow.from_client_secrets_file(client_secrets, SCOPES)
         creds = flow.run_local_server(port=0)
 
         with open(pickle_file, "wb") as f:
@@ -87,12 +95,10 @@ def post_and_pin_comment(youtube, video_id: str, comment_text: str) -> bool:
                 "snippet": {
                     "videoId": video_id,
                     "topLevelComment": {
-                        "snippet": {
-                            "textOriginal": comment_text.strip()
-                        }
-                    }
+                        "snippet": {"textOriginal": comment_text.strip()}
+                    },
                 }
-            }
+            },
         )
         comment_response = comment_request.execute()
         comment_id = comment_response.get("id")
@@ -110,7 +116,7 @@ def upload_to_youtube(
     title: str,
     description: str,
     tags: list,
-    comment_text: str = None
+    comment_text: str = None,
 ) -> bool:
     """Uploads video to YouTube and posts pinned comment."""
     try:
@@ -127,21 +133,23 @@ def upload_to_youtube(
                     "title": title,
                     "description": description,
                     "tags": tags,
-                    "categoryId": "24"
+                    "categoryId": "24",
                 },
                 "status": {
                     "privacyStatus": "public",
-                    "selfDeclaredMadeForKids": False
-                }
+                    "selfDeclaredMadeForKids": False,
+                },
             },
             media_body=MediaFileUpload(
                 video_path, chunksize=-1, resumable=True, mimetype="video/mp4"
-            )
+            ),
         )
 
         response = request.execute()
-        video_id = response.get('id')
-        print(f"✅ Upload successful! URL: https://www.youtube.com/watch?v={video_id}")
+        video_id = response.get("id")
+        print(
+            f"✅ Upload successful! URL: https://www.youtube.com/watch?v={video_id}"
+        )
 
         # Post engaging comment if present
         if comment_text:
