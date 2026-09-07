@@ -56,19 +56,28 @@ jobs:
       - name: Commit updated JSON status
         run: |
           git config --global user.name "github-actions[bot]"
-          git config --global user.email "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
 
-          # Fetch latest changes from main branch without stashing video artifacts
+          # Temporarily save the updated JSON file created during this run
+          cp warrior_ethos/warriorethos.json /tmp/warriorethos.json
+
+          # Discard all generated video files and working tree modifications
+          git reset --hard HEAD
+          git clean -fd
+
+          # Fetch and rebase cleanly against the remote main branch
           git fetch origin main
-          git rebase origin/main || git rebase --abort
+          git rebase origin/main
 
-          # Explicitly add only the JSON file to prevent committing temp video files
+          # Restore the updated JSON file
+          cp /tmp/warriorethos.json warrior_ethos/warriorethos.json
+
+          # Stage and commit only the JSON status file
           git add warrior_ethos/warriorethos.json
 
-          # Commit and push only if warriorethos.json changed
           if ! git diff --staged --quiet; then
             git commit -m "Auto-update posted status in warrior_ethos.json [skip ci]"
             git push origin main
           else
-            echo "No changes detected in warrior_ethos/warriorethos.json"
+            echo "No status changes to commit."
           fi
