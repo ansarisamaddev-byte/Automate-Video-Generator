@@ -107,7 +107,7 @@
         "tag": "Gym_Training",
         "bg_music": "heavy_phonk_01.mp3",
         "pinned_comment": "Nobody sees the early hours. Keep putting in the work. \ud83d\udca5",
-        "posted": false,
+        "posted": true,
         "scenes": [
             {
                 "text": "Nobody cares about your excuses when the weights are on the bar.",
