@@ -75,7 +75,7 @@
         "tag": "Statues_Stoicism",
         "bg_music": "dark_ambient_01.mp3",
         "pinned_comment": "Mastery demands total isolation from comfort. Share if you are on this path. \ud83d\udd25",
-        "posted": false,
+        "posted": true,
         "scenes": [
             {
                 "text": "Comfort is the quiet thief of human greatness.",

@@ -47,7 +47,7 @@ jobs:
 
       - name: Run Script
         env:
-          YOUTUBE_TOKEN_PICKLE_BASE64: ${{ secrets.YOUTUBE_TOKEN_PICKLE_BASE64 }}
+          COLDCASES_TOKEN_PICKLE_BASE64: ${{ secrets.COLDCASES_TOKEN_PICKLE_BASE64 }}
           CLOUDINARY_CLOUD_NAME: ${{ secrets.CLOUDINARY_CLOUD_NAME }}
           CLOUDINARY_API_KEY: ${{ secrets.CLOUDINARY_API_KEY }}
           CLOUDINARY_API_SECRET: ${{ secrets.CLOUDINARY_API_SECRET }}

@@ -24,46 +24,88 @@ SCOPES = [
     "https://www.googleapis.com/auth/youtube.force-ssl"  # Required to post comments
 ]
 
-
 def get_service(
     pickle_file: str = os.path.join(BASE_DIR, "warrior_pickle.pickle"),
     client_secrets: str = os.path.join(BASE_DIR, "client_secret_warrior_ethos.json"),
 ):
-    """Authenticates and returns the YouTube API service instance for Warrior Ethos."""
     creds = None
 
-    # Restore pickle token from Base64 environment variable if running in CI/GitHub Actions
+    # Restore token from GitHub Secret
     if not os.path.exists(pickle_file) and os.environ.get("WARRIOR_TOKEN_PICKLE_BASE64"):
         print("🔑 Restoring Warrior Ethos pickle token from GitHub Secrets...")
-        token_data = base64.b64decode(os.environ["WARRIOR_TOKEN_PICKLE_BASE64"])
+
+        token_data = base64.b64decode(
+            os.environ["WARRIOR_TOKEN_PICKLE_BASE64"]
+        )
+
         with open(pickle_file, "wb") as f:
             f.write(token_data)
 
+    # Load existing credentials
     if os.path.exists(pickle_file):
+        print("🔐 Loading Warrior Ethos OAuth credentials...")
+
         with open(pickle_file, "rb") as f:
             creds = pickle.load(f)
 
+    # Refresh existing credentials
     if creds and creds.expired and creds.refresh_token:
         print("🔄 Refreshing YouTube access token...")
+
         try:
             creds.refresh(Request())
+
+            # Save refreshed credentials
+            with open(pickle_file, "wb") as f:
+                pickle.dump(creds, f)
+
+            print("✅ Token refreshed successfully.")
+
         except Exception as e:
             print(f"⚠️ Could not refresh token: {e}")
             creds = None
 
+    # If credentials are still invalid
     if not creds or not creds.valid:
+
+        # NEVER try browser OAuth in GitHub Actions
+        if os.environ.get("GITHUB_ACTIONS") == "true":
+            raise RuntimeError(
+                "❌ YouTube OAuth credentials are missing or invalid in GitHub Actions. "
+                "Generate warrior_pickle.pickle locally and store it as "
+                "WARRIOR_TOKEN_PICKLE_BASE64."
+            )
+
+        # Local machine authentication
         if not os.path.exists(client_secrets):
-            raise FileNotFoundError(f"❌ Missing '{client_secrets}'.")
+            raise FileNotFoundError(
+                f"❌ Missing '{client_secrets}'."
+            )
 
         print("--- AUTHENTICATION REQUIRED (WARRIOR ETHOS) ---")
-        flow = InstalledAppFlow.from_client_secrets_file(client_secrets, SCOPES)
-        creds = flow.run_local_server(port=0)
+
+        flow = InstalledAppFlow.from_client_secrets_file(
+            client_secrets,
+            SCOPES
+        )
+
+        creds = flow.run_local_server(
+            port=0,
+            access_type="offline",
+            prompt="consent"
+        )
 
         with open(pickle_file, "wb") as f:
             pickle.dump(creds, f)
 
-    return googleapiclient.discovery.build("youtube", "v3", credentials=creds)
+        print("✅ Local YouTube authentication successful.")
+        print(f"💾 Saved credentials to: {pickle_file}")
 
+    return googleapiclient.discovery.build(
+        "youtube",
+        "v3",
+        credentials=creds
+    )
 
 def build_fallback_pin_comment() -> str:
     return "Discipline over motivation. Are you putting in the work today? Drop a 🔥 below!"
