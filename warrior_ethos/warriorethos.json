@@ -139,7 +139,7 @@
         "tag": "Rainy_City",
         "bg_music": "rain_ambient_piano.mp3",
         "pinned_comment": "Solitude isn't weakness; it's clarity. Drop a \ud83c\udf27\ufe0f if you grind in silence.",
-        "posted": false,
+        "posted": true,
         "scenes": [
             {
                 "text": "Walking alone through the storm is not a sign of defeat.",
